@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/HomeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryBackground"
+    tools:context="SymptomsActivity">
+
+    <RelativeLayout
+        android:id="@+id/navBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="@color/primaryBackground"
+        app:layout_constraintBottom_toTopOf="@+id/EoESymptoms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/lato_medium"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:text="@string/symptomsEoE"
+            android:textColor="@color/primary"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/EoESymptoms"
+        android:layout_width="0dp"
+        android:layout_height="124dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/lato_medium"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp"
+        android:text="@string/EoESymptoms"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/lato_medium"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="@string/EoESymptoms2"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EoESymptoms" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

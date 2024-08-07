@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/HomeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    app:backgroundTint="@color/primary"
+    tools:context="AllergiesActivity">
+
+    <!-- Navigation Bar -->
+
+    <RelativeLayout
+        android:id="@+id/navBar"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/primaryBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <!-- Page Title -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/lato_medium"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:text="Allergens"
+            android:textColor="@color/primary"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <!-- Current Medication List  -->
+
+    <View
+        android:id="@+id/allergenSectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navBar" />
+
+    <TextView
+        android:id="@+id/currentAllergenTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/currentAllergens"
+        android:textColor="@color/primary"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@id/allergenSectionHeader"
+        app:layout_constraintTop_toTopOf="@id/allergenSectionHeader" />
+
+
+    <ScrollView
+        android:id="@+id/allergenScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/middleGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/allergenSectionHeader">
+
+        <TableLayout
+            android:id="@+id/allergenTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Rows will be added programmatically -->
+        </TableLayout>
+    </ScrollView>
+
+    <!-- Guideline for Equal Division -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="365dp" />
+
+    <!-- Past Medication List -->
+
+    <View
+        android:id="@+id/pastAllergenSectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/middleGuideline" />
+
+    <TextView
+        android:id="@+id/pastAllergenTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/discontinuedAllerges"
+        android:textColor="@color/primary"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@id/pastAllergenSectionHeader"
+        app:layout_constraintTop_toTopOf="@id/pastAllergenSectionHeader" />
+
+    <ScrollView
+        android:id="@+id/pastAllergenScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pastAllergenSectionHeader"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TableLayout
+            android:id="@+id/pastAllergenTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Rows will be added programmatically -->
+        </TableLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/addAllergenButton"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="11dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/add"
+        android:textColor="@color/primary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/allergenSectionHeader"
+        app:layout_constraintEnd_toEndOf="@+id/allergenSectionHeader"
+        app:layout_constraintTop_toTopOf="@+id/allergenSectionHeader"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/HomeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryBackground"
+    tools:context="PlanActivity">
+
+    <!-- Navigation Bar -->
+
+    <RelativeLayout
+        android:id="@+id/navBar"
+        android:layout_width="411dp"
+        android:layout_height="50dp"
+        android:background="@color/primaryBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <!-- Page Title -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/lato_medium"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:text="@string/yourPlan"
+            android:textColor="@color/primary"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <!-- Buttons -->
+
+    <Button
+        android:id="@+id/dietButton"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="42dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:fontFamily="@font/lato_medium"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp"
+        android:text="@string/diet"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/planName" />
+
+    <Button
+        android:id="@+id/medicationsButton"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:fontFamily="@font/lato_medium"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp"
+        android:text="@string/medications"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dietButton" />
+
+    <Button
+        android:id="@+id/documentsButton"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:fontFamily="@font/lato_medium"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp"
+        android:text="@string/documents"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/medicationsButton" />
+
+    <Button
+        android:id="@+id/endoscopyButton"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:fontFamily="@font/lato_medium"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp"
+        android:text="@string/endoscopy"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/documentsButton" />
+
+    <Button
+        android:id="@+id/accidentalExposureButton"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:fontFamily="@font/lato_medium"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp"
+        android:text="@string/accidentalExposure"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/endoscopyButton" />
+
+    <!-- Text Views -->
+
+    <TextView
+        android:id="@+id/checkPlan"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/checkPlan"
+        android:textSize="17sp"
+        android:textColor="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+
+
+    <TextView
+        android:id="@+id/planName"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:fontFamily="@font/lato_medium"
+        android:text=""
+        android:textColor="@color/primary"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkPlan"
+        tools:ignore="MissingConstraints" />
+</androidx.constraintlayout.widget.ConstraintLayout>

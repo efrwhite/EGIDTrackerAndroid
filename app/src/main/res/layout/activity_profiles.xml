@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/HomeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context="ProfilesActivity">
+
+    <!-- Navigation Bar -->
+    <RelativeLayout
+        android:id="@+id/navBar"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/primaryBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <!-- Page Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/lato_medium"
+            android:text="@string/profiles"
+            android:textColor="@color/primary"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <!-- Child List  -->
+    <View
+        android:id="@+id/childSectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navBar" />
+
+    <TextView
+        android:id="@+id/childListTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/child"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@id/childSectionHeader"
+        app:layout_constraintTop_toTopOf="@id/childSectionHeader" />
+
+    <Button
+        android:id="@+id/addChildlink"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/add"
+        android:textColor="@color/primary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@id/childListTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/childSectionHeader" />
+
+    <ScrollView
+        android:id="@+id/childScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/middleGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/childSectionHeader">
+
+        <TableLayout
+            android:id="@+id/childTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Rows will be added programmatically -->
+        </TableLayout>
+    </ScrollView>
+
+    <!-- Guideline for Equal Division -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.50" />
+
+    <!-- Caregiver List -->
+
+    <View
+        android:id="@+id/caregiverSectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/middleGuideline" />
+
+    <TextView
+        android:id="@+id/caregiverListTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/caregiver"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@id/caregiverSectionHeader"
+        app:layout_constraintTop_toTopOf="@id/caregiverSectionHeader" />
+
+    <Button
+        android:id="@+id/addCaregiverlink"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/add"
+        android:textColor="@color/primary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/caregiverListTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/caregiverSectionHeader" />
+
+    <ScrollView
+        android:id="@+id/caregiverScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/caregiverSectionHeader">
+
+        <TableLayout
+            android:id="@+id/caregiverTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Rows will be added programmatically -->
+        </TableLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

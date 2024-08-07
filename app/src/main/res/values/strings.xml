@@ -1,3 +1,406 @@
 <resources>
-    <string name="app_name">egidtracker</string>
+    <!-- Global Strings -->
+    <string name="app_name">EGID Tracker</string>
+    <string name="appName">EGID Tracker</string>
+
+    <!-- Strings for Sign In and Sign Up Activity -->
+    <string name="signIn">Sign In</string>
+    <string name="signUp">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="email">Email</string>
+    <string name="phoneNumber">Mobile Number</string>
+    <string name="backDescription">Back Button</string>
+    <string name="dontHavAcc">Don\'t have an account?</string>
+    <string name="passwordRequirements">Password Requirements:\n- 7 Characters long\n- 1 Capital letter\n- 1 Symbol (!, @, #, $)</string>
+
+    <!-- Strings for Home Activity -->
+    <string name="home">Home</string>
+    <string name="homeWelcome">Welcome (Name)</string>
+    <string name="homeDiet">Diet: (Diet Type)</string>
+
+    <string name="yourPlan">Your Plan</string>
+    <string name="foodTracker">Food Tracker</string>
+    <string name="symptomScore">Symptom Score Checker</string>
+    <string name="QoLChecker">Quality of Life Checker</string>
+    <string name="education">EGID Education</string>
+    <string name="profiles">Profiles</string>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="diet_options">
+        <item>Diet 1</item>
+        <item>Diet 2</item>
+        <item>Diet 4</item>
+        <item>Diet 6</item>
+    </string-array>
+
+    <!-- Strings for EOE Education -->
+    <string name="generalQuestions">General Questions</string>
+    <string name="whatEoE">What is EGID and EoE?</string>
+    <string name="EoEdefinition">Eosinophilic esophagitis (EoE), also known as allergic esophagitis is a chronic immune system disease where a white blood cell called Eosinophil builds up in the lining of the tube (Esophagus) that connects your mouth to your stomach. These eosinophils can release chemicals into the surrounding tissues that cause inflammation.</string>
+    <string name="EoEdefinition2">Eosinophilic gastrointestinal disorders (EGIDs) are a group of chronic inflammatory disorders characterized by the recruitment of eosinophils in the gastrointestinal tract. The eosinophils can release toxins, which lead to inflammation and injury to the GI tract. The EGID can involve any part of the GI tract, and the patient experiences symptoms depending on the site of the GI tract involved.</string>
+    <string name="EoEdefinition3">Depending on the location of involvement, EGIDs are classified into:</string>
+    <string name="EoEdefinition4">Eosinophilic gastritis (Stomach)</string>
+    <string name="EoEdefinition5">Eosinophilic enteritis (small intestine [Duodenum, Jejunum, and Ileum])</string>
+    <string name="EoEdefinition6">Eosinophilic colitis (Colon)</string>
+    <string name="causesEoE">What Causes EGID and EoE?</string>
+    <string name="EoECauses">EoE is usually caused by an immune response to food ingestion. However, the relationship between food allergy and EoE is complex. Unlike many well known food allergens which causes symptoms right after exposure such as hives, lip swelling, vomiting and breathing issues, the EoE allergen induced reactions are often delayed, and can develop over several days making it difficult to pinpoint the specific food allergen. Environmental allergies to substances like pollen, dust, mold and animals also appear to play a role in triggering EoE and exacerbating EoE symptoms.</string>
+    <string name="EoECauses2">The cause of EGIDs is still unknown but appears to be triggered by a few commonly consumed foods, including (but not limited to) dairy, gluten, soy, egg, nuts, and fish. This condition is often seen in patients with other allergic conditions, such as asthma, eczema, and allergic rhinitis. Genetics also play a role as these conditions are being increasingly recognized in patients with a family history of eosinophilic esophagitis or EGIDs.</string>
+    <string name="affectedEoE">Who is Affected?</string>
+    <string name="affectedByEoE">EoE appears to be more common in white males but is being increasingly recognized in patients of all age groups, race and socioeconomic backgrounds. The symptoms however may vary with age.</string>
+    <string name="affectedEoE2">EGID can affect both children and adults. The prevalence of non-EoE EGIDs in the USA appears to be 1-20 per 100,000 people in the general population. It is slightly more common in children (19.4/100,000) than adults (17.5/100,000). About 5% of patients with Eosinophilic esophagitis may also experience symptoms of EGIDs.</string>
+    <string name="symptomsEoE">What are the Symptoms?</string>
+    <string name="EoESymptoms">The typical EGID symptoms are based on the site involved. Patients can experience nausea, vomiting, abdominal pain, diarrhea, weight loss or failure to thrive, and rectal bleeding.</string>
+    <string name="EoESymptoms2">Patients with EoE can experience several symptoms, including difficulty swallowing, choking, food getting stuck in the esophagus, and symptoms of gastroesophageal reflux, such as vomiting, heartburn, and regurgitation. Infants and young children may present with food refusal and poor weight gain and growth.
+</string>
+    <string name="diagnosedEoE">How is it Diagnosed?</string>
+    <string name="howEoEDiagnosed">EoE is diagnosed by performing an upper endoscopy with biopsies. Upper endoscopy is a medical procedure where a flexible tube with a light and camera at the tip is passed through the mouth into the esophagus. This procedure will help visualize the lining of the esophagus and also let your doctor take small tissue samples from the lining of the esophagus to examine under microscope for the presence of eosinophils. In an unaffected individual, there are no eosinophils in the esophagus but in patients with the tissue samples may show numerous eosinophils and signs of inflammation.</string>
+    <string name="howEoEDiagnosed2">The symptoms of EGIDs can be vague, and patients often experience symptoms for an extended period before the diagnosis. Currently, the diagnosis relies on an upper endoscopy and colonoscopy with biopsies of the gut lining performed by an experienced gastroenterologist. Patients with EGID do have dense eosinophils in the biopsy specimens.</string>
+    <string name="normalesophagus"><b>Normal Esophagus</b></string>
+    <string name="eoesophagus"><b>Eosinophilic Esophagitis</b></string>
+    <string name="eosinophil"><b>Eosinophil</b></string>
+    <string name="treatedEoE">How is it Treated?</string>
+    <string name="howEoETreated">There are three main types of treatments available for EoE (as below). Please consult your doctor for a detailed discussion on these options and see what works best for you and your family.</string>
+    <string name="howEoETreated2">Identifying and removing the trigger food(s) from the diet can help improve symptoms, but it is often very challenging. The therapy usually combines empiric food elimination and topical steroids (budesonide). In severe cases, strong inflammatory medications such as systemic steroids (prednisone) or other anti-inflammatory medications may be needed for better control of inflammation and symptoms. Your doctor will help you choose the right therapy for you based on symptoms and biopsy findings.</string>
+    <string name="optionA">a. Empiric food elimination</string>
+    <string name="optionB">b. Medical therapy</string>
+    <string name="optionC">c. Elemental diet</string>
+    <string name="infoEGID">EGID Information</string>
+    <string name="EGIDinfo">*Waiting on information from Naren.</string>
+    <string name="moreInfo">Where Can I Find More Info?</string>
+    <string name="NASPGHANbutton">NASPGHAN</string>
+    <string name="NASPGHANtext">North American Society for Pediatric Gastroenterology, Hepatology, &amp; Nutrition</string>
+    <string name="AAAIbutton">AAAI</string>
+    <string name="AAAItext">American Academy for Allergy, Asthma, and Immunology</string>
+    <string name="APFEDbutton">APFED</string>
+    <string name="APFEDtext">American Partnership for Eosinophilic Disorders</string>
+    <string name="CHRICHMONDbutton">CHoR</string>
+    <string name="CHRICHMONDtext">Children\'s Hospital of Richmond</string>
+    <string name="CEGIRbutton">CEGIR</string>
+    <string name="CEGIRtext">Consortium of Eosinophilic Gastrointestinal Disease Researchers</string>
+
+    <!-- Strings for Your Plan Layout -->
+    <string name="checkPlan">Check Plan For:</string>
+    <string name="planName">Name</string>
+    <string name="diet">Diet</string>
+    <string name="medications">Medications</string>
+    <string name="documents">Documents</string>
+    <string name="endoscopy">Endoscopy</string>
+    <string name="accidentalExposure">Accidental Exposure</string>
+
+    <!-- Strings for Diet Plan -->
+    <string name="dietPlan">Diet Plan</string>
+    <string name="diet1">Diet 1</string>
+    <string name="diet2">Diet 2</string>
+    <string name="diet4">Diet 4</string>
+    <string name="diet6">Diet 6</string>
+    <string name="allergies">Allergies</string>
+
+    <!-- Strings for Medications -->
+    <string name="currentMedications">Current Medications</string>
+    <string name="pastMedications">Past Medications</string>
+
+    <!-- Strings for Add Medications -->
+    <string name="addMedication">Add Medication</string>
+    <string name="name">Name</string>
+    <string name="dosage">Dosage</string>
+    <string name="startDate">Start Date</string>
+    <string name="frequency">Frequency</string>
+    <string name="discontinueMed">Discontinue the medication?</string>
+    <string name="note">Notes</string>
+    <string name="medNameField">Medication Name</string>
+    <string name="medAmountField">Amount</string>
+    <string name="frequencyField">How Often?</string>
+    <string name="notesField">Enter special instructions for the medication\nhere</string>
+    <string name="saveButton">Save</string>
+    <string name="datePicker">Enter Date</string>
+    <string name="endDate">End Date</string>
+
+    <!-- Strings for Allergies -->
+    <string name="addAllergies">Add Allergies</string>
+    <string name="currentAllergens">Current Allergens</string>
+    <string name="discontinuedAllerges">Discontinued Allergens</string>
+    <string name="allergen">Allergen</string>
+    <string name="discontinuedAllergen">Discontinued Allergen</string>
+
+
+    <!-- Strings for Diets -->
+    <string name="foodstoavoid">Foods to Avoid</string>
+    <string name="dairy">Dairy</string>
+    <string name="gluten">Gluten</string>
+    <string name="egg">Egg</string>
+    <string name="soy">Soy</string>
+    <string name="peanutTreenut">Peanut and Treenut</string>
+    <string name="fishShellfish">Fish and Shellfish</string>
+    <string name="bakedGoods">Baked goods</string>
+    <string name="butter">Butter</string>
+    <string name="buttermilk">Buttermilk</string>
+    <string name="casein">Casein</string>
+    <string name="cheese">Cheese</string>
+    <string name="chocolate">Chocolate</string>
+    <string name="condensedMilk">Condensed milk</string>
+    <string name="cottageCheese">Cottage cheese</string>
+    <string name="cream">Cream</string>
+    <string name="creamCheese">Cream cheese</string>
+    <string name="curd">Curd</string>
+    <string name="custard">Custard</string>
+    <string name="evaporatedMilk">Evaporated milk</string>
+    <string name="ghee">Ghee</string>
+    <string name="goatMilk">Goat’s milk</string>
+    <string name="gravy">Gravy</string>
+    <string name="halfAndHalf">Half &amp; half</string>
+    <string name="iceCream">Ice cream</string>
+    <string name="lactose">Lactose</string>
+    <string name="margarine">Margarine</string>
+    <string name="milk">Milk</string>
+    <string name="milkPowder">Milk powder</string>
+    <string name="pudding">Pudding</string>
+    <string name="saladDressing">Salad dressing</string>
+    <string name="sheepMilk">Sheep’s milk</string>
+    <string name="sourCream">Sour cream</string>
+    <string name="whey">Whey</string>
+    <string name="yogurt">Yogurt</string>
+    <string name="breadAndBreadProducts">Bread and bread products</string>
+    <string name="bagels">Bagels</string>
+    <string name="barley">Barley</string>
+    <string name="batteredAndFriedFoods">Battered and fried foods</string>
+    <string name="bran">Bran</string>
+    <string name="bulgur">Bulgur</string>
+    <string name="cereal">Cereal</string>
+    <string name="couscous">Couscous</string>
+    <string name="crackers">Crackers</string>
+    <string name="durum">Durum</string>
+    <string name="einkorn">Einkorn</string>
+    <string name="englishMuffins">English muffins</string>
+    <string name="farina">Farina</string>
+    <string name="farro">Farro</string>
+    <string name="flour">Flour</string>
+    <string name="flourTortillas">Flour tortillas</string>
+    <string name="gravyOrSaucesContainingARoux">Gravy or sauces containing a roux</string>
+    <string name="licorice">Licorice</string>
+    <string name="naan">Naan</string>
+    <string name="oats">Oats</string>
+    <string name="pasta">Pasta</string>
+    <string name="pancakes">Pancakes</string>
+    <string name="pastries">Pastries</string>
+    <string name="pita">Pita</string>
+    <string name="rye">Rye</string>
+    <string name="sauces">Sauces</string>
+    <string name="semolina">Semolina</string>
+    <string name="spelt">Spelt</string>
+    <string name="soySauce">Soy sauce</string>
+    <string name="triticale">Triticale</string>
+    <string name="waffles">Waffles</string>
+    <string name="wheat">Wheat</string>
+    <string name="albumin">Albumin</string>
+    <string name="bakedGoodsWithAnEggWash">Baked goods with an egg wash</string>
+    <string name="batteredFoods">Battered foods</string>
+    <string name="bearnaiseSauce">Bearnaise sauce</string>
+    <string name="eggFromAllAnimals">Egg from all animals</string>
+    <string name="eggnog">Eggnog</string>
+    <string name="eggSubstitutes">Egg substitutes</string>
+    <string name="eggYolk">Egg yolk</string>
+    <string name="eggWhite">Egg white</string>
+    <string name="hollandaiseSauce">Hollandaise sauce</string>
+    <string name="marshmallow">Marshmallow</string>
+    <string name="mayonnaise">Mayonnaise</string>
+    <string name="meatballsAndMeatloaf">Meatballs and meatloaf</string>
+    <string name="meringue">Meringue</string>
+    <string name="nougat">Nougat</string>
+    <string name="cannedFoods">Canned foods</string>
+    <string name="dressing">Dressing</string>
+    <string name="hoisin">Hoisin</string>
+    <string name="marinade">Marinade</string>
+    <string name="miso">Miso</string>
+    <string name="processedFoods">Processed foods</string>
+    <string name="proteinBarsAndShakes">Protein bars and shakes</string>
+    <string name="soyMilk">Soy milk</string>
+    <string name="soyOil">Soy oil (expeller pressed, cold pressed, expressed, extruded)</string>
+    <string name="soyProtein">Soy protein</string>
+    <string name="tamari">Tamari</string>
+    <string name="tempeh">Tempeh</string>
+    <string name="tofu">Tofu</string>
+    <string name="vegetarianAndVeganFoods">Vegetarian and vegan foods</string>
+    <string name="almond">Almond</string>
+    <string name="almondExtract">Almond extract</string>
+    <string name="almondFlour">Almond flour</string>
+    <string name="brazilNut">Brazil nut</string>
+    <string name="candy">Candy</string>
+    <string name="cashew">Cashew</string>
+    <string name="chestnut">Chestnut</string>
+    <string name="coffee">Coffee</string>
+    <string name="granola">Granola</string>
+    <string name="glutenFreeItems">Gluten free items</string>
+    <string name="hazelnut">Hazelnut</string>
+    <string name="macadamiaNut">Macadamia nut</string>
+    <string name="milkMadeFromNuts">Milk made from nuts</string>
+    <string name="peanut">Peanut</string>
+    <string name="peanutButter">Peanut butter</string>
+    <string name="peanutFlour">Peanut flour</string>
+    <string name="peanutOil">Peanut oil</string>
+    <string name="pecan">Pecan</string>
+    <string name="pesto">Pesto</string>
+    <string name="pineNut">Pine nut</string>
+    <string name="pistachio">Pistachio</string>
+    <string name="sauceInEthnicCuisines">Sauce in ethnic cuisines</string>
+    <string name="walnut">Walnut</string>
+    <string name="anchovy">Anchovy</string>
+    <string name="caviar">Caviar</string>
+    <string name="calamari">Calamari</string>
+    <string name="caesarSalad">Caesar salad (contains anchovy)</string>
+    <string name="crab">Crab</string>
+    <string name="chowderAndSoup">Chowder and soup</string>
+    <string name="clam">Clam</string>
+    <string name="clamJuice">Clam juice</string>
+    <string name="cod">Cod</string>
+    <string name="fishOil">Fish oil</string>
+    <string name="fishSauce">Fish sauce</string>
+    <string name="haddock">Haddock</string>
+    <string name="halibut">Halibut</string>
+    <string name="imitationCrab">Imitation crab</string>
+    <string name="lobster">Lobster</string>
+    <string name="mahiMahi">Mahi mahi</string>
+    <string name="mussels">Mussels</string>
+    <string name="octopus">Octopus</string>
+    <string name="oyster">Oyster</string>
+    <string name="salmon">Salmon</string>
+    <string name="sardines">Sardines</string>
+    <string name="scallop">Scallop</string>
+    <string name="seafoodFlavoring">Seafood flavoring</string>
+    <string name="shrimp">Shrimp</string>
+    <string name="squid">Squid</string>
+    <string name="swordfish">Swordfish</string>
+    <string name="tilapia">Tilapia</string>
+    <string name="trout">Trout</string>
+    <string name="tuna">Tuna</string>
+    <string name="worcestershireSauce">Worcestershire sauce</string>
+
+
+    <!-- Strings for Documents -->
+    <string name="addDocuments">Add Documents</string>
+
+    <!-- Strings for Profiles -->
+    <string name="child">Child</string>
+    <string name="caregiver">Caregiver</string>
+    <string name="add">Add</string>
+
+
+
+
+    <!-- Strings for Child and Caregiver Profiles -->
+    <string name="CaregiverTitle">Caregiver Profile</string>
+    <string name="ChildTitle">Child Profile</string>
+    <string name="ChangePicture">Select Image</string>
+    <string name="Username">Username</string>
+    <string name="FirstName">First Name</string>
+    <string name="LastName">Last Name</string>
+    <string name="SaveContinue">Save and Continue</string>
+    <string name="Birthdate">Birthdate</string>
+    <string name="Gender">Gender</string>
+    <string name="Diet">Diet</string>
+
+    <!-- Strings for Symptom Score Checker -->
+    <string name="symptomScoreChecker">Symptom Score</string>
+    <string name="results">Results</string>
+    <string name="genReport">Create Report</string>
+    <string name="symptomKey">Key:</string>
+    <string name="symptomKey0">0 - None</string>
+    <string name="symptomKey1">1 - Mild</string>
+    <string name="symptomKey2">2 - Moderate</string>
+    <string name="symptomKey3">3 - Severe</string>
+    <string name="symptomKey4">4 - Worst</string>
+    <string name="visitDate">Visit Date</string>
+    <string name="NumberHint">0 – 4</string>
+    <string name="YesNoHint">Y / N</string>
+    <string name="YesNo">Please input a Y if the symptom is present or N if not.</string>
+    <string name="question2">How often does your child have trouble swallowing?</string>
+    <string name="question3">How bad is your child\'s trouble swallowing?</string>
+    <string name="question4">How often does your child feel like food gets stuck in their throat or chest?</string>
+    <string name="question5">How bad is it when your child gets food stuck in their throat or chest?</string>
+    <string name="question6">How often does your child need to drink a lot to help them swallow food?</string>
+    <string name="question7">How bad is it when your child needs to drink a lot to help them swallow food?</string>
+    <string name="question8">How often does your child eat less than others?</string>
+    <string name="question9">How often does your child need more time to eat than other?</string>
+    <string name="question10">How often does your child have heartburn (burning in the chest, mouth or throat)?</string>
+    <string name="question11">How bad is your child\'s heartburn (burning in the chest, mouth or throat)?</string>
+    <string name="question12">How often does your child have food come back up in their throat when eating?</string>
+    <string name="question13">How bad is it when food comes back up in your child\'s throat?</string>
+    <string name="question14">How often does your child vomit (throw up)?</string>
+    <string name="question15">How bad is your child\'s vomiting?</string>
+    <string name="question16">How often does your child feel nauseous (feel like throwing up, but doesn\'t)?</string>
+    <string name="question17">How bad is your child\'s nausea (feel like throwing up, but doesn\'t)?</string>
+    <string name="question18">How often does your child have chest pain, ache, or hurt?</string>
+    <string name="question19">How bad is your child\'s chest pain, ache, or hurt?</string>
+    <string name="question20">How often does your child have stomach aches or belly aches?</string>
+    <string name="question21">How bad are your child\'s stomach aches or belly aches?</string>
+    <string name="question23">Feeding is difficult / refuses food</string>
+    <string name="question24">Slow eating</string>
+    <string name="question25">Prolonged chewing</string>
+    <string name="question26">Swallowing liquids with solid food</string>
+    <string name="question27">Avoidance of solid food</string>
+    <string name="question28">Retching</string>
+    <string name="question29">Choking</string>
+    <string name="question30">Food Impaction</string>
+    <string name="question31">Hoarseness</string>
+    <string name="question32">Constipation</string>
+    <string name="question33">Poor weight gain</string>
+    <string name="question34">Diarrhea</string>
+
+    <!-- Strings for Quality of Life Checker -->
+    <string name="qualityOfLifeChecker">Quality of Life</string>
+    <string name="QsymptomKey">Symptom Key:</string>
+    <string name="Qkey0">0 - never a problem</string>
+    <string name="Qkey1">1 - almost never a problem</string>
+    <string name="Qkey2">2 - sometimes a problem</string>
+    <string name="Qkey3">3 - often a problem</string>
+    <string name="Qkey4">4 - almost always a problem</string>
+    <string name="SymptomsI">Symptoms I </string>
+    <string name="symptoms1">I have chest pain, ache, or hurt</string>
+    <string name="symptoms2">I have burning in my chest, mouth, or throat  (heartburn)</string>
+    <string name="symptoms3">I have stomach aches or belly aches</string>
+    <string name="symptoms4">I throw up (vomit)</string>
+    <string name="symptoms5">I feel like I am going to throw up, but I don\'t (nausea)</string>
+    <string name="symptoms6">When I am eating, food comes back up my throat</string>
+    <string name="SymptomsII">Symptoms II</string>
+    <string name="symptoms7">I have trouble swallowing</string>
+    <string name="symptoms8">I feel like food gets stuck in my throat or chest</string>
+    <string name="symptoms9">I need to drink to help me swallow my food</string>
+    <string name="symptoms10">I need more time to eat than other kids my age</string>
+    <string name="Treatment">Treatment</string>
+    <string name="treatment1">It is hard for me to take my medicine</string>
+    <string name="treatment2">I do not want to take my medicines</string>
+    <string name="treatment3">I do not like going to the doctor</string>
+    <string name="treatment4">I do not like getting an endoscopy (scope, EGD)</string>
+    <string name="treatment5">I do not like getting allergy testing</string>
+    <string name="Worry">Worry</string>
+    <string name="worry1">I worry about having EoE</string>
+    <string name="worry2">I worry about getting sick in front of other people</string>
+    <string name="worry3">I worry about what other people think about me because  of EoE</string>
+    <string name="worry4">I worry about getting allergy testing</string>
+    <string name="Communication">Communication</string>
+    <string name="comm1">I have trouble telling other people about EoE</string>
+    <string name="comm2">I have trouble talking to my parents about how I feel</string>
+    <string name="comm3">I have trouble talking to other adults about how I feel</string>
+    <string name="comm4">I have trouble talking to my friends about how I feel</string>
+    <string name="comm5">I have trouble talking to doctors or nurses about how I feel</string>
+    <string name="FoodandEating">Food and Eating</string>
+    <string name="FandE1">It is hard not being allowed to eat some foods</string>
+    <string name="FandE2">It is hard for me not to sneak foods I\'m allergic to</string>
+    <string name="FandE3">It is hard for me not to eat the same things as my family</string>
+    <string name="FandE4">It is hard not to eat the same things as my friends</string>
+    <string name="FoodFeelings">Food Feelings</string>
+    <string name="feelings1">I worry about eating foods I\'m allergic to or not supposed to eat</string>
+    <string name="feelings2">I feel mad (get upset) about not eating foods I am  allergic to or not supposed to eat</string>
+    <string name="feelings3">I feel sad about not eating foods I am allergic to or not supposed to eat</string>
+    <string name="title_activity_diet2">Diet2Activity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="Diet2">Diet 2</string>
+
 </resources>

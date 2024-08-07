@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/HomeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryBackground"
+    tools:context="SymptomCheckerActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/results"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:fontFamily="@font/lato_medium"
+                android:textSize="20sp"
+                android:textColor="@color/primary"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true" />
+
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TableLayout
+        android:id="@+id/fieldNames"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Date"
+                android:textSize="16sp"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginVertical="8dp"/>
+
+            <TextView
+                android:id="@+id/score"
+                android:textColor="@color/primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score"
+                android:textSize="16sp"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginVertical="8dp"/>
+            </TableRow>
+
+    </TableLayout>
+
+    <ScrollView
+        android:id="@+id/reportScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toTopOf ="@id/genBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fieldNames">
+
+        <TableLayout
+            android:id="@+id/reportTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Rows will be added programmatically -->
+        </TableLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/genBar"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@color/primaryBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/genButton"
+            android:layout_width="200dp"
+            android:layout_height="48dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:text="@string/genReport"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:backgroundTint="@color/primary" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

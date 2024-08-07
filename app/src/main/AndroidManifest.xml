@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Permission for Camera -->
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- Permissions for reading and writing to storage -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -10,19 +19,58 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Egidtracker"
+        android:theme="@style/Theme.EGIDTracker"
         tools:targetApi="31">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.elizabethwhitebaker.egidtracker.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Egidtracker">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SignInActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".HomeActivity" />
+        <activity android:name=".ProfilesActivity" />
+        <activity android:name=".FoodTrackerActivity" />
+        <activity android:name=".EducationActivity" />
+        <activity android:name=".QoLActivity" />
+        <activity android:name=".PlanActivity" />
+        <activity android:name=".SymptomCheckerActivity" />
+        <activity android:name=".DiagnosedActivity" />
+        <activity android:name=".EoECausesActivity" />
+        <activity android:name=".MoreInfoActivity" />
+        <activity android:name=".SymptomsActivity" />
+        <activity android:name=".TreatmentActivity" />
+        <activity android:name=".WhatIsEoEActivity" />
+        <activity android:name=".WhoIsAffectedActivity" />
+        <activity android:name=".AddCaregiverActivity" />
+        <activity android:name=".AddChildActivity" />
+        <activity android:name=".AddAllergiesActivity" />
+        <activity android:name=".DocumentsActivity" />
+        <activity android:name=".MedicationsActivity" />
+        <activity android:name=".AddMedicationActivity" />
+        <activity android:name=".AllergiesActivity"/>
+        <activity android:name=".Diet1Activity"/>
+        <activity android:name=".Diet2Activity"/>
+        <activity android:name=".Diet4Activity"/>
+        <activity android:name=".Diet6Activity"/>
+        <activity android:name=".ResultsActivity"/>
+        <activity android:name=".ReportActivity"/>
+        <activity android:name=".DBHelper"/>
     </application>
 
 </manifest>
