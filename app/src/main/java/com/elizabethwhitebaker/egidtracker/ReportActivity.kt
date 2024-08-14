@@ -1,6 +1,18 @@
 package com.elizabethwhitebaker.egidtracker
 
-/**
+
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.os.Bundle
+import android.os.Environment
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -8,12 +20,16 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
-*/
-
-import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ReportActivity : AppCompatActivity() {
-    /**
 
     private lateinit var lineChart: LineChart
     private lateinit var descriptionText: TextView
@@ -128,7 +144,7 @@ class ReportActivity : AppCompatActivity() {
         }
         startActivity(Intent.createChooser(shareIntent, "Send Report"))
     }
-*/
+
 }
 
 
