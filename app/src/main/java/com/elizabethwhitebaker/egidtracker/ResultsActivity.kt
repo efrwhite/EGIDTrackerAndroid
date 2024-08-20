@@ -1,8 +1,8 @@
 package com.elizabethwhitebaker.egidtracker
 
 import android.content.Context
-import android.os.Bundle
 import android.content.Intent
+import android.os.Bundle
 import android.widget.Button
 import android.widget.TableLayout
 import android.widget.TextView
@@ -11,7 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class ResultsActivity : AppCompatActivity() {
 
@@ -23,13 +24,16 @@ class ResultsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_results)
 
         reportButton = findViewById(R.id.genButton)
+        val sourceActivity = intent.getStringExtra("sourceActivity") ?: "SymptomChecker"
+
         reportButton.setOnClickListener {
-            val intent = Intent(this, ReportActivity::class.java)
+            val intent = Intent(this, ReportActivity::class.java).apply {
+                putExtra("sourceActivity", sourceActivity)
+            }
             startActivity(intent)
         }
 
         tableLayout = findViewById(R.id.reportTableLayout)
-        val sourceActivity = intent.getStringExtra("sourceActivity") ?: "SymptomChecker"
 
         val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {

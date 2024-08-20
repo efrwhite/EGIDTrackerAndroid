@@ -1,6 +1,5 @@
 package com.elizabethwhitebaker.egidtracker
 
-
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -102,23 +101,30 @@ class ReportActivity : AppCompatActivity() {
                 lineChart.description.isEnabled = false
                 lineChart.invalidate() // Refresh the graph
 
-                updateDescriptions(documents)
+                updateDescriptions(documents, sourceActivity)
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to load data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun updateDescriptions(documents: List<DocumentSnapshot>) {
-        val mostRecentWithY = documents.firstOrNull { doc ->
-            (doc["responses"] as? List<*>)?.contains("y") == true
-        }
+    private fun updateDescriptions(documents: List<DocumentSnapshot>, sourceActivity: String) {
+        if (sourceActivity == "SymptomChecker") {
+            // Only update description text for SymptomChecker
+            val mostRecentWithY = documents.firstOrNull { doc ->
+                (doc["responses"] as? List<*>)?.contains("y") == true
+            }
 
-        mostRecentWithY?.let { doc ->
-            val descriptions = doc["symptomDescriptions"] as? List<*>
-            descriptionText.text = descriptions?.joinToString(", ") ?: "No descriptions available"
+            mostRecentWithY?.let { doc ->
+                val descriptions = doc["symptomDescriptions"] as? List<*>
+                descriptionText.text = descriptions?.joinToString(", ") ?: "No descriptions available"
+            }
+        } else {
+            // Clear or set a default text for QoLActivity
+            descriptionText.text = "No specific descriptions for QoL."
         }
     }
+
     private fun captureView(view: View): Bitmap {
         val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
@@ -144,7 +150,4 @@ class ReportActivity : AppCompatActivity() {
         }
         startActivity(Intent.createChooser(shareIntent, "Send Report"))
     }
-
 }
-
-

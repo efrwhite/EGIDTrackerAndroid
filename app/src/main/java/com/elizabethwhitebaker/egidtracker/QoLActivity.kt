@@ -1,24 +1,34 @@
 package com.elizabethwhitebaker.egidtracker
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 class QoLActivity : AppCompatActivity() {
 
     private lateinit var resultsButton: Button
+    private lateinit var visitDateInput: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qol_score_checker)
+
+        visitDateInput = findViewById(R.id.visitDateInput)
+        visitDateInput.setOnClickListener {
+            showDatePickerDialog()
+        }
 
         val saveButton: Button = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
@@ -30,9 +40,9 @@ class QoLActivity : AppCompatActivity() {
             val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
             val intent = Intent(this, ResultsActivity::class.java).apply {
                 putExtra("sourceActivity", "QoLActivity")
-
             }
             startActivity(intent)
+            finish()
         }
     }
 
@@ -65,6 +75,10 @@ class QoLActivity : AppCompatActivity() {
         }
 
         saveResultsToFirestore(totalScore, responses, dateString)
+
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun calculateTotalScore(): Int {
@@ -118,4 +132,24 @@ class QoLActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
+                // Format the date and set it to the EditText
+                val formattedDate = "${selectedMonth + 1}/$selectedDay/$selectedYear"
+                visitDateInput.setText(formattedDate)
+            },
+            year, month, day
+        )
+
+        datePickerDialog.show()
+    }
+
 }
