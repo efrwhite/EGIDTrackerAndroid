@@ -4,17 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AddAllergiesActivity : AppCompatActivity() {
     
     private lateinit var saveButton: Button
     private lateinit var allergenName: EditText
-    private lateinit var frequency: EditText
-    private lateinit var discontinue: SwitchCompat
+    private lateinit var discontinue: Switch
     private lateinit var notes: EditText
     private var childId: String? = null
     private var allergenId: String? = null
@@ -28,7 +27,6 @@ class AddAllergiesActivity : AppCompatActivity() {
 
         allergenName = findViewById(R.id.allergiesNameField)
         saveButton = findViewById(R.id.saveButton)
-        frequency = findViewById(R.id.frequencyField)
         discontinue = findViewById(R.id.discontinueSwitch)
         notes = findViewById(R.id.allergyNotesField)
         childId = getCurrentChildId()
@@ -56,7 +54,6 @@ class AddAllergiesActivity : AppCompatActivity() {
     private fun saveAllergen() {
         val allergenMap = hashMapOf(
             "allergenName" to allergenName.text.toString().trim(),
-            "frequency" to frequency.text.toString().trim(),
             "discontinue" to discontinue.isChecked,
             "notes" to notes.text.toString().trim(),
             "childId" to childId
@@ -67,7 +64,9 @@ class AddAllergiesActivity : AppCompatActivity() {
                 val allergenId = documentReference.id
                 Toast.makeText(this, "Allergen added successfully", Toast.LENGTH_SHORT).show()
                 // Start AllergiesActivity and finish this activity
-                val intent = Intent(this, AllergiesActivity::class.java)
+                val intent = Intent(this, AllergiesActivity::class.java).apply{
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                }
                 startActivity(intent)
                 finish()
             }
@@ -79,7 +78,6 @@ class AddAllergiesActivity : AppCompatActivity() {
     private fun updateAllergen() {
         val allergenMap = hashMapOf(
             "allergenName" to allergenName.text.toString().trim(),
-            "frequency" to frequency.text.toString().trim(),
             "discontinue" to discontinue.isChecked,
             "notes" to notes.text.toString().trim(),
             "childId" to childId
@@ -90,7 +88,10 @@ class AddAllergiesActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Toast.makeText(this, "Allergen updated successfully", Toast.LENGTH_SHORT).show()
                     // Start AllergiesActivity and finish this activity
-                    val intent = Intent(this, AllergiesActivity::class.java)
+                    val intent = Intent(this, AllergiesActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+
+                    }
                     startActivity(intent)
                     finish()
                 }
@@ -106,7 +107,6 @@ class AddAllergiesActivity : AppCompatActivity() {
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     allergenName.setText(document.getString("allergenName"))
-                    frequency.setText(document.getString("frequency"))
                     discontinue.isChecked = document.getBoolean("discontinue") ?: false
                     notes.setText(document.getString("notes"))
 

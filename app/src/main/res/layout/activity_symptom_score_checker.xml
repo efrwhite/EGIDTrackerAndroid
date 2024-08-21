@@ -130,7 +130,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="10dp"
-                    tools:ignore="Autofill" />
+                    tools:ignore="Autofill"
+                    android:focusable="false"
+                    android:clickable="true"/>
 
             </TableRow>
 

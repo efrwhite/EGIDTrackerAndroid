@@ -1,6 +1,7 @@
 package com.elizabethwhitebaker.egidtracker
 
 import android.Manifest
+import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +12,7 @@ import android.provider.MediaStore
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -26,13 +28,14 @@ import com.google.firebase.ktx.Firebase
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 class AddChildActivity : AppCompatActivity() {
     private lateinit var firstNameEditText: EditText
     private lateinit var lastNameEditText: EditText
-    private lateinit var birthDateEditText: EditText
+    private lateinit var birthDateInput: EditText
     private lateinit var genderInput: AutoCompleteTextView
     private lateinit var dietInput: AutoCompleteTextView
     private lateinit var saveButton: Button
@@ -52,7 +55,7 @@ class AddChildActivity : AppCompatActivity() {
 
         firstNameEditText = findViewById(R.id.editText2)
         lastNameEditText = findViewById(R.id.editText)
-        birthDateEditText = findViewById(R.id.editTextDate)
+        birthDateInput = findViewById(R.id.editTextDate)
         genderInput = findViewById(R.id.GenderInputFields)
         dietInput = findViewById(R.id.DietInputFields)
         saveButton = findViewById(R.id.saveButton)
@@ -77,6 +80,10 @@ class AddChildActivity : AppCompatActivity() {
             } else {
                 updateChildInfo()
             }
+        }
+
+        birthDateInput.setOnClickListener {
+            showDatePickerDialog()
         }
 
         setupDropdownMenus()
@@ -123,7 +130,7 @@ class AddChildActivity : AppCompatActivity() {
                 if (document.exists()) {
                     firstNameEditText.setText(document.getString("firstName"))
                     lastNameEditText.setText(document.getString("lastName"))
-                    birthDateEditText.setText(document.getString("birthDate"))
+                    birthDateInput.setText(document.getString("birthDate"))
                     genderInput.setText(document.getString("gender"))
                     dietInput.setText(document.getString("diet"))
                 } else {
@@ -140,7 +147,7 @@ class AddChildActivity : AppCompatActivity() {
         val userMap = hashMapOf(
             "firstName" to firstNameEditText.text.toString().trim(),
             "lastName" to lastNameEditText.text.toString().trim(),
-            "birthDate" to birthDateEditText.text.toString().trim(),
+            "birthDate" to birthDateInput.text.toString().trim(),
             "gender" to genderInput.text.toString().trim(),
             "diet" to dietInput.text.toString().trim(),
             "parentUserId" to firebaseAuth.currentUser?.uid
@@ -162,7 +169,7 @@ class AddChildActivity : AppCompatActivity() {
         val userMap = hashMapOf(
             "firstName" to firstNameEditText.text.toString().trim(),
             "lastName" to lastNameEditText.text.toString().trim(),
-            "birthDate" to birthDateEditText.text.toString().trim(),
+            "birthDate" to birthDateInput.text.toString().trim(),
             "gender" to genderInput.text.toString().trim(),
             "diet" to dietInput.text.toString().trim(),
             "parentUserId" to firebaseAuth.currentUser?.uid
@@ -389,6 +396,25 @@ class AddChildActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
+                // Format the date and set it to the EditText
+                val formattedDate = "${selectedMonth + 1}/$selectedDay/$selectedYear"
+                birthDateInput.setText(formattedDate)
+            },
+            year, month, day
+        )
+
+        datePickerDialog.show()
     }
 
     companion object {

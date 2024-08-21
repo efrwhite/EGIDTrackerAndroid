@@ -113,7 +113,9 @@ class AddMedicationActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to add medication: ${e.message}", Toast.LENGTH_SHORT).show()
             }
 
-        val intent = Intent(this, MedicationsActivity::class.java)
+        val intent = Intent(this, MedicationsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        }
         startActivity(intent)
         finish()
     }
@@ -149,7 +151,9 @@ class AddMedicationActivity : AppCompatActivity() {
                 }
         }
 
-        val intent = Intent(this, MedicationsActivity::class.java)
+        val intent = Intent(this, MedicationsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        }
         startActivity(intent)
         finish()
     }
