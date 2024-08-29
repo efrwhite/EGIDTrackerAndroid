@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -19,6 +20,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var symptomCheckerButton: Button
     private lateinit var qoLButton: Button
     private lateinit var eOEedButton: Button
+    private lateinit var logoutButton: Button
     private lateinit var childNameTextView: TextView
     private lateinit var childDietTextView: TextView
     private lateinit var childImageView: ImageView
@@ -34,6 +36,14 @@ class HomeActivity : AppCompatActivity() {
         childId?.let {
             fetchAndDisplayChildData(it)
         }
+
+        logoutButton.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun initializeViews() {
@@ -46,6 +56,7 @@ class HomeActivity : AppCompatActivity() {
         childNameTextView = findViewById(R.id.childName)
         childDietTextView = findViewById(R.id.childDiet)
         childImageView = findViewById(R.id.homeImage)
+        logoutButton = findViewById(R.id.logoutButton)
 
         profileButton.setOnClickListener {
             val intent = Intent(this, ProfilesActivity::class.java)

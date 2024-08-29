@@ -402,5 +402,10 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="Diet2">Diet 2</string>
+    <string name="logOut">Log Out</string>
+    <string name="patient">Patient</string>
+    <string name="clearedAllergens">Cleared Allergens</string>
+    <string name="clearedAllergen">Cleared Allergen</string>
+    <string name="igEAllergen">IgE Allergen</string>
 
 </resources>

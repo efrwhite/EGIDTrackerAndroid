@@ -71,18 +71,44 @@
         app:layout_constraintStart_toEndOf="@+id/addAllergiesName"
         app:layout_constraintTop_toBottomOf="@+id/navBar" />
 
-
     <TextView
-        android:id="@+id/discontinueAllergen"
+        android:id="@+id/igEAllergen"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_marginTop="60dp"
         android:fontFamily="@font/lato_medium"
-        android:text="@string/discontinuedAllergen"
+        android:text="@string/igEAllergen"
         android:textColor="@color/primary"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/addAllergiesName" />
+
+
+    <Switch
+        android:id="@+id/igESwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="60dp"
+        android:paddingEnd="16dp"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+        app:layout_constraintHorizontal_bias="0.676"
+        app:layout_constraintTop_toBottomOf="@+id/addAllergiesName"
+        tools:ignore="MissingConstraints" />
+
+
+    <TextView
+        android:id="@+id/clearAllergen"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/clearedAllergen"
+        android:textColor="@color/primary"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/igEAllergen" />
 
     <TextView
         android:id="@+id/addAllergenNotes"
@@ -94,7 +120,7 @@
         android:textColor="@color/primary"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/discontinueAllergen" />
+        app:layout_constraintTop_toBottomOf="@+id/clearAllergen" />
 
     <EditText
         android:id="@+id/allergyNotesField"
@@ -117,17 +143,16 @@
 
 
     <Switch
-        android:id="@+id/discontinueSwitch"
+        android:id="@+id/clearSwitch"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginTop="30dp"
+        android:paddingEnd="16dp"
         android:scaleX="1.5"
         android:scaleY="1.5"
-        app:layout_constraintBottom_toTopOf="@+id/allergyNotesField"
         app:layout_constraintEnd_toStartOf="@id/rightGuideline"
         app:layout_constraintHorizontal_bias="0.676"
-        app:layout_constraintTop_toBottomOf="@+id/addAllergiesName"
+        app:layout_constraintTop_toBottomOf="@+id/igEAllergen"
         tools:ignore="MissingConstraints" />
 
 
