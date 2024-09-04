@@ -402,5 +402,10 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="Diet2">Diet 2</string>
+    <string name="history">History</string>
+    <string name="reportNewAccidentalExposure">Report New Accidental Exposure</string>
+    <string name="date">Date</string>
+    <string name="itemExposed">Exposed Item</string>
+    <string name="itemName">Item Name</string>
 
 </resources>
