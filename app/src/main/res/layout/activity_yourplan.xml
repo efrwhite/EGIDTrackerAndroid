@@ -78,7 +78,7 @@
         app:backgroundTint="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dietButton" />
+        app:layout_constraintTop_toBottomOf="@+id/accidentalExposureButton" />
 
     <Button
         android:id="@+id/documentsButton"
@@ -128,9 +128,9 @@
         android:background="@drawable/rounded_edittext_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
-        android:paddingStart="16dp"
+        android:paddingStart="0dp"
         android:paddingTop="0dp"
-        android:paddingEnd="16dp"
+        android:paddingEnd="0dp"
         android:paddingBottom="0dp"
         android:text="@string/accidentalExposure"
         android:textColor="#ffffff"
@@ -138,7 +138,7 @@
         app:backgroundTint="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/endoscopyButton" />
+        app:layout_constraintTop_toBottomOf="@+id/dietButton" />
 
     <!-- Text Views -->
 
@@ -160,7 +160,7 @@
     <TextView
         android:id="@+id/planName"
         android:layout_width="wrap_content"
-        android:layout_height="38dp"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/lato_medium"
         android:text=""
         android:textColor="@color/primary"

@@ -1,7 +1,7 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -13,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 class PlanActivity : AppCompatActivity() {
 
     private lateinit var dietButton: Button
+    private lateinit var accidentalExposureButton: Button
     private lateinit var medicationsButton: Button
     private lateinit var documentsButton: Button
     private lateinit var childDiet: String
@@ -24,6 +25,7 @@ class PlanActivity : AppCompatActivity() {
 
         //Initialize buttons
         dietButton = findViewById(R.id.dietButton)
+        accidentalExposureButton = findViewById(R.id.accidentalExposureButton)
         medicationsButton = findViewById(R.id.medicationsButton)
         documentsButton = findViewById(R.id.documentsButton)
         planName = findViewById(R.id.planName)
@@ -35,6 +37,11 @@ class PlanActivity : AppCompatActivity() {
         //set onClickListeners for Buttons
         dietButton.setOnClickListener {
             goToDietActivity()
+        }
+
+        accidentalExposureButton.setOnClickListener {
+            val intent = Intent(this, AccidentalExposureActivity :: class.java)
+            startActivity(intent)
         }
 
         medicationsButton.setOnClickListener {
