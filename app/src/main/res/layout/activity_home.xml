@@ -20,11 +20,11 @@
     <Button
         android:id="@+id/profileButton"
         android:layout_width="250dp"
-        android:layout_height="48dp"
+        android:layout_height="58dp"
         android:background="@drawable/rounded_edittext_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:paddingStart="16dp"
         android:paddingTop="0dp"
         android:paddingEnd="16dp"
@@ -79,7 +79,7 @@
     <Button
         android:id="@+id/planButton"
         android:layout_width="250dp"
-        android:layout_height="48dp"
+        android:layout_height="58dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/rounded_edittext_bg"
         android:fontFamily="@font/lato_medium"
@@ -100,7 +100,7 @@
     <Button
         android:id="@+id/foodTrackerButton"
         android:layout_width="250dp"
-        android:layout_height="48dp"
+        android:layout_height="58dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/rounded_edittext_bg"
         android:fontFamily="@font/lato_medium"
@@ -121,7 +121,7 @@
     <Button
         android:id="@+id/symptomCheckerButton"
         android:layout_width="250dp"
-        android:layout_height="48dp"
+        android:layout_height="58dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/rounded_edittext_bg"
         android:fontFamily="@font/lato_medium"
@@ -141,7 +141,7 @@
     <Button
         android:id="@+id/QoLButton"
         android:layout_width="250dp"
-        android:layout_height="48dp"
+        android:layout_height="58dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/rounded_edittext_bg"
         android:fontFamily="@font/lato_medium"
@@ -161,7 +161,7 @@
     <Button
         android:id="@+id/EOEedButton"
         android:layout_width="250dp"
-        android:layout_height="48dp"
+        android:layout_height="58dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/rounded_edittext_bg"
         android:fontFamily="@font/lato_medium"

@@ -71,6 +71,7 @@
         <activity android:name=".ResultsActivity"/>
         <activity android:name=".ReportActivity"/>
         <activity android:name=".DBHelper"/>
+        <activity android:name=".EndoscopyActivity"/>
         <activity
             android:name=".AccidentalExposureActivity"
             android:windowSoftInputMode="adjustPan">

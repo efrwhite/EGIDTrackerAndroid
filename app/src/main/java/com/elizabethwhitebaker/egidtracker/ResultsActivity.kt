@@ -49,6 +49,7 @@ class ResultsActivity : AppCompatActivity() {
         val subCollection = when (sourceActivity) {
             "SymptomChecker" -> "Symptom Scores"
             "QoLActivity" -> "Quality of Life Scores"
+            "EndoscopyActivity" -> "EndoscopyResults"
             else -> "Symptom Scores"
         }
 
