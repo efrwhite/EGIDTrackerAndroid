@@ -133,6 +133,8 @@ class AddChildActivity : AppCompatActivity() {
                     birthDateInput.setText(document.getString("birthDate"))
                     genderInput.setText(document.getString("gender"))
                     dietInput.setText(document.getString("diet"))
+
+                    setupDropdownMenus()
                 } else {
                     Toast.makeText(this, "Child not found.", Toast.LENGTH_SHORT).show()
                 }
@@ -206,6 +208,8 @@ class AddChildActivity : AppCompatActivity() {
         val dietAdapter =
             ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, dietOptions)
         dietInput.setAdapter(dietAdapter)
+
+
     }
 
     private fun goToNextActivity() {

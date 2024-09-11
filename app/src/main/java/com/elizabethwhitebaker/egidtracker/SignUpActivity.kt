@@ -56,6 +56,11 @@ class SignUpActivity : AppCompatActivity() {
             return
         }
 
+        if (!isPasswordValid(password)) {
+            Toast.makeText(this, "Password does not meet the requirements.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         checkUsernameUnique(username) { isUnique ->
             if (isUnique) {
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
@@ -85,6 +90,11 @@ class SignUpActivity : AppCompatActivity() {
                 Toast.makeText(this, "Username is already taken. Please choose another.", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun isPasswordValid(password: String): Boolean {
+        val passwordPattern = "^(?=.*[A-Z])(?=.*[!@#\$])[A-Za-z\\d!@#\$]{7,}$"
+        return Regex(passwordPattern).matches(password)
     }
 
     private fun checkUsernameUnique(username: String, onComplete: (Boolean) -> Unit) {

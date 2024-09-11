@@ -13,7 +13,7 @@ class AddAllergiesActivity : AppCompatActivity() {
     
     private lateinit var saveButton: Button
     private lateinit var allergenName: EditText
-    private lateinit var discontinue: Switch
+    private lateinit var cleared: Switch
     private lateinit var notes: EditText
     private var childId: String? = null
     private var allergenId: String? = null
@@ -27,7 +27,7 @@ class AddAllergiesActivity : AppCompatActivity() {
 
         allergenName = findViewById(R.id.allergiesNameField)
         saveButton = findViewById(R.id.saveButton)
-        discontinue = findViewById(R.id.discontinueSwitch)
+        cleared = findViewById(R.id.clearSwitch)
         notes = findViewById(R.id.allergyNotesField)
         childId = getCurrentChildId()
 
@@ -54,7 +54,7 @@ class AddAllergiesActivity : AppCompatActivity() {
     private fun saveAllergen() {
         val allergenMap = hashMapOf(
             "allergenName" to allergenName.text.toString().trim(),
-            "discontinue" to discontinue.isChecked,
+            "cleared" to cleared.isChecked,
             "notes" to notes.text.toString().trim(),
             "childId" to childId
         )
@@ -78,7 +78,7 @@ class AddAllergiesActivity : AppCompatActivity() {
     private fun updateAllergen() {
         val allergenMap = hashMapOf(
             "allergenName" to allergenName.text.toString().trim(),
-            "discontinue" to discontinue.isChecked,
+            "cleared" to cleared.isChecked,
             "notes" to notes.text.toString().trim(),
             "childId" to childId
         )
@@ -107,7 +107,7 @@ class AddAllergiesActivity : AppCompatActivity() {
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     allergenName.setText(document.getString("allergenName"))
-                    discontinue.isChecked = document.getBoolean("discontinue") ?: false
+                    cleared.isChecked = document.getBoolean("discontinue") ?: false
                     notes.setText(document.getString("notes"))
 
                 } else {

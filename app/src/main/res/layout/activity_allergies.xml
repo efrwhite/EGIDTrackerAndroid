@@ -107,7 +107,7 @@
         android:layout_height="38dp"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/lato_medium"
-        android:text="@string/discontinuedAllerges"
+        android:text="@string/clearedAllergens"
         android:textColor="@color/primary"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@id/pastAllergenSectionHeader"

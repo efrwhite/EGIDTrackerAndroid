@@ -65,6 +65,25 @@
             android:textColor="@color/primary"
             android:textSize="20sp" />
 
+        <!-- Logout Button -->
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/lato_medium"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:background="@android:color/transparent"
+            android:text="@string/logOut"
+            android:textColor="@color/primary"
+            android:textAllCaps="false"
+            android:textSize="17sp"/>
+
+
     </RelativeLayout>
 
     <ImageView

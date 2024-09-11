@@ -407,5 +407,9 @@
     <string name="date">Date</string>
     <string name="itemExposed">Exposed Item</string>
     <string name="itemName">Item Name</string>
-
+    <string name="logOut">Log Out</string>
+    <string name="patient">Patient</string>
+    <string name="clearedAllergens">Cleared Allergens</string>
+    <string name="clearedAllergen">Cleared Allergen</string>
+    <string name="igEAllergen">IgE Allergen</string>
 </resources>
