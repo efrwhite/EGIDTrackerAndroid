@@ -16,6 +16,7 @@ class PlanActivity : AppCompatActivity() {
     private lateinit var accidentalExposureButton: Button
     private lateinit var medicationsButton: Button
     private lateinit var documentsButton: Button
+    private lateinit var endoscopyButton: Button
     private lateinit var childDiet: String
     private lateinit var planName: TextView
 
@@ -28,7 +29,9 @@ class PlanActivity : AppCompatActivity() {
         accidentalExposureButton = findViewById(R.id.accidentalExposureButton)
         medicationsButton = findViewById(R.id.medicationsButton)
         documentsButton = findViewById(R.id.documentsButton)
+        endoscopyButton = findViewById(R.id.endoscopyButton)
         planName = findViewById(R.id.planName)
+
 
         val childId = getCurrentChildId()
         childId?.let {
@@ -51,6 +54,11 @@ class PlanActivity : AppCompatActivity() {
 
         documentsButton.setOnClickListener {
             val intent = Intent(this, DocumentsActivity :: class.java)
+            startActivity(intent)
+        }
+
+        endoscopyButton.setOnClickListener {
+            val intent = Intent(this, EndoscopyActivity :: class.java)
             startActivity(intent)
         }
     }

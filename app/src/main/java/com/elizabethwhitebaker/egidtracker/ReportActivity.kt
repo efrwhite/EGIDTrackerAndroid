@@ -119,9 +119,6 @@ class ReportActivity : AppCompatActivity() {
                 val descriptions = doc["symptomDescriptions"] as? List<*>
                 descriptionText.text = descriptions?.joinToString(", ") ?: "No descriptions available"
             }
-        } else {
-            // Clear or set a default text for QoLActivity
-            descriptionText.text = "No specific descriptions for QoL."
         }
     }
 
