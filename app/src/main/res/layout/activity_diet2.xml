@@ -15,7 +15,7 @@
     <RelativeLayout
         android:id="@+id/navBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="78dp"
         android:background="@color/primaryBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,16 +23,20 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:fontFamily="@font/lato_medium"
             android:paddingLeft="20dp"
             android:paddingTop="5dp"
             android:paddingRight="20dp"
             android:paddingBottom="5dp"
-            android:text="@string/diet2"
+            android:text="@string/diet2String"
             android:textColor="@color/primary"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:gravity="center"
+            android:singleLine="false"
+            android:maxLines="2"
+            android:layout_gravity="center" />
 
     </RelativeLayout>
 
@@ -41,8 +45,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navBar">
@@ -662,6 +666,7 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -857,7 +862,7 @@
         android:id="@+id/allergiesButton"
         android:layout_width="250dp"
         android:layout_height="48dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/rounded_edittext_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
@@ -865,17 +870,23 @@
         android:paddingTop="0dp"
         android:paddingEnd="16dp"
         android:paddingBottom="0dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="0dp"
         android:text="@string/allergies"
         android:textColor="@color/primary"
         android:textSize="17sp"
         app:backgroundTint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/bottonGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView" />
 
-
+    <!-- Guideline for Allergies Button -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottonGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

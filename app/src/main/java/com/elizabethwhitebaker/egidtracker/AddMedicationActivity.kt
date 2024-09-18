@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Switch
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,6 +23,7 @@ class AddMedicationActivity : AppCompatActivity() {
     private lateinit var calendar: Calendar
     private lateinit var saveButton: Button
 
+    private lateinit var title: TextView
     private lateinit var medName: EditText
     private lateinit var dosage: EditText
     private lateinit var startDate: String
@@ -43,6 +45,7 @@ class AddMedicationActivity : AppCompatActivity() {
         endDatePickerButton = findViewById(R.id.endDatePickerButton)
         saveButton = findViewById(R.id.medSaveButton)
 
+        title = findViewById(R.id.title)
         medName = findViewById(R.id.medNameField)
         dosage = findViewById(R.id.medAmountField)
         frequency = findViewById(R.id.frequencyField)
@@ -159,6 +162,7 @@ class AddMedicationActivity : AppCompatActivity() {
     }
 
     private fun fetchAndPopulateMedicationData(medicationId: String) {
+        title.text = "Edit Medication"
         firestore.collection("Medications").document(medicationId).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {

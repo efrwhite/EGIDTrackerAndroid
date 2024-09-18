@@ -15,7 +15,7 @@
     <RelativeLayout
         android:id="@+id/navBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="80dp"
         android:background="@color/primaryBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,26 +23,31 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:fontFamily="@font/lato_medium"
             android:paddingLeft="20dp"
             android:paddingTop="5dp"
             android:paddingRight="20dp"
             android:paddingBottom="5dp"
-            android:text="@string/diet1"
+            android:text="@string/diet1String"
             android:textColor="@color/primary"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:gravity="center"
+            android:singleLine="false"
+            android:maxLines="2"
+            android:layout_gravity="center" />
+
 
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/foodsToAvoid"
+        android:id="@+id/dietName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navBar">
@@ -65,7 +70,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/foodsToAvoid"
+        app:layout_constraintTop_toBottomOf="@id/dietName"
         app:layout_constraintBottom_toTopOf="@+id/allergiesButton">
 
         <TableLayout
@@ -84,7 +89,7 @@
                 <TextView
                     android:id="@+id/dairy"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="0"
                     android:paddingVertical="10dp"
@@ -506,7 +511,7 @@
         android:id="@+id/allergiesButton"
         android:layout_width="250dp"
         android:layout_height="48dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/rounded_edittext_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
@@ -514,16 +519,39 @@
         android:paddingTop="0dp"
         android:paddingEnd="16dp"
         android:paddingBottom="0dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="0dp"
         android:text="@string/allergies"
         android:textColor="@color/primary"
         android:textSize="17sp"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/allergiesGuideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView" />
 
+    <!-- Guideline for end of scroll view -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/scrollEndGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="90dp" />
+
+    <!-- Guideline for top of Allergies Button -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottonGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5" />
+
+    <!-- Guideline for Allergies Button -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/allergiesGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -410,6 +410,13 @@
     <string name="logOut">Log Out</string>
     <string name="patient">Patient</string>
     <string name="clearedAllergens">Cleared Allergens</string>
-    <string name="clearedAllergen">Cleared Allergen</string>
+    <string name="clearedAllergen">Allergen Cleared</string>
     <string name="igEAllergen">IgE Allergen</string>
+    <string name="diet1String">Diet 1:\nDairy-Free Diet</string>
+    <string name="diet2String">Diet 2:\nDairy &amp; Gluten-Free Diet</string>
+    <string name="diet4String">Diet 4:\nDairy, Gluten, &amp; Egg-Free Diet</string>
+    <string name="diet6String">Diet 6:\nDairy, Gluten, Egg, &amp; Soy-Free Diet</string>
+    <string name="editMed">Edit Medication</string>
+    <string name="clearedDate">Date Cleared</string>
+    <string name="diagnosedDate">Date of Diagnosis</string>
 </resources>

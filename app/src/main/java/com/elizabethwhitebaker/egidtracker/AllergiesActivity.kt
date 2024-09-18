@@ -44,15 +44,61 @@ class AllergiesActivity : AppCompatActivity() {
 
     private fun fetchAndDisplayAllergies(allergyTableLayout: TableLayout, pastAllergyTableLayout: TableLayout) {
         val childId = getCurrentChildId()
+
         Firebase.firestore.collection("Allergens")
             .whereEqualTo("childId", childId)
             .get()
             .addOnSuccessListener { documents ->
+                val igEAllergies = mutableListOf<Map<String, Any>>()
+                val nonIgEAllergies = mutableListOf<Map<String, Any>>()
+
+                // Separate allergies into IgE and Non-IgE groups
                 for (document in documents) {
                     val allergenName = document.getString("allergenName") ?: "No Name"
                     val allergenId = document.id
-                    val isDiscontinued = document.getBoolean("discontinue") ?: false
-                    addRowToTable(allergyTableLayout, pastAllergyTableLayout, allergenName, allergenId, isDiscontinued)
+                    val igE = document.getBoolean("igE") ?: false
+                    val isCleared = document.getBoolean("cleared") ?: false
+
+                    val allergyData = mapOf(
+                        "allergenName" to allergenName,
+                        "allergenId" to allergenId,
+                        "isCleared" to isCleared,
+                        "igE" to igE
+                    )
+
+                    if (igE) {
+                        igEAllergies.add(allergyData)
+                    } else {
+                        nonIgEAllergies.add(allergyData)
+                    }
+                }
+
+                // Sort each group alphabetically by allergenName
+                igEAllergies.sortBy { it["allergenName"].toString() }
+                nonIgEAllergies.sortBy { it["allergenName"].toString() }
+
+                // Add rows for IgE allergies
+                for (allergy in igEAllergies) {
+                    addRowToTable(
+                        allergyTableLayout,
+                        pastAllergyTableLayout,
+                        allergy["allergenName"] as String,
+                        allergy["allergenId"] as String,
+                        allergy["isCleared"] as Boolean,
+                        true
+                    )
+                }
+
+                // Add rows for Non-IgE allergies
+                for (allergy in nonIgEAllergies) {
+                    addRowToTable(
+                        allergyTableLayout,
+                        pastAllergyTableLayout,
+                        allergy["allergenName"] as String,
+                        allergy["allergenId"] as String,
+                        allergy["isCleared"] as Boolean,
+                        false
+                    )
                 }
             }
             .addOnFailureListener { e ->
@@ -64,35 +110,49 @@ class AllergiesActivity : AppCompatActivity() {
             }
     }
 
+
     @SuppressLint("InflateParams")
-    private fun addRowToTable(allergyTableLayout: TableLayout, pastAllergyTableLayout: TableLayout, name: String, allergenId: String, isDiscontinued: Boolean) {
+    private fun addRowToTable(allergyTableLayout: TableLayout, pastAllergyTableLayout: TableLayout, name: String, allergenId: String, isCleared: Boolean, igE: Boolean) {
         val row = layoutInflater.inflate(R.layout.table_row_item, null)
-        val nameTextView = row.findViewById<TextView>(R.id.nameTextView)
+        val text = row.findViewById<TextView>(R.id.nameTextView)
         val editButton = row.findViewById<Button>(R.id.editButton)
+        var igEText: String = if (igE) "IgE Allergen" else "Non-IgE Allergen"
 
-        nameTextView.text = name
+        text.text = "$name, $igEText"
 
-        nameTextView.text = name
-        editButton.setOnClickListener {
-            navigateToEditActivity(allergenId)
-        }
-
-        if (isDiscontinued) {
-            // Add to past medications list
+        if (isCleared) {
+            editButton.text = "View"
+            editButton.setOnClickListener {
+                navigateToViewOnlyActivity(allergenId)
+            }
             pastAllergyTableLayout.addView(row)
         } else {
-            // Add to current medications list
+            editButton.text = "Edit"
+            editButton.setOnClickListener {
+                navigateToEditActivity(allergenId)
+            }
             allergyTableLayout.addView(row)
         }
     }
+
+
+    private fun navigateToViewOnlyActivity(allergenId: String) {
+        val intent = Intent(this, AddAllergiesActivity::class.java).apply {
+            putExtra("allergenId", allergenId)
+            putExtra("isViewOnly", true)
+        }
+        startActivity(intent)
+    }
+
+
     private fun navigateToEditActivity(allergenId: String) {
         val intent = Intent(this, AddAllergiesActivity::class.java).apply {
             putExtra("allergenId", allergenId)
-            putExtra("editMode", true) // Indicate that we are editing an existing allergen
+            putExtra("isViewOnly", false)
         }
         startActivity(intent)
-        finish()
     }
+
 
 }
 
