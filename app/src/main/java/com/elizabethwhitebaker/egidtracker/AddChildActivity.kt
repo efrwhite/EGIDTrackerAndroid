@@ -86,6 +86,25 @@ class AddChildActivity : AppCompatActivity() {
             showDatePickerDialog()
         }
 
+        dietInput.setOnClickListener {
+            // Show a warning dialog
+            val builder = android.app.AlertDialog.Builder(this)
+            builder.setTitle("Reminder")
+            builder.setMessage("You should have indicated which cleared allergen facilitated this diet change in the allergen notes field.")
+
+            // Add the OK button
+            builder.setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss() // Dismiss the dialog when OK is clicked
+                // Proceed with further interaction (e.g., showing diet options)
+                dietInput.showDropDown() // Show the dropdown for diet selection
+            }
+
+            // Create and show the dialog
+            val alertDialog = builder.create()
+            alertDialog.show()
+        }
+
+
         setupDropdownMenus()
 
         requestPermissionLauncher =
