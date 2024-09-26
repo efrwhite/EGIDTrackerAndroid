@@ -111,7 +111,7 @@
         android:textColor="@color/primary"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/addMedDate" />
+        app:layout_constraintTop_toBottomOf="@+id/discontinueMed" />
 
     <TextView
         android:id="@+id/addMedFreq"
@@ -123,7 +123,7 @@
         android:textColor="@color/primary"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/endMedDate" />
+        app:layout_constraintTop_toBottomOf="@+id/addMedDate" />
 
     <TextView
         android:id="@+id/discontinueMed"
@@ -147,7 +147,7 @@
         android:textColor="@color/primary"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/discontinueMed" />
+        app:layout_constraintTop_toBottomOf="@+id/endMedDate" />
 
     <EditText
         android:id="@+id/medNotesField"
@@ -206,8 +206,7 @@
         android:textSize="14sp"
         app:backgroundTint="#ffffff"
         app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-
-        app:layout_constraintTop_toBottomOf="@+id/datePickerButton" />
+        app:layout_constraintTop_toBottomOf="@+id/discontinueSwitch" />
 
 
     <EditText
@@ -227,7 +226,7 @@
         android:textColor="@color/secondary"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/endDatePickerButton" />
+        app:layout_constraintTop_toBottomOf="@+id/datePickerButton" />
 
     <EditText
         android:id="@+id/medAmountField"

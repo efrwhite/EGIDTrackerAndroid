@@ -47,7 +47,7 @@ class EndoscopyActivity : AppCompatActivity() {
     }
 
 
-    // Ensure all fields are filled and numeric
+    // Ensure all fields are numeric
     private fun areAllFieldsFilled(): Boolean {
         val fieldIds = arrayOf(
             R.id.upper, R.id.middle, R.id.lower,
@@ -57,7 +57,7 @@ class EndoscopyActivity : AppCompatActivity() {
         for (id in fieldIds) {
             val editText = findViewById<EditText>(id)
             val inputText = editText.text.toString().trim()
-            if(inputText.isEmpty() || inputText.toIntOrNull() == null) {
+            if(inputText.toIntOrNull() == null) {
                 return false
             }
         }
@@ -67,7 +67,7 @@ class EndoscopyActivity : AppCompatActivity() {
 
     private fun saveEndoscopyData() {
         if (!areAllFieldsFilled()) {
-            Toast.makeText(this, "Please fill out all fields with valid input before saving.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please enter numeric values only.", Toast.LENGTH_SHORT).show()
             return
         }
 
