@@ -1,9 +1,8 @@
-<TableRow
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:baselineAligned="false">
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/nameTextView"
@@ -14,11 +13,8 @@
         android:focusable="true"
         android:layout_marginLeft="16dp"
         android:textSize="16sp"
-        android:maxLines="5"
-        android:ellipsize="none"
-        android:scrollHorizontally="false"
-        android:gravity="start|center_vertical"
-        android:lineSpacingExtra="2dp" /> <!-- Added line spacing for better multi-line display -->
+        android:inputType="textNoSuggestions"/>
+
 
     <Button
         android:id="@+id/editButton"
@@ -29,7 +25,5 @@
         android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit"
-        android:padding="4dp" /> <!-- Reduced padding to make button smaller -->
-
+        android:text="Edit"/>
 </TableRow>
