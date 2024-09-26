@@ -11,6 +11,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 class MedicationsActivity : AppCompatActivity() {
 
@@ -54,8 +57,33 @@ class MedicationsActivity : AppCompatActivity() {
                     val medicationName = document.getString("medName") ?: "No Name"
                     val medicationId = document.id
                     val startDate = document.getString("startDate") ?: "None"
-                    isDiscontinued = document.getBoolean("discontinue") ?: false
-                    addRowToTable(medTableLayout, pastMedTableLayout, medicationName, medicationId, isDiscontinued, startDate)
+                    val endDate = document.getString("endDate") ?: "" // Getting endDate which could be empty
+                    var isDiscontinued = document.getBoolean("discontinue") ?: false
+
+                    // If the medication is not discontinued and has a valid end date, check if it should be discontinued
+                    if (!isDiscontinued && endDate.isNotEmpty()) {
+                        try {
+                            val currentDate = LocalDate.now()
+                            val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy")
+                            val parsedEndDate = LocalDate.parse(endDate, formatter)
+
+                            if (parsedEndDate.isBefore(currentDate)) {
+                                // If the endDate is before the current date, mark the medication as discontinued
+                                isDiscontinued = true
+                                discontinueMedication(medicationId) // Mark as discontinued in Firestore
+                            }
+                        } catch (e: DateTimeParseException) {
+                            // Handle parsing errors if the endDate format is wrong
+                            Toast.makeText(
+                                this,
+                                "Invalid end date format for medication $medicationName",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    // Add rows to the respective table
+                    addRowToTable(medTableLayout, pastMedTableLayout, medicationName, medicationId, isDiscontinued, startDate, endDate)
                 }
             }
             .addOnFailureListener { e ->
@@ -68,15 +96,19 @@ class MedicationsActivity : AppCompatActivity() {
     }
 
     @SuppressLint("InflateParams")
-    private fun addRowToTable(medTableLayout: TableLayout, pastMedTableLayout: TableLayout, name: String, medicationId: String, isDiscontinued: Boolean, startDate: String) {
-
+    private fun addRowToTable(medTableLayout: TableLayout, pastMedTableLayout: TableLayout, name: String, medicationId: String, isDiscontinued: Boolean, startDate: String, endDate: String) {
 
         if (isDiscontinued) {
             // Add to past medications list
             val row = layoutInflater.inflate(R.layout.past_med_table_row_item, null)
             val nameTextView = row.findViewById<TextView>(R.id.nameTextView)
 
-            var nameText = "$name\nStart Date: $startDate"
+            // Show the end date instead of the start date for discontinued medications
+            val nameText = if (endDate.isNotEmpty()) {
+                "$name\nEnd Date: $endDate"
+            } else {
+                "$name\nEnd Date: None"  // In case the end date is not set
+            }
 
             nameTextView.text = nameText
             pastMedTableLayout.addView(row)
@@ -86,7 +118,9 @@ class MedicationsActivity : AppCompatActivity() {
             val nameTextView = row.findViewById<TextView>(R.id.nameTextView)
             val editButton = row.findViewById<Button>(R.id.editButton)
 
-            var nameText = "$name\nStart Date: $startDate"
+            // Show the start date for active medications
+            val nameText = "$name\nStart Date: $startDate"
+
             nameTextView.text = nameText
 
             editButton.setOnClickListener {
@@ -106,7 +140,20 @@ class MedicationsActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun discontinueMedication(medicationId: String) {
+        val medicationRef = Firebase.firestore.collection("Medications").document(medicationId)
+        medicationRef.update("discontinue", true)
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this,
+                    "Failed to discontinue medication that has past its end date: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
 }
+
+
 
 
 

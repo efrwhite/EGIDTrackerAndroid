@@ -104,7 +104,7 @@
 
     <!-- Strings for Medications -->
     <string name="currentMedications">Current Medications</string>
-    <string name="pastMedications">Past Medications</string>
+    <string name="pastMedications">Discontinued Medications</string>
 
     <!-- Strings for Add Medications -->
     <string name="addMedication">Add Medication</string>
@@ -419,4 +419,5 @@
     <string name="editMed">Edit Medication</string>
     <string name="clearedDate">Date Cleared</string>
     <string name="diagnosedDate">Date of Diagnosis</string>
+    <string name="procedureDate">Procedure Date</string>
 </resources>

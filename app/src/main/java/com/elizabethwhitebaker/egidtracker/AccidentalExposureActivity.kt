@@ -77,11 +77,10 @@ class AccidentalExposureActivity : AppCompatActivity() {
 
         firestore.collection("AccidentalExposure").add(itemMap)
             .addOnSuccessListener {documentReference ->
-                val medicationId = documentReference.id
-                Toast.makeText(this, "Medication added successfully", Toast.LENGTH_SHORT).show()
-            }
+                val exposureId = documentReference.id
+                Toast.makeText(this, "Exposure added successfully", Toast.LENGTH_SHORT).show()}
             .addOnFailureListener{e ->
-                Toast.makeText(this, "Failed to add medication: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to add exposure: ${e.message}", Toast.LENGTH_SHORT).show()
             }
 
         val intent = Intent(this, AccidentalExposureActivity::class.java).apply {
