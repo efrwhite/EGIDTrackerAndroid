@@ -69,11 +69,14 @@ class SignUpActivity : AppCompatActivity() {
                         val userId = firebaseAuth.currentUser?.uid ?: ""
                         val userMap = hashMapOf("email" to email, "username" to username, "phone" to phone)
                         Firebase.firestore.collection("Users").document(userId).set(userMap).addOnSuccessListener {
+                            // Save the username in SharedPreferences
+                            saveUsernameToSharedPreferences(username)
+
                             // Save the username mapping
                             Firebase.firestore.collection("Usernames").document(username).set(mapOf("userId" to userId)).addOnSuccessListener {
-                                // Transition to AddCaregiverActivity with the username passed as an extra
+                                // Transition to AddCaregiverActivity
                                 val intent = Intent(this, AddCaregiverActivity::class.java).apply {
-                                    putExtra("username", username) // Pass the username for use in the next activity
+                                    putExtra("username", username)
                                     putExtra("isFirstTimeUser", true)
                                 }
                                 startActivity(intent)
@@ -90,6 +93,13 @@ class SignUpActivity : AppCompatActivity() {
                 Toast.makeText(this, "Username is already taken. Please choose another.", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun saveUsernameToSharedPreferences(username: String) {
+        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("CurrentUsername", username)
+        editor.apply()
     }
 
     private fun isPasswordValid(password: String): Boolean {

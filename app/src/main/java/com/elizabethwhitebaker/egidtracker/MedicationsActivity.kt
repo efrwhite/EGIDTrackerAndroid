@@ -11,9 +11,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MedicationsActivity : AppCompatActivity() {
 
@@ -63,16 +64,16 @@ class MedicationsActivity : AppCompatActivity() {
                     // If the medication is not discontinued and has a valid end date, check if it should be discontinued
                     if (!isDiscontinued && endDate.isNotEmpty()) {
                         try {
-                            val currentDate = LocalDate.now()
-                            val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy")
-                            val parsedEndDate = LocalDate.parse(endDate, formatter)
+                            val currentDate = Date()
+                            val formatter = SimpleDateFormat("MM-dd-yyyy", Locale.getDefault())
+                            val parsedEndDate = formatter.parse(endDate)
 
-                            if (parsedEndDate.isBefore(currentDate)) {
+                            if (parsedEndDate != null && parsedEndDate.before(currentDate)) {
                                 // If the endDate is before the current date, mark the medication as discontinued
                                 isDiscontinued = true
                                 discontinueMedication(medicationId) // Mark as discontinued in Firestore
                             }
-                        } catch (e: DateTimeParseException) {
+                        } catch (e: ParseException) {
                             // Handle parsing errors if the endDate format is wrong
                             Toast.makeText(
                                 this,
@@ -81,6 +82,7 @@ class MedicationsActivity : AppCompatActivity() {
                             ).show()
                         }
                     }
+
 
                     // Add rows to the respective table
                     addRowToTable(medTableLayout, pastMedTableLayout, medicationName, medicationId, isDiscontinued, startDate, endDate)

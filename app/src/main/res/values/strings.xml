@@ -420,4 +420,7 @@
     <string name="clearedDate">Date Cleared</string>
     <string name="diagnosedDate">Date of Diagnosis</string>
     <string name="procedureDate">Procedure Date</string>
+    <string name="custombutton">Custom Resources\n</string>
+    <string name="customText">Add your own custom resources here</string>
+    <string name="custom_resources">Custom Resources</string>
 </resources>

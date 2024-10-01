@@ -56,6 +56,9 @@ class SignInActivity : AppCompatActivity() {
                             firebaseAuth.signInWithEmailAndPassword(email, password)
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
+                                        // Save the username in SharedPreferences
+                                        saveUsernameToSharedPreferences(username)
+
                                         // Navigate to HomeActivity or the next appropriate activity
                                         startActivity(Intent(this, HomeActivity::class.java).apply {
                                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -76,6 +79,13 @@ class SignInActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Username and password are required.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun saveUsernameToSharedPreferences(username: String) {
+        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("CurrentUsername", username)
+        editor.apply()
     }
 }
 
