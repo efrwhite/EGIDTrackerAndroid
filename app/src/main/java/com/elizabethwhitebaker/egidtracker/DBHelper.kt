@@ -1,11 +1,11 @@
 package com.elizabethwhitebaker.egidtracker
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
-import android.content.ContentValues
-import java.util.*
+import java.util.Date
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
@@ -72,7 +72,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 val date = Date(c.getLong(c.getColumnIndexOrThrow(DocumentEntry.COLUMN_NAME_DATE)))
                 val thumbnail = c.getString(c.getColumnIndexOrThrow(DocumentEntry.COLUMN_NAME_THUMBNAIL))
 
-                documents.add(DocumentsActivity.Document(name, url, type, size, date, thumbnail))
+                documents.add(DocumentsActivity.Document(childId.toLong(), name, url, type, size, date, thumbnail))
             }
         }
         return documents

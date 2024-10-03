@@ -3,6 +3,8 @@ package com.elizabethwhitebaker.egidtracker
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Switch
@@ -67,6 +69,25 @@ class AddAllergiesActivity : AppCompatActivity() {
             }
         }
 
+        // Make notes field always editable
+        notes.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (isViewOnly) {
+                    // Change "Back" button to "Save" button if notes are modified
+                    saveButton.text = "Save"
+                    saveButton.setOnClickListener {
+                        // Only save notes if we are in view-only mode
+                        if (allergenId != null) {
+                            updateAllergenNotes()
+                        }
+                    }
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
         clearedDatePickerButton.setOnClickListener {
             if (!isViewOnly) {
                 showDatePickerDialog(clearedDatePickerButton)
@@ -88,13 +109,14 @@ class AddAllergiesActivity : AppCompatActivity() {
         }
     }
 
-
     private fun getCurrentChildId(): String? {
         val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
         return sharedPreferences.getString("CurrentChildId", null)
     }
 
     private fun saveAllergen() {
+        if (!validateClearedFields()) return
+
         val allergenMap = hashMapOf(
             "allergenName" to allergenName.text.toString().trim(),
             "diagnosisDate" to diagnosisDatePickerButton.text.toString().trim(),
@@ -120,6 +142,8 @@ class AddAllergiesActivity : AppCompatActivity() {
     }
 
     private fun updateAllergen() {
+        if (!validateClearedFields()) return
+
         val allergenMap = hashMapOf(
             "allergenName" to allergenName.text.toString().trim(),
             "diagnosisDate" to diagnosisDatePickerButton.text.toString().trim(),
@@ -162,7 +186,7 @@ class AddAllergiesActivity : AppCompatActivity() {
                     clearedDatePickerButton.text = clearedDate
 
                     if (isViewOnly) {
-                        disableInteraction() // Disable all interactions
+                        disableInteraction() // Disable all interactions except notes
                     }
                 } else {
                     Toast.makeText(this, "Allergen not found.", Toast.LENGTH_SHORT).show()
@@ -199,8 +223,37 @@ class AddAllergiesActivity : AppCompatActivity() {
         return sdf.format(date)
     }
 
+    private fun validateClearedFields(): Boolean {
+        if (cleared.isChecked && clearedDatePickerButton.text.toString() == "Enter Date") {
+            Toast.makeText(this, "Please enter a cleared date when clearing an allergen", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
+    private fun updateAllergenNotes() {
+        val notesMap = hashMapOf(
+            "notes" to notes.text.toString().trim()
+        )
+
+        allergenId?.let {
+            firestore.collection("Allergens").document(it).update(notesMap as Map<String, Any>)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Notes updated successfully", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AllergiesActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
+                    startActivity(intent)
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Failed to update notes: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
     private fun enableViewMode() {
-        title.text = "View Past Allergen"
+        title.text = "View Cleared Allergen"
 
         saveButton.text = "Back"
         saveButton.isEnabled = true
@@ -215,13 +268,12 @@ class AddAllergiesActivity : AppCompatActivity() {
         disableInteraction()
     }
 
-
     private fun disableInteraction() {
         allergenName.isEnabled = false
         diagnosisDatePickerButton.isEnabled = false
         clearedDatePickerButton.isEnabled = false
         igE.isEnabled = false
         cleared.isEnabled = false
-        notes.isEnabled = false
+        // Notes remain editable
     }
 }
