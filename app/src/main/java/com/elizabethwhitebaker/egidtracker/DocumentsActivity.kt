@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +20,12 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.util.Date
 
 class DocumentsActivity : AppCompatActivity() {
@@ -28,9 +33,11 @@ class DocumentsActivity : AppCompatActivity() {
     private lateinit var addButton: Button
     private lateinit var docsRecyclerView: RecyclerView
     private lateinit var documentUploadLauncher: ActivityResultLauncher<Intent>
+    private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private var documentsList = mutableListOf<Document>()
     private lateinit var dbHelper: DBHelper
     private lateinit var childId: String
+    private var tempPhotoUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +53,7 @@ class DocumentsActivity : AppCompatActivity() {
         docsRecyclerView.layoutManager = LinearLayoutManager(this)
         docsRecyclerView.adapter = DocumentAdapter(documentsList)
 
+        // Initialize the ActivityResultLauncher for loading a document
         documentUploadLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK && result.data != null && result.data!!.data != null) {
                 processDocumentUri(result.data!!.data!!)
@@ -54,14 +62,67 @@ class DocumentsActivity : AppCompatActivity() {
             }
         }
 
-        addButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                type = "*/*"
-                addCategory(Intent.CATEGORY_OPENABLE)
+        // Initialize the ActivityResultLauncher for taking a photo
+        takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            val uri = tempPhotoUri  // Create a local copy to safely cast it
+            if (success && uri != null) {
+                processDocumentUri(uri)
+            } else {
+                Toast.makeText(this, "Failed to capture photo.", Toast.LENGTH_SHORT).show()
             }
-            documentUploadLauncher.launch(intent)
+        }
+
+
+        // Show the dialog to choose between "Take Photo" and "Load Document"
+        addButton.setOnClickListener {
+            showAddDocumentOptions()
         }
     }
+
+    // Function to show the dialog
+    private fun showAddDocumentOptions() {
+        val options = arrayOf("Take Photo", "Load Document")
+        AlertDialog.Builder(this)
+            .setTitle("Add Document")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> takePhoto()
+                    1 -> loadDocument()
+                }
+            }
+            .show()
+    }
+
+    // Load document from the phone
+    private fun loadDocument() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "*/*"
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        documentUploadLauncher.launch(intent)
+    }
+
+    // Take a photo using the camera
+    private fun takePhoto() {
+        val photoFile = createImageFile()
+        val uri = FileProvider.getUriForFile(
+            this,
+            "com.elizabethwhitebaker.egidtracker.fileprovider",
+            photoFile
+        )
+        tempPhotoUri = uri  // Set tempPhotoUri after creating the URI
+        takePictureLauncher.launch(uri)  // Use the local uri variable for launching
+    }
+
+
+    // Create a file to store the photo
+    private fun createImageFile(): File {
+        val fileName = "photo_${System.currentTimeMillis()}.jpg"
+        // Use app-specific external storage to avoid Scoped Storage issues
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File(storageDir, fileName)
+    }
+
 
     private fun getChildId(): String {
         val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
@@ -77,15 +138,42 @@ class DocumentsActivity : AppCompatActivity() {
                 val date = Date()
                 val type = contentResolver.getType(uri) ?: "Unknown"
 
-                val document = Document(0, name, uri.toString(), type, size, date, null)
-                val id = dbHelper.insertDocument(childId, name, uri.toString(), type, size, date.time, null)
-                documentsList.add(document)
-                dbHelper.insertDocument(childId, name, uri.toString(), type, size, date.time, null)
-                docsRecyclerView.adapter?.notifyDataSetChanged()
+                // Copy the file from the original location to the app's internal storage
+                val savedFilePath = copyDocumentToAppStorage(uri, name)
+
+                if (savedFilePath != null) {
+                    // Save the document info to the database
+                    val document = Document(0, name, savedFilePath, type, size, date, null)
+                    dbHelper.insertDocument(childId, name, savedFilePath, type, size, date.time, null)
+                    documentsList.add(document)
+                    docsRecyclerView.adapter?.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(this, "Failed to save the document.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
+    // Helper function to copy the document to internal storage
+    private fun copyDocumentToAppStorage(uri: Uri, fileName: String): String? {
+        try {
+            val inputStream: InputStream? = contentResolver.openInputStream(uri)
+            val file = File(filesDir, fileName)  // Save to internal storage
+            val outputStream = FileOutputStream(file)
+
+            inputStream?.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+            return file.absolutePath // Return the file path
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    // DBHelper and DocumentAdapter remain the same
     class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
         companion object {
@@ -119,11 +207,12 @@ class DocumentsActivity : AppCompatActivity() {
             onCreate(db)
         }
 
-        fun insertDocument(childId: String, name: String, url: String, type: String, size: Long, date: Long, thumbnail: String?) {
+        // In your DBHelper, ensure you're storing the file path
+        fun insertDocument(childId: String, name: String, filePath: String, type: String, size: Long, date: Long, thumbnail: String?) {
             val db = this.writableDatabase
             val contentValues = ContentValues().apply {
                 put(COLUMN_NAME, name)
-                put(COLUMN_URL, url)
+                put(COLUMN_URL, filePath)  // Save the file path instead of the URI
                 put(COLUMN_TYPE, type)
                 put(COLUMN_SIZE, size)
                 put(COLUMN_DATE, date)
@@ -171,7 +260,6 @@ class DocumentsActivity : AppCompatActivity() {
         }
     }
 
-
     data class Document(
         var id: Long,
         var name: String,
@@ -180,7 +268,6 @@ class DocumentsActivity : AppCompatActivity() {
         val size: Long,
         val date: Date,
         val thumbnail: String?
-
     )
 
     inner class DocumentAdapter(private val documents: List<Document>) : RecyclerView.Adapter<DocumentAdapter.DocumentViewHolder>() {
@@ -201,10 +288,19 @@ class DocumentsActivity : AppCompatActivity() {
             private val editButton: Button = itemView.findViewById(R.id.editButton)
 
             init {
+                // Set click listener for the entire row
                 itemView.setOnClickListener {
                     val document = documents[adapterPosition]
                     openDocument(document)
                 }
+
+                // Set click listener for the nameTextView (optional, if you want individual clicks)
+                nameTextView.setOnClickListener {
+                    val document = documents[adapterPosition]
+                    openDocument(document)
+                }
+
+                // Set click listener for the edit button
                 editButton.setOnClickListener {
                     val document = documents[adapterPosition]
                     showEditOptionsDialog(document)
@@ -213,12 +309,17 @@ class DocumentsActivity : AppCompatActivity() {
 
             fun bind(document: Document) {
                 nameTextView.text = document.name
-                editButton.visibility = View.VISIBLE // Ensure the edit button is visible
+                editButton.visibility = View.VISIBLE
             }
 
             private fun openDocument(document: Document) {
+                val file = File(document.url)
+                val fileUri: Uri = FileProvider.getUriForFile(
+                    this@DocumentsActivity,
+                    "com.elizabethwhitebaker.egidtracker.fileprovider",
+                    file
+                )
                 val intent = Intent(Intent.ACTION_VIEW)
-                val fileUri: Uri = Uri.parse(document.url) // Convert URL to Uri
                 intent.setDataAndType(fileUri, document.type)
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 try {

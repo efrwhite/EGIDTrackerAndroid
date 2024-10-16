@@ -65,6 +65,10 @@ class SymptomCheckerActivity : AppCompatActivity() {
             return
         }
 
+        if (!validateInputs()) {
+            return  // Stop further execution if validation fails
+        }
+
         val totalScore = calculateTotalScore()
         val responses = collectResponses()
         val symptomDescriptions = collectSymptomDescriptions()
@@ -76,8 +80,41 @@ class SymptomCheckerActivity : AppCompatActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
         finish()
-
     }
+
+    private fun validateInputs(): Boolean {
+        for (i in 1..20) { // Validate numerical score questions (0-4)
+            val answerId = resources.getIdentifier("answer$i", "id", packageName)
+            val answer = findViewById<EditText>(answerId)
+            val input = answer.text.toString().trim()  // Trim the input
+
+            // Check if input is a valid number between 0 and 4
+            val number = input.toIntOrNull()
+            if (number == null || number !in 0..4) {
+                answer.error = "Enter a number between 0 and 4"
+                Toast.makeText(this, "Question $i: Enter a number between 0 and 4", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+
+        for (i in 21..32) { // Validate Yes/No questions (Y/N)
+            val answerId = resources.getIdentifier("answer$i", "id", packageName)
+            val answer = findViewById<EditText>(answerId)
+            val input = answer.text.toString().trim()  // Trim the input
+
+            // Check if input is 'Y', 'y', 'N', or 'n'
+            if (input.isNotEmpty() && !input.equals("y", true) && !input.equals("n", true)) {
+                answer.error = "Enter 'Y' or 'N'"
+                Toast.makeText(this, "Question $i: Enter 'Y' or 'N'", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+
+        return true // All inputs are valid
+    }
+
+
+
 
     private fun calculateTotalScore(): Int {
         var score = 0

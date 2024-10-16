@@ -46,6 +46,15 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val childId = getCurrentChildId()
+        childId?.let {
+            fetchAndDisplayChildData(it)  // Reload data to ensure it reflects latest changes
+        }
+    }
+
+
     private fun initializeViews() {
         profileButton = findViewById(R.id.profileButton)
         planButton = findViewById(R.id.planButton)
@@ -105,7 +114,13 @@ class HomeActivity : AppCompatActivity() {
                     // Update UI with child data
                     childNameTextView.text = childName
                     childDietTextView.text = childDiet
-                    Glide.with(this).load(imageUrl).into(childImageView)
+
+                    // Check if imageUrl is empty and show default image if it is
+                    if (imageUrl.isNotEmpty()) {
+                        Glide.with(this).load(imageUrl).into(childImageView)
+                    } else {
+                        childImageView.setImageResource(R.drawable.default_profile_picture)  // Show default image
+                    }
                 } else {
                     Toast.makeText(this, "Child not found.", Toast.LENGTH_SHORT).show()
                 }
@@ -114,4 +129,6 @@ class HomeActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to load child data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
+
 }
