@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -175,7 +176,7 @@ class ReportActivity : AppCompatActivity() {
                 }
 
                 // Create LineDataSets for each field
-                val dataSets = ArrayList<LineDataSet>()
+                val dataSets = ArrayList<ILineDataSet>()
 
                 // Define distinct colors for each dataset
                 val colors = listOf(
@@ -220,7 +221,7 @@ class ReportActivity : AppCompatActivity() {
                         dataSet.circleRadius = 3f
                         dataSet.setCircleColor(colors[i])
                         dataSet.setDrawValues(false) // Disable point values
-                        dataSets.add(dataSet)
+                        dataSets.add(dataSet as ILineDataSet)
 
                         // Debugging print to ensure it's being added
                         println("Adding dataset for ${fieldNames[i]} with ${entriesList[i].size} entries")
@@ -232,7 +233,7 @@ class ReportActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
-                val lineData = LineData(dataSets as List<ILineDataSet>?)
+                val lineData = LineData(dataSets)
                 lineChart.data = lineData
 
                 // Configure chart appearance
@@ -244,23 +245,27 @@ class ReportActivity : AppCompatActivity() {
                     labelRotationAngle = 45f // Rotate labels to prevent overlap
                 }
 
+                val yAxis = lineChart.axisLeft
+                yAxis.granularity = 1f // Set the granularity to 1, which means whole numbers
+                yAxis.isGranularityEnabled = true // Ensure granularity is enabled
+
+
                 // Increase bottom padding to give space for the legend
-                lineChart.setExtraOffsets(10f, 10f, 10f, 40f) // Adjust this if legend still cuts off
+                lineChart.setExtraOffsets(10f, 0f, 30f, 10f) // Adjust this if legend still cuts off
 
                 lineChart.axisLeft.setDrawGridLines(false)
                 lineChart.axisRight.isEnabled = false
                 lineChart.description.isEnabled = false
 
                 // Customize legend appearance
-                lineChart.legend.apply {
-                    isEnabled = true
-                    textSize = 12f
-                    formSize = 12f
-                    xEntrySpace = 10f
-                    yEntrySpace = 5f
-                    formToTextSpace = 5f
-                    maxSizePercent = 0.45f // Adjust to fit into two lines
-                }
+                val legend = lineChart.legend
+                legend.isWordWrapEnabled = true // Enable word wrapping
+                legend.setMaxSizePercent(0.95f) // Ensure legend occupies no more than 95% of the width
+                legend.xEntrySpace = 10f // Space between items on the x-axis
+                legend.yEntrySpace = 5f // Space between items on the y-axis
+                legend.xOffset = 10f
+                legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+
 
                 // Refresh the chart
                 lineChart.notifyDataSetChanged()  // Ensure chart is aware of new data
@@ -269,6 +274,7 @@ class ReportActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to load data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+
     }
 
 

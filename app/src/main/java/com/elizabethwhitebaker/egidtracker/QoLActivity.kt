@@ -58,16 +58,19 @@ class QoLActivity : AppCompatActivity() {
         return true // All fields are filled
     }
     private fun saveScores() {
-
         if (!areAllFieldsFilled()) {
             Toast.makeText(this, "Please fill out all fields before saving.", Toast.LENGTH_SHORT).show()
             return
         }
 
+        if (!validateInputs()) {
+            return // Stop further execution if validation fails
+        }
+
         val totalScore = calculateTotalScore()
         val responses = collectResponses()
         val dateInput: EditText = findViewById(R.id.visitDateInput)
-        val dateString = dateInput.text.toString()
+        val dateString = dateInput.text.toString().trim()
 
         if (dateString.isBlank()) {
             Toast.makeText(this, "Please enter a valid date.", Toast.LENGTH_SHORT).show()
@@ -80,6 +83,26 @@ class QoLActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+    private fun validateInputs(): Boolean {
+        val numberOfQuestions = 31  // Adjust according to your questions
+
+        for (i in 1..numberOfQuestions) {
+            val answerId = resources.getIdentifier("answer$i", "id", packageName)
+            val answer = findViewById<EditText>(answerId)
+            val input = answer.text.toString().trim() // Trim input
+
+            // Check if input is a valid number between 0 and 4
+            val number = input.toIntOrNull()
+            if (number == null || number !in 0..4) {
+                answer.error = "Enter a number between 0 and 4"
+                Toast.makeText(this, "Question $i: Enter a number between 0 and 4", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+        return true // All inputs are valid
+    }
+
 
     private fun calculateTotalScore(): Int {
         var score = 0

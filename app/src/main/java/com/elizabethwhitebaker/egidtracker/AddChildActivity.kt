@@ -2,7 +2,6 @@ package com.elizabethwhitebaker.egidtracker
 
 import android.Manifest
 import android.app.DatePickerDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -22,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -62,6 +62,8 @@ class AddChildActivity : AppCompatActivity() {
         pictureButton = findViewById(R.id.button)
         imageView = findViewById(R.id.imageView)
 
+        imageView.setImageResource(R.drawable.default_profile_picture)  // Set default image initially
+
         initLaunchers()
 
         // Check if in edit mode and if so, fetch and populate child data
@@ -87,22 +89,28 @@ class AddChildActivity : AppCompatActivity() {
         }
 
         dietInput.setOnClickListener {
-            // Show a warning dialog
-            val builder = android.app.AlertDialog.Builder(this)
-            builder.setTitle("Reminder")
-            builder.setMessage("You should have indicated which cleared allergen facilitated this diet change in the allergen notes field.")
+            if (childId != null) {
+                // Show the pop-up only in edit mode
+                val builder = android.app.AlertDialog.Builder(this)
+                builder.setTitle("Reminder")
+                builder.setMessage("You should have indicated which cleared allergen facilitated this diet change in the allergen notes field.")
 
-            // Add the OK button
-            builder.setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss() // Dismiss the dialog when OK is clicked
-                // Proceed with further interaction (e.g., showing diet options)
-                dietInput.showDropDown() // Show the dropdown for diet selection
+                // Add the OK button
+                builder.setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss() // Dismiss the dialog when OK is clicked
+                    // Proceed with further interaction (e.g., showing diet options)
+                    dietInput.showDropDown() // Show the dropdown for diet selection
+                }
+
+                // Create and show the dialog
+                val alertDialog = builder.create()
+                alertDialog.show()
+            } else {
+                // If not in edit mode, just show the dropdown
+                dietInput.showDropDown()
             }
-
-            // Create and show the dialog
-            val alertDialog = builder.create()
-            alertDialog.show()
         }
+
 
 
         setupDropdownMenus()
@@ -128,30 +136,44 @@ class AddChildActivity : AppCompatActivity() {
         takePictureLauncher =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
                 if (isSuccess) {
-                    imageView.setImageURI(imageUri)
-                    saveImageInfoToDatabase()
+                    // Ensure the image updates immediately in the ImageView after taking a picture
+                    imageView.setImageURI(imageUri)  // Immediately show the selected image
+                    saveImageInfoToDatabase()  // Save the image info right after it's selected
+                } else {
+                    Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT).show()
                 }
             }
 
         pickImageFromGalleryLauncher =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
                 uri?.let {
-                    imageView.setImageURI(uri)
-                    imageUri = uri
-                    saveImageInfoToDatabase()
+                    imageUri = it
+                    imageView.setImageURI(it)  // Immediately show the selected image
+                    saveImageInfoToDatabase()  // Save the image info right after it's selected
                 }
             }
     }
+
+
 
     private fun fetchAndPopulateChildData(childId: String) {
         Firebase.firestore.collection("Children").document(childId).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
+                    // Populate child info fields
                     firstNameEditText.setText(document.getString("firstName"))
                     lastNameEditText.setText(document.getString("lastName"))
                     birthDateInput.setText(document.getString("birthDate"))
                     genderInput.setText(document.getString("gender"))
                     dietInput.setText(document.getString("diet"))
+
+                    // Load existing profile picture if available
+                    val imageUrl = document.getString("imageUrl") ?: ""
+                    if (imageUrl.isNotEmpty()) {
+                        Glide.with(this).load(imageUrl).into(imageView) // Display profile picture
+                    } else {
+                        imageView.setImageResource(R.drawable.default_profile_picture) // Set default placeholder
+                    }
 
                     setupDropdownMenus()
                 } else {
@@ -159,10 +181,10 @@ class AddChildActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to load child data: ${e.message}", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Failed to load child data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
 
     private fun saveChildInfo() {
         val userMap = hashMapOf(
@@ -171,7 +193,8 @@ class AddChildActivity : AppCompatActivity() {
             "birthDate" to birthDateInput.text.toString().trim(),
             "gender" to genderInput.text.toString().trim(),
             "diet" to dietInput.text.toString().trim(),
-            "parentUserId" to firebaseAuth.currentUser?.uid
+            "parentUserId" to firebaseAuth.currentUser?.uid,
+            "imageUrl" to (imageUri?.toString() ?: "")  // Save imageUri if it's not null, else empty string
         )
 
         Firebase.firestore.collection("Children").add(userMap)
@@ -193,7 +216,8 @@ class AddChildActivity : AppCompatActivity() {
             "birthDate" to birthDateInput.text.toString().trim(),
             "gender" to genderInput.text.toString().trim(),
             "diet" to dietInput.text.toString().trim(),
-            "parentUserId" to firebaseAuth.currentUser?.uid
+            "parentUserId" to firebaseAuth.currentUser?.uid,
+            "imageUrl" to (imageUri?.toString() ?: "")  // Save imageUri if it's not null, else empty string
         )
 
         childId?.let { id ->
@@ -208,6 +232,7 @@ class AddChildActivity : AppCompatActivity() {
                 }
         }
     }
+
 
     private fun saveCurrentChildId(childId: String) {
         val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
@@ -247,7 +272,7 @@ class AddChildActivity : AppCompatActivity() {
     }
 
     private fun showImagePickDialog() {
-        val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
+        val options = arrayOf("Take Photo", "Choose from Gallery", "Delete Picture", "Cancel")
         val builder = android.app.AlertDialog.Builder(this)
         builder.setItems(options) { dialog, which ->
             when (which) {
@@ -270,34 +295,57 @@ class AddChildActivity : AppCompatActivity() {
                 }
 
                 1 -> {
-                    // Check and request read media image permission
+                    // Choose from gallery
                     when {
                         ContextCompat.checkSelfPermission(
                             this,
                             Manifest.permission.READ_MEDIA_IMAGES
                         ) == PackageManager.PERMISSION_GRANTED -> {
-                            // Permission is already granted
                             pickImageFromGallery()
                         }
 
                         else -> {
-                            // Request read media image permission
+                            // Request permission
                             requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
                         }
                     }
                 }
 
                 2 -> {
-                    if (dialog is DialogInterface) {
-                        dialog.dismiss() // Correctly dismiss the dialog
-                    }
+                    // Delete profile picture
+                    deleteProfilePicture()
                 }
+
+                3 -> dialog.dismiss()  // Cancel
             }
         }
-
-        val dialog = builder.create() // Create the AlertDialog from the builder
-        dialog.show() // Show the dialog
+        builder.show()
     }
+
+    private fun deleteProfilePicture() {
+        imageView.setImageResource(R.drawable.default_profile_picture) // Set a default image locally
+        imageUri = null  // Clear the URI
+
+        // Update Firestore to remove the image URL
+        childId?.let { id ->
+            Firebase.firestore.collection("Children").document(id)
+                .update("imageUrl", "")  // Clear imageUrl in Firestore
+        }
+    }
+
+
+    private fun saveImageInfoToDatabase() {
+        val imageUrl = imageUri?.toString() ?: ""  // Get the image URL or empty if none
+
+        // Store the image URL in Firestore
+        childId?.let { id ->
+            Firebase.firestore.collection("Children").document(id)
+                .update("imageUrl", imageUrl)
+
+        }
+    }
+
+
 
 
     private fun dispatchTakePictureIntent() {
@@ -310,13 +358,14 @@ class AddChildActivity : AppCompatActivity() {
                     null
                 }
                 photoFile?.also {
-                    val uri = FileProvider.getUriForFile(this, "com.example.fire.fileprovider", it)
+                    val uri = FileProvider.getUriForFile(this, "com.elizabethwhitebaker.egidtracker.fileprovider", it)
                     imageUri = uri
                     takePictureLauncher.launch(uri)
                 }
             }
         }
     }
+
 
 
     private fun pickImageFromGallery() {
@@ -332,29 +381,6 @@ class AddChildActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveImageInfoToDatabase() {
-        val imageName = imageUri?.lastPathSegment
-        val imageUrl = imageUri.toString()
-        val date = System.currentTimeMillis()
-
-        val userMap = hashMapOf(
-            "imageUri" to imageUrl,
-            "imageName" to imageName,
-            "date" to date
-        )
-
-        childId?.let { id ->
-            Firebase.firestore.collection("Children").document(id)
-                .collection("Images").add(userMap)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Image saved successfully", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to save image: ${e.message}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-        }
-    }
 
     private fun checkPermissionsAndTakePicture() {
         if (ContextCompat.checkSelfPermission(
