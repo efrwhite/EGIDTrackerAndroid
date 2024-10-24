@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/HomeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryBackground"
+    tools:context="AddAllergiesActivity"
+    tools:ignore="ExtraText">
+
+    <!-- Navigation Bar -->
+
+    <RelativeLayout
+        android:id="@+id/navBar"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:background="@color/primaryBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Back Button -->
+
+        <!-- Page Title -->
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/lato_medium"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:text="@string/addFood"
+            android:textColor="@color/primary"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/diagnosedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="50dp"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/date"
+        android:textColor="@color/primary"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+
+    <Button
+        android:id="@+id/date"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="00dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:fontFamily="@font/lato_medium"
+        android:gravity="start|center_vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp"
+        android:text="@string/datePicker"
+        android:textColor="@color/secondary"
+        android:textSize="14sp"
+        app:backgroundTint="#ffffff"
+        app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+
+
+    <EditText
+        android:id="@+id/foodNameField"
+        android:layout_width="325dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:fontFamily="@font/lato_medium"
+        android:hint="@string/name"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp"
+        android:textColor="@color/secondary"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/leftGuideline"
+        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/date" />
+
+
+    <TextView
+        android:id="@+id/addAllergenNotes"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/lato_medium"
+        android:text="@string/note"
+        android:textColor="@color/primary"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/foodNameField" />
+
+
+    <EditText
+        android:id="@+id/notesField"
+        android:layout_width="325dp"
+        android:layout_height="150dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:fontFamily="@font/lato_medium"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="90dp"
+        android:textColor="@color/secondary"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/leftGuideline"
+        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintTop_toBottomOf="@+id/addAllergenNotes"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+
+
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:fontFamily="@font/lato_medium"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp"
+        android:text="@string/saveButton"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notesField" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="150dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/lato_medium"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="0dp"
+        android:text="@string/delete"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/saveButton" />
+
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/enterFieldsGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

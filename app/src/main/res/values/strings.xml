@@ -423,4 +423,6 @@
     <string name="custombutton">Custom Resources\n</string>
     <string name="customText">Add your own custom resources here</string>
     <string name="custom_resources">Custom Resources</string>
+    <string name="addFood">Add Food</string>
+    <string name="delete">Delete</string>
 </resources>
