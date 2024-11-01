@@ -79,7 +79,10 @@ class QoLActivity : AppCompatActivity() {
 
         saveResultsToFirestore(totalScore, responses, dateString)
 
-        val intent = Intent(this, HomeActivity::class.java)
+        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        val intent = Intent(this, ResultsActivity::class.java).apply {
+            putExtra("sourceActivity", "QoLActivity")
+        }
         startActivity(intent)
         finish()
     }

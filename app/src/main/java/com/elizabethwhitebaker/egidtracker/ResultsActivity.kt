@@ -8,6 +8,7 @@ import android.widget.TableLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -56,6 +57,7 @@ class ResultsActivity : AppCompatActivity() {
         Firebase.firestore.collection("Children")
             .document(childId)
             .collection(subCollection)
+            .orderBy("date", Query.Direction.ASCENDING)  // Sort by date in chronological order
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
