@@ -122,7 +122,7 @@
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
                     android:paddingEnd="10dp"
-                    android:text="@string/visitDate" />
+                    android:text="@string/dateOfQuiz" />
 
                 <EditText
                     android:id="@+id/visitDateInput"
@@ -158,7 +158,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer1"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer2"/>
 
             </TableRow>
 
@@ -184,7 +186,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer2"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer3"/>
 
             </TableRow>
 
@@ -210,7 +214,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer3"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer4"/>
 
             </TableRow>
 
@@ -236,7 +242,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer4"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer5"/>
 
             </TableRow>
 
@@ -262,7 +270,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer5"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer6"/>
 
             </TableRow>
 
@@ -288,7 +298,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer6"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer7"/>
 
             </TableRow>
 
@@ -314,7 +326,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer7"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer8"/>
 
             </TableRow>
 
@@ -340,7 +354,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer8"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer9"/>
 
             </TableRow>
 
@@ -366,7 +382,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer9"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer10"/>
 
             </TableRow>
 
@@ -392,7 +410,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer10"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer11"/>
 
             </TableRow>
 
@@ -418,7 +438,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer11"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer12"/>
 
             </TableRow>
 
@@ -444,7 +466,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer12"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer13"/>
 
             </TableRow>
 
@@ -470,7 +494,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer13"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer14"/>
 
             </TableRow>
 
@@ -496,7 +522,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer14"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer15"/>
 
             </TableRow>
 
@@ -522,7 +550,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer15"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer16"/>
 
             </TableRow>
 
@@ -548,7 +578,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer16"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer17"/>
 
             </TableRow>
 
@@ -574,7 +606,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer17"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer18"/>
 
             </TableRow>
 
@@ -600,7 +634,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer18"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer19"/>
 
             </TableRow>
 
@@ -626,7 +662,9 @@
                     android:hint="@string/NumberHint"
                     android:inputType="number"
                     android:tag="answer19"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer20"/>
 
             </TableRow>
 
@@ -651,7 +689,10 @@
                     android:layout_gravity="center_vertical"
                     android:hint="@string/NumberHint"
                     android:tag="answer20"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:inputType="number"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer21"/>
 
             </TableRow>
 
@@ -692,7 +733,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer21"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer22"/>
 
             </TableRow>
 
@@ -718,7 +761,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer22"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer23"/>
 
             </TableRow>
 
@@ -744,7 +789,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer23"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer24"/>
 
             </TableRow>
 
@@ -770,7 +817,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer24"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer25"/>
 
             </TableRow>
 
@@ -796,7 +845,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer25"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer26"/>
 
             </TableRow>
 
@@ -822,7 +873,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer26"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer27"/>
 
             </TableRow>
 
@@ -848,7 +901,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer27"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer28"/>
 
             </TableRow>
 
@@ -874,7 +929,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer28"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer29"/>
 
             </TableRow>
 
@@ -900,7 +957,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer29"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer30"/>
 
             </TableRow>
 
@@ -926,7 +985,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer30"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer31"/>
 
             </TableRow>
 
@@ -952,7 +1013,9 @@
                     android:hint="@string/YesNoHint"
                     android:inputType="text"
                     android:tag="answer31"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@id/answer32"/>
 
             </TableRow>
 

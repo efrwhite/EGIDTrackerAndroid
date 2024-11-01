@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
@@ -50,7 +51,7 @@ class ReportActivity : AppCompatActivity() {
         loadChartData(sourceActivity, childId)
 
         sendReportButton.setOnClickListener {
-            sendChartAsImage()
+            sendChartAsPdf()
         }
     }
 
@@ -73,7 +74,7 @@ class ReportActivity : AppCompatActivity() {
 
         Firebase.firestore.collection("Children").document(childId)
             .collection(subCollection)
-            .orderBy("date", Query.Direction.DESCENDING)
+            .orderBy("date", Query.Direction.ASCENDING)
             .limit(6)
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -316,22 +317,28 @@ class ReportActivity : AppCompatActivity() {
         return bitmap
     }
 
-    private fun sendChartAsImage() {
+    private fun sendChartAsPdf() {
         val bitmap = captureView(findViewById(R.id.chartContainer))
+        val pdfDocument = PdfDocument()
+        val pageInfo = PdfDocument.PageInfo.Builder(bitmap.width, bitmap.height, 1).create()
+        val page = pdfDocument.startPage(pageInfo)
 
-        // Save the bitmap to a file
-        val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "report.png")
-        FileOutputStream(file).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-        }
+        val canvas = page.canvas
+        canvas.drawBitmap(bitmap, 0f, 0f, null)
+        pdfDocument.finishPage(page)
 
-        // Share the file using FileProvider
-        val uri = FileProvider.getUriForFile(this, "com.elizabethwhitebaker.egidtracker.fileprovider", file)
+        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "report.pdf")
+        pdfDocument.writeTo(FileOutputStream(pdfFile))
+        pdfDocument.close()
+
+        // Share the PDF file using FileProvider
+        val uri = FileProvider.getUriForFile(this, "com.elizabethwhitebaker.egidtracker.fileprovider", pdfFile)
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_STREAM, uri)
-            type = "image/png"
+            type = "application/pdf"
         }
         startActivity(Intent.createChooser(shareIntent, "Send Report"))
     }
+
 }

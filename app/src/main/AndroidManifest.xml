@@ -44,15 +44,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".SignUpActivity" />
+        <activity android:name=".SignInActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".SignUpActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".HomeActivity" />
         <activity android:name=".ProfilesActivity" />
         <activity android:name=".FoodTrackerActivity" />
         <activity android:name=".EducationActivity" />
-        <activity android:name=".QoLActivity" />
+        <activity android:name=".QoLActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".PlanActivity" />
-        <activity android:name=".SymptomCheckerActivity" />
+        <activity android:name=".SymptomCheckerActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".DiagnosedActivity" />
         <activity android:name=".EoECausesActivity" />
         <activity android:name=".MoreInfoActivity" />
@@ -60,12 +64,16 @@
         <activity android:name=".TreatmentActivity" />
         <activity android:name=".WhatIsEoEActivity" />
         <activity android:name=".WhoIsAffectedActivity" />
-        <activity android:name=".AddCaregiverActivity" />
-        <activity android:name=".AddChildActivity" />
-        <activity android:name=".AddAllergiesActivity" />
+        <activity android:name=".AddCaregiverActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".AddChildActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".AddAllergiesActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".DocumentsActivity" />
         <activity android:name=".MedicationsActivity" />
-        <activity android:name=".AddMedicationActivity" />
+        <activity android:name=".AddMedicationActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".AllergiesActivity"/>
         <activity android:name=".Diet1Activity"/>
         <activity android:name=".Diet2Activity"/>
@@ -74,14 +82,16 @@
         <activity android:name=".ResultsActivity"/>
         <activity android:name=".ReportActivity"/>
         <activity android:name=".DBHelper"/>
-        <activity android:name=".AddFoodActivity"/>
-        <activity android:name=".EndoscopyActivity"/>
-        <activity
-            android:name=".AccidentalExposureActivity"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity android:name="CustomResourcesActivity"/>
-        <activity android:name="AddCustomResourceActivity"/>
+        <activity android:name=".AddFoodActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".EndoscopyActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".AccidentalExposureActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name="CustomResourcesActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name="AddCustomResourceActivity"
+            android:windowSoftInputMode="adjustResize"/>
 
 
     </application>

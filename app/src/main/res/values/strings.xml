@@ -425,4 +425,5 @@
     <string name="custom_resources">Custom Resources</string>
     <string name="addFood">Add Food</string>
     <string name="delete">Delete</string>
+    <string name="dateOfQuiz">Date of Quiz</string>
 </resources>

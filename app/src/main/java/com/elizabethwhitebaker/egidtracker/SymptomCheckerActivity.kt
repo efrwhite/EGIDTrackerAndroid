@@ -77,7 +77,10 @@ class SymptomCheckerActivity : AppCompatActivity() {
 
         saveResultsToFirestore(totalScore, responses, symptomDescriptions, dateString)
 
-        val intent = Intent(this, HomeActivity::class.java)
+        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        val intent = Intent(this, ResultsActivity::class.java).apply {
+            putExtra("sourceActivity", "SymptomChecker")
+        }
         startActivity(intent)
         finish()
     }
