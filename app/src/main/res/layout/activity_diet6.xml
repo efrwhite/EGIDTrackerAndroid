@@ -94,7 +94,8 @@
                     android:layout_weight="0"
                     android:paddingVertical="10dp"
                     android:text="@string/dairy"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -108,7 +109,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/bakedGoods" />
+                    android:text="@string/bakedGoods"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -122,7 +124,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/butter" />
+                    android:text="@string/butter"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -136,7 +139,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/buttermilk" />
+                    android:text="@string/buttermilk"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -150,7 +154,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/casein"/>
+                    android:text="@string/casein"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -164,7 +169,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/cheese"/>
+                    android:text="@string/cheese"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -178,7 +184,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/chocolate"/>
+                    android:text="@string/chocolate"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -192,7 +199,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/condensedMilk"/>
+                    android:text="@string/condensedMilk"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -206,7 +214,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/cottageCheese"/>
+                    android:text="@string/cottageCheese"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -220,7 +229,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/cream"/>
+                    android:text="@string/cream"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -234,7 +244,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/creamCheese"/>
+                    android:text="@string/creamCheese"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -248,7 +259,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/curd"/>
+                    android:text="@string/curd"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -262,7 +274,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/custard"/>
+                    android:text="@string/custard"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -276,7 +289,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/evaporatedMilk"/>
+                    android:text="@string/evaporatedMilk"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -290,7 +304,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/ghee"/>
+                    android:text="@string/ghee"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -304,7 +319,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/goatMilk"/>
+                    android:text="@string/goatMilk"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -318,7 +334,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/gravy"/>
+                    android:text="@string/gravy"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -332,7 +349,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/halfAndHalf"/>
+                    android:text="@string/halfAndHalf"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -346,7 +364,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/iceCream"/>
+                    android:text="@string/iceCream"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -360,7 +379,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/lactose"/>
+                    android:text="@string/lactose"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -374,7 +394,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/margarine"/>
+                    android:text="@string/margarine"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -388,7 +409,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/milk"/>
+                    android:text="@string/milk"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -402,7 +424,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/milkPowder"/>
+                    android:text="@string/milkPowder"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -416,7 +439,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/pastries"/>
+                    android:text="@string/pastries"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -430,7 +454,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/pudding"/>
+                    android:text="@string/pudding"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -444,7 +469,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/saladDressing"/>
+                    android:text="@string/saladDressing"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -458,7 +484,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/sheepMilk"/>
+                    android:text="@string/sheepMilk"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -472,7 +499,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/sourCream"/>
+                    android:text="@string/sourCream"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -486,7 +514,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/whey"/>
+                    android:text="@string/whey"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -500,7 +529,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/yogurt"/>
+                    android:text="@string/yogurt"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -516,7 +546,8 @@
                     android:layout_weight="0"
                     android:paddingVertical="10dp"
                     android:text="@string/gluten"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -530,7 +561,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingVertical="10dp"
-                    android:text="@string/breadAndBreadProducts"/>
+                    android:text="@string/breadAndBreadProducts"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -540,7 +572,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/bagels" />
+                    android:text="@string/bagels"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -550,7 +583,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/bakedGoods" />
+                    android:text="@string/bakedGoods"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -560,7 +594,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/barley" />
+                    android:text="@string/barley"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -570,7 +605,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/batteredAndFriedFoods" />
+                    android:text="@string/batteredAndFriedFoods"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -580,7 +616,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/bran" />
+                    android:text="@string/bran"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -590,7 +627,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/bulgur" />
+                    android:text="@string/bulgur"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -600,7 +638,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/cereal" />
+                    android:text="@string/cereal"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -610,7 +649,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/couscous" />
+                    android:text="@string/couscous"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -620,7 +660,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/crackers" />
+                    android:text="@string/crackers"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -630,7 +671,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/durum" />
+                    android:text="@string/durum"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -640,7 +682,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/einkorn" />
+                    android:text="@string/einkorn"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -650,7 +693,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/englishMuffins" />
+                    android:text="@string/englishMuffins"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -660,7 +704,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/farina" />
+                    android:text="@string/farina"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -670,7 +715,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/farro" />
+                    android:text="@string/farro"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -680,7 +726,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/flour" />
+                    android:text="@string/flour"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -690,7 +737,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/flourTortillas" />
+                    android:text="@string/flourTortillas"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -700,7 +748,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/gravyOrSaucesContainingARoux" />
+                    android:text="@string/gravyOrSaucesContainingARoux"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -710,7 +759,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/licorice" />
+                    android:text="@string/licorice"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -720,7 +770,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/naan" />
+                    android:text="@string/naan"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -730,7 +781,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/oats" />
+                    android:text="@string/oats"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -740,7 +792,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/pasta" />
+                    android:text="@string/pasta"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -750,7 +803,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/pancakes" />
+                    android:text="@string/pancakes"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -760,7 +814,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/pastries" />
+                    android:text="@string/pastries"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -770,7 +825,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/pita" />
+                    android:text="@string/pita"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -780,7 +836,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/rye" />
+                    android:text="@string/rye"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -790,7 +847,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/sauces" />
+                    android:text="@string/sauces"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -800,7 +858,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/semolina" />
+                    android:text="@string/semolina"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -810,7 +869,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/spelt" />
+                    android:text="@string/spelt"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -820,7 +880,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/soySauce" />
+                    android:text="@string/soySauce"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -830,7 +891,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/triticale" />
+                    android:text="@string/triticale"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -840,7 +902,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/waffles" />
+                    android:text="@string/waffles"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -850,7 +913,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/wheat" />
+                    android:text="@string/wheat"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -864,7 +928,8 @@
                     android:layout_weight="0"
                     android:paddingVertical="10dp"
                     android:text="@string/egg"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -874,7 +939,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/albumin" />
+                    android:text="@string/albumin"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -884,7 +950,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/bakedGoodsWithAnEggWash" />
+                    android:text="@string/bakedGoodsWithAnEggWash"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -894,7 +961,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/batteredFoods" />
+                    android:text="@string/batteredFoods"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -904,7 +972,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/bearnaiseSauce" />
+                    android:text="@string/bearnaiseSauce"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -914,7 +983,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/custard" />
+                    android:text="@string/custard"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -924,7 +994,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/eggFromAllAnimals" />
+                    android:text="@string/eggFromAllAnimals"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -934,7 +1005,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/eggnog" />
+                    android:text="@string/eggnog"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -944,7 +1016,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/eggSubstitutes" />
+                    android:text="@string/eggSubstitutes"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -954,7 +1027,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/eggYolk" />
+                    android:text="@string/eggYolk"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -964,7 +1038,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/eggWhite" />
+                    android:text="@string/eggWhite"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -974,7 +1049,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/hollandaiseSauce" />
+                    android:text="@string/hollandaiseSauce"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -984,7 +1060,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/iceCream" />
+                    android:text="@string/iceCream"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -994,7 +1071,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/marshmallow" />
+                    android:text="@string/marshmallow"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1004,7 +1082,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/mayonnaise" />
+                    android:text="@string/mayonnaise"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1014,7 +1093,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/meatballsAndMeatloaf" />
+                    android:text="@string/meatballsAndMeatloaf"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1024,7 +1104,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/meringue" />
+                    android:text="@string/meringue"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1034,7 +1115,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/nougat" />
+                    android:text="@string/nougat"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1044,7 +1126,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/saladDressing" />
+                    android:text="@string/saladDressing"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1058,7 +1141,8 @@
                     android:layout_weight="0"
                     android:paddingVertical="10dp"
                     android:text="@string/soy"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1068,7 +1152,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/cannedFoods" />
+                    android:text="@string/cannedFoods"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1078,7 +1163,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/dressing" />
+                    android:text="@string/dressing"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1088,7 +1174,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/hoisin" />
+                    android:text="@string/hoisin"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1098,7 +1185,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/marinade" />
+                    android:text="@string/marinade"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1108,7 +1196,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/miso" />
+                    android:text="@string/miso"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1118,7 +1207,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/processedFoods" />
+                    android:text="@string/processedFoods"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1128,7 +1218,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/proteinBarsAndShakes" />
+                    android:text="@string/proteinBarsAndShakes"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1138,7 +1229,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/soyMilk" />
+                    android:text="@string/soyMilk"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1148,7 +1240,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/soyOil" />
+                    android:text="@string/soyOil"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1158,7 +1251,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/soyProtein" />
+                    android:text="@string/soyProtein"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1168,7 +1262,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/tamari" />
+                    android:text="@string/tamari"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1178,7 +1273,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/tempeh" />
+                    android:text="@string/tempeh"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1188,7 +1284,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/tofu" />
+                    android:text="@string/tofu"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1198,7 +1295,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/vegetarianAndVeganFoods" />
+                    android:text="@string/vegetarianAndVeganFoods"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1212,7 +1310,8 @@
                     android:layout_weight="0"
                     android:paddingVertical="10dp"
                     android:text="@string/peanutTreenut"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1222,7 +1321,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/almond" />
+                    android:text="@string/almond"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1232,7 +1332,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/almondExtract" />
+                    android:text="@string/almondExtract"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1242,7 +1343,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/almondFlour" />
+                    android:text="@string/almondFlour"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1252,7 +1354,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/bakedGoods" />
+                    android:text="@string/bakedGoods"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1262,7 +1365,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/brazilNut" />
+                    android:text="@string/brazilNut"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1272,7 +1376,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/candy" />
+                    android:text="@string/candy"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1282,7 +1387,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/cashew" />
+                    android:text="@string/cashew"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1292,7 +1398,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/chestnut" />
+                    android:text="@string/chestnut"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1302,7 +1409,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/chocolate" />
+                    android:text="@string/chocolate"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1312,7 +1420,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/coffee" />
+                    android:text="@string/coffee"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1322,7 +1431,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/granola" />
+                    android:text="@string/granola"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1332,7 +1442,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/glutenFreeItems" />
+                    android:text="@string/glutenFreeItems"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1342,7 +1453,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/hazelnut" />
+                    android:text="@string/hazelnut"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1352,7 +1464,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/iceCream" />
+                    android:text="@string/iceCream"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1362,7 +1475,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/macadamiaNut" />
+                    android:text="@string/macadamiaNut"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1372,7 +1486,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/milkMadeFromNuts" />
+                    android:text="@string/milkMadeFromNuts"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1382,7 +1497,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/nougat" />
+                    android:text="@string/nougat"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1392,7 +1508,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/peanut" />
+                    android:text="@string/peanut"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1402,7 +1519,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/peanutButter" />
+                    android:text="@string/peanutButter"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1412,7 +1530,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/peanutFlour" />
+                    android:text="@string/peanutFlour"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1422,7 +1541,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/peanutOil" />
+                    android:text="@string/peanutOil"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1432,7 +1552,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/pecan" />
+                    android:text="@string/pecan"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1442,7 +1563,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/pesto" />
+                    android:text="@string/pesto"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1452,7 +1574,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/pineNut" />
+                    android:text="@string/pineNut"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1462,7 +1585,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/pistachio" />
+                    android:text="@string/pistachio"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1472,7 +1596,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/sauceInEthnicCuisines" />
+                    android:text="@string/sauceInEthnicCuisines"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1482,7 +1607,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/walnut" />
+                    android:text="@string/walnut"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1496,7 +1622,8 @@
                     android:layout_weight="0"
                     android:paddingVertical="10dp"
                     android:text="@string/fishShellfish"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1506,7 +1633,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/anchovy" />
+                    android:text="@string/anchovy"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1516,7 +1644,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/caviar" />
+                    android:text="@string/caviar"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1526,7 +1655,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/calamari" />
+                    android:text="@string/calamari"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1536,7 +1666,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/caesarSalad" />
+                    android:text="@string/caesarSalad"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1546,7 +1677,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/crab" />
+                    android:text="@string/crab"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1556,7 +1688,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/chowderAndSoup" />
+                    android:text="@string/chowderAndSoup"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1566,7 +1699,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/clam" />
+                    android:text="@string/clam"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1576,7 +1710,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/clamJuice" />
+                    android:text="@string/clamJuice"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1586,7 +1721,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/cod" />
+                    android:text="@string/cod"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1596,7 +1732,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/fishOil" />
+                    android:text="@string/fishOil"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1606,7 +1743,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/fishSauce" />
+                    android:text="@string/fishSauce"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1616,7 +1754,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/haddock" />
+                    android:text="@string/haddock"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1626,7 +1765,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/halibut" />
+                    android:text="@string/halibut"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1636,7 +1776,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/imitationCrab" />
+                    android:text="@string/imitationCrab"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1646,7 +1787,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/lobster" />
+                    android:text="@string/lobster"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1656,7 +1798,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/mahiMahi" />
+                    android:text="@string/mahiMahi"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1666,7 +1809,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/mussels" />
+                    android:text="@string/mussels"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1676,7 +1820,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/octopus" />
+                    android:text="@string/octopus"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1686,7 +1831,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/oyster" />
+                    android:text="@string/oyster"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1696,7 +1842,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/salmon" />
+                    android:text="@string/salmon"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1706,7 +1853,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/sardines" />
+                    android:text="@string/sardines"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1716,7 +1864,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/scallop" />
+                    android:text="@string/scallop"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1726,7 +1875,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/seafoodFlavoring" />
+                    android:text="@string/seafoodFlavoring"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1736,7 +1886,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/shrimp" />
+                    android:text="@string/shrimp"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1746,7 +1897,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/squid" />
+                    android:text="@string/squid"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1756,7 +1908,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/swordfish" />
+                    android:text="@string/swordfish"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1766,7 +1919,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/tilapia" />
+                    android:text="@string/tilapia"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1776,7 +1930,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/trout" />
+                    android:text="@string/trout"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1786,7 +1941,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/tuna" />
+                    android:text="@string/tuna"
+                    android:textColor="#808080"/>
             </TableRow>
 
             <TableRow
@@ -1796,7 +1952,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="@string/worcestershireSauce" />
+                    android:text="@string/worcestershireSauce"
+                    android:textColor="#808080"/>
             </TableRow>
 
         </TableLayout>

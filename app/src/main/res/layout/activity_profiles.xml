@@ -49,7 +49,8 @@
         android:text="@string/patient"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@id/childSectionHeader"
-        app:layout_constraintTop_toTopOf="@id/childSectionHeader" />
+        app:layout_constraintTop_toTopOf="@id/childSectionHeader"
+        android:textColor="#808080"/>
 
     <Button
         android:id="@+id/addChildlink"
@@ -115,7 +116,8 @@
         android:text="@string/caregiver"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@id/caregiverSectionHeader"
-        app:layout_constraintTop_toTopOf="@id/caregiverSectionHeader" />
+        app:layout_constraintTop_toTopOf="@id/caregiverSectionHeader"
+        android:textColor="#808080"/>
 
     <Button
         android:id="@+id/addCaregiverlink"

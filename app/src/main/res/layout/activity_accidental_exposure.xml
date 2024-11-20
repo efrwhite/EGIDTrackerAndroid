@@ -1,243 +1,257 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context="AccidentalExposureActivity">
+    tools:context="SignUpActivity"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-    <!-- Navigation Bar -->
-
-    <RelativeLayout
-        android:id="@+id/navBar"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/HomeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/primaryBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:context="AccidentalExposureActivity">
 
-        <!-- Page Title -->
+        <!-- Navigation Bar -->
+
+        <RelativeLayout
+            android:id="@+id/navBar"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@color/primaryBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Page Title -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/lato_medium"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="5dp"
+                android:text="@string/accidentalExposure"
+                android:textColor="@color/primary"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <!-- Form Header -->
+
+        <View
+            android:id="@+id/formSectionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/navBar" />
 
         <TextView
+            android:id="@+id/reportNewAccidentalExposure"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
-            android:layout_centerInParent="true"
+            android:layout_marginStart="8dp"
             android:fontFamily="@font/lato_medium"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="5dp"
-            android:text="@string/accidentalExposure"
+            android:text="@string/reportNewAccidentalExposure"
             android:textColor="@color/primary"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
-
-    <!-- Form Header -->
-
-    <View
-        android:id="@+id/formSectionHeader"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/navBar" />
-
-    <TextView
-        android:id="@+id/reportNewAccidentalExposure"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/reportNewAccidentalExposure"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/formSectionHeader"
-        app:layout_constraintTop_toTopOf="@id/formSectionHeader" />
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/formSectionHeader"
+            app:layout_constraintTop_toTopOf="@id/formSectionHeader" />
 
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="10dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/date"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/reportNewAccidentalExposure" />
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/lato_medium"
+            android:text="@string/date"
+            android:textColor="@color/primary"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/reportNewAccidentalExposure" />
 
 
-    <Button
-        android:id="@+id/datePickerButton"
-        android:layout_width="225dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:paddingStart="2dp"
-        android:paddingTop="2dp"
-        android:paddingEnd="120dp"
-        android:paddingBottom="2dp"
-        android:text="@string/datePicker"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:backgroundTint="#ffffff"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-        app:layout_constraintTop_toBottomOf="@id/reportNewAccidentalExposure"/>
+        <Button
+            android:id="@+id/datePickerButton"
+            android:layout_width="225dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:paddingStart="2dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="120dp"
+            android:paddingBottom="2dp"
+            android:text="@string/datePicker"
+            android:textColorHint="#808080"
+            android:textColor="@color/secondary"
+            android:textSize="14sp"
+            app:backgroundTint="#ffffff"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
+            app:layout_constraintTop_toBottomOf="@id/reportNewAccidentalExposure"/>
 
 
-    <TextView
-        android:id="@+id/itemExposedTo"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="10dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/itemExposed"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/date" />
+        <TextView
+            android:id="@+id/itemExposedTo"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/lato_medium"
+            android:text="@string/itemExposed"
+            android:textColor="@color/primary"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/date" />
 
 
-    <EditText
-        android:id="@+id/exposedItemTextField"
-        android:layout_width="225dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginStart="-20dp"
-        android:layout_marginEnd="0dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:paddingStart="10dp"
-        android:paddingTop="2dp"
-        android:paddingEnd="127dp"
-        android:paddingBottom="2dp"
-        android:hint="@string/itemName"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:backgroundTint="#ffffff"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-        app:layout_constraintTop_toBottomOf="@id/date"/>
+        <EditText
+            android:id="@+id/exposedItemTextField"
+            android:layout_width="225dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="-20dp"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="127dp"
+            android:paddingBottom="2dp"
+            android:hint="@string/itemName"
+            android:textColorHint="#808080"
+            android:textColor="@color/secondary"
+            android:textSize="14sp"
+            app:backgroundTint="#ffffff"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
+            app:layout_constraintTop_toBottomOf="@id/date"/>
 
 
-    <Button
-        android:id="@+id/addAEButton"
-        android:layout_width="150dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="34dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:layout_marginBottom="30dp"
-        android:text="@string/add"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemExposedTo" />
+        <Button
+            android:id="@+id/addAEButton"
+            android:layout_width="150dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="34dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="0dp"
+            android:layout_marginBottom="30dp"
+            android:text="@string/add"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            app:backgroundTint="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemExposedTo" />
 
 
 
-    <!-- Guideline for Equal Division -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/middleGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="365dp" />
+        <!-- Guideline for Equal Division -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/middleGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="365dp" />
 
-    <!-- Past Medication List -->
+        <!-- Past Medication List -->
 
-    <View
-        android:id="@+id/historySectionHeader"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginStart="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/middleGuideline" />
-
-    <TextView
-        android:id="@+id/history"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/history"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/historySectionHeader"
-        app:layout_constraintTop_toTopOf="@id/historySectionHeader" />
-
-    <ScrollView
-        android:id="@+id/AEItemScrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/historySectionHeader"
-        app:layout_constraintVertical_bias="0.0">
-
-        <TableLayout
-            android:id="@+id/AEItemTableLayout"
+        <View
+            android:id="@+id/historySectionHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!-- Rows will be added programmatically -->
-        </TableLayout>
-    </ScrollView>
+            android:layout_height="30dp"
+            android:layout_marginStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/middleGuideline" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/enterFieldsGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="160dp" />
+        <TextView
+            android:id="@+id/history"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/lato_medium"
+            android:text="@string/history"
+            android:textColor="@color/primary"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/historySectionHeader"
+            app:layout_constraintTop_toTopOf="@id/historySectionHeader" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
+        <ScrollView
+            android:id="@+id/AEItemScrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/historySectionHeader"
+            app:layout_constraintVertical_bias="0.0">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
+            <TableLayout
+                android:id="@+id/AEItemTableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- Rows will be added programmatically -->
+            </TableLayout>
+        </ScrollView>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/middleVerticalGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/enterFieldsGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="160dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/leftGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/rightGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/middleVerticalGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

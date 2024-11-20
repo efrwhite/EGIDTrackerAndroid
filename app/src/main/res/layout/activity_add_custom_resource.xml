@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context=".AddCustomResourceActivity">
+    tools:context="SignUpActivity"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -59,6 +62,7 @@
             android:background="@drawable/rounded_edittext_bg"
             android:fontFamily="@font/lato_medium"
             android:hint="Enter resource name"
+            android:textColorHint="#808080"
             android:inputType="text"
             android:paddingStart="16dp"
             android:textColor="@color/secondary"
@@ -90,6 +94,7 @@
             android:background="@drawable/rounded_edittext_bg"
             android:fontFamily="@font/lato_medium"
             android:hint="Enter URL"
+            android:textColorHint="#808080"
             android:inputType="text"
             android:paddingStart="16dp"
             android:textColor="@color/secondary"
@@ -121,6 +126,7 @@
             android:background="@drawable/rounded_edittext_bg"
             android:fontFamily="@font/lato_medium"
             android:hint="Enter notes"
+            android:textColorHint="#808080"
             android:inputType="text"
             android:paddingStart="16dp"
             android:textColor="@color/secondary"

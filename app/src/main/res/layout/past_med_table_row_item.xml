@@ -18,5 +18,6 @@
         android:inputType="textMultiLine"
         android:scrollHorizontally="false"
         android:breakStrategy="high_quality"
-        android:autoText="false"/>
+        android:autoText="false"
+        android:textColor="#808080"/>
 </TableRow>
