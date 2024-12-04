@@ -207,7 +207,9 @@
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+        app:layout_constraintTop_toBottomOf="@+id/navBar"
+        android:textColor="#808080"
+        />
 
     <TextView
         android:id="@+id/childDiet"
@@ -217,7 +219,8 @@
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeImage" />
+        app:layout_constraintTop_toBottomOf="@+id/homeImage"
+        android:textColor="#808080"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

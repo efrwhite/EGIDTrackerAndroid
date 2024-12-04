@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackground">
+    android:background="@color/primaryBackground"
+    tools:context="SignUpActivity"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -59,7 +63,9 @@
         android:background="@drawable/rounded_edittext_bg"
         app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/editText2"
+        android:textColor="#808080"
+        android:textColorHint="#808080"/>
 
     <TextView
         android:id="@+id/FirstName"
@@ -186,7 +192,9 @@
         app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        android:textColor="#808080"
+        android:textColorHint="#808080"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/middleGuideline"
@@ -244,7 +252,9 @@
         app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
         app:layout_constraintStart_toEndOf="@id/middleGuideline"
         app:layout_constraintTop_toBottomOf="@+id/editText"
-        tools:background="@drawable/rounded_edittext_bg" />
+        tools:background="@drawable/rounded_edittext_bg"
+        android:textColor="#808080"
+        android:textColorHint="#808080"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/GenderInput"
@@ -255,14 +265,16 @@
         android:background="@drawable/rounded_edittext_bg"
         app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
         app:layout_constraintStart_toEndOf="@id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@id/editTextDate">
+        app:layout_constraintTop_toBottomOf="@id/editTextDate" >
 
         <AutoCompleteTextView
             android:id="@+id/GenderInputFields"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="2dp"
-            android:inputType="none" />
+            android:inputType="none"
+            android:textColor="#808080"
+            android:textColorHint="#808080"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -275,14 +287,18 @@
         android:background="@drawable/rounded_edittext_bg"
         app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
         app:layout_constraintStart_toEndOf="@id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@id/GenderInput">
+        app:layout_constraintTop_toBottomOf="@id/GenderInput"
+        android:textColor="#808080"
+        android:textColorHint="#808080">
 
         <AutoCompleteTextView
             android:id="@+id/DietInputFields"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="2dp"
-            android:inputType="none" />
+            android:inputType="none"
+            android:textColor="#808080"
+            android:textColorHint="#808080"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

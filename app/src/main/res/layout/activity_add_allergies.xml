@@ -1,270 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context="AddAllergiesActivity"
-    tools:ignore="ExtraText">
+    tools:context="SignUpActivity"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-    <!-- Navigation Bar -->
-
-    <RelativeLayout
-        android:id="@+id/navBar"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/HomeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/primaryBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:context="AddAllergiesActivity"
+        tools:ignore="ExtraText">
 
-        <!-- Back Button -->
+        <!-- Navigation Bar -->
 
-        <!-- Page Title -->
+        <RelativeLayout
+            android:id="@+id/navBar"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:background="@color/primaryBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Back Button -->
+
+            <!-- Page Title -->
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/lato_medium"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="5dp"
+                android:text="Add Allergen"
+                android:textColor="@color/primary"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/addAllergiesName"
             android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_centerInParent="true"
+            android:layout_height="32dp"
+            android:layout_marginTop="32dp"
             android:fontFamily="@font/lato_medium"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="5dp"
-            android:text="Add Allergen"
+            android:text="@string/allergen"
             android:textColor="@color/primary"
-            android:textSize="20sp" />
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/navBar" />
 
-    </RelativeLayout>
+        <EditText
+            android:id="@+id/allergiesNameField"
+            android:layout_width="225dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:hint="@string/name"
+            android:textColorHint="#808080"
+            android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="0dp"
+            android:textColor="@color/secondary"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintStart_toEndOf="@+id/addAllergiesName"
+            app:layout_constraintTop_toBottomOf="@+id/navBar" />
 
-    <TextView
-        android:id="@+id/addAllergiesName"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/allergen"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+        <TextView
+            android:id="@+id/igEAllergen"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/lato_medium"
+            android:text="@string/igEAllergen"
+            android:textColor="@color/primary"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/addAllergiesName" />
 
-    <EditText
-        android:id="@+id/allergiesNameField"
-        android:layout_width="225dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:hint="@string/name"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintStart_toEndOf="@+id/addAllergiesName"
-        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+        <TextView
+            android:id="@+id/diagnosedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/lato_medium"
+            android:text="@string/diagnosedDate"
+            android:textColor="@color/primary"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/igEAllergen" />
 
-    <TextView
-        android:id="@+id/igEAllergen"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/igEAllergen"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/addAllergiesName" />
+        <Button
+            android:id="@+id/diagnosisDate"
+            android:layout_width="175dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="00dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="start|center_vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="0dp"
+            android:text="@string/datePicker"
+            android:textColorHint="#808080"
+            android:textColor="@color/secondary"
+            android:textSize="14sp"
+            app:backgroundTint="#ffffff"
+            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/igEAllergen" />
 
-    <TextView
-        android:id="@+id/diagnosedDate"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/diagnosedDate"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/igEAllergen" />
-
-    <Button
-        android:id="@+id/diagnosisDate"
-        android:layout_width="175dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="00dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="start|center_vertical"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/datePicker"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:backgroundTint="#ffffff"
-        app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/igEAllergen" />
-
-    <Switch
-        android:id="@+id/igESwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="20dp"
-        android:paddingEnd="16dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintHorizontal_bias="0.676"
-        app:layout_constraintTop_toBottomOf="@+id/addAllergiesName"
-        tools:ignore="MissingConstraints" />
+        <Switch
+            android:id="@+id/igESwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="20dp"
+            android:paddingEnd="16dp"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintHorizontal_bias="0.676"
+            app:layout_constraintTop_toBottomOf="@+id/addAllergiesName"
+            tools:ignore="MissingConstraints" />
 
 
-    <TextView
-        android:id="@+id/clearAllergen"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/clearedAllergen"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/allergyNotesField" />
+        <TextView
+            android:id="@+id/clearAllergen"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/lato_medium"
+            android:text="@string/clearedAllergen"
+            android:textColor="@color/primary"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/allergyNotesField" />
 
-    <TextView
-        android:id="@+id/addAllergenNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/note"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/diagnosedDate" />
+        <TextView
+            android:id="@+id/addAllergenNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/lato_medium"
+            android:text="@string/note"
+            android:textColor="@color/primary"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/diagnosedDate" />
 
-    <TextView
-        android:id="@+id/clearedDate"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/clearedDate"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/clearAllergen" />
+        <TextView
+            android:id="@+id/clearedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/lato_medium"
+            android:text="@string/clearedDate"
+            android:textColor="@color/primary"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/clearAllergen" />
 
-    <Button
-        android:id="@+id/clearedDatePickerButton"
-        android:layout_width="175dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="00dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="start|center_vertical"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/datePicker"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:backgroundTint="#ffffff"
-        app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/clearAllergen" />
+        <Button
+            android:id="@+id/clearedDatePickerButton"
+            android:layout_width="175dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="00dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="start|center_vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="0dp"
+            android:text="@string/datePicker"
+            android:textColorHint="#808080"
+            android:textColor="@color/secondary"
+            android:textSize="14sp"
+            app:backgroundTint="#ffffff"
+            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/clearAllergen" />
 
-    <EditText
-        android:id="@+id/allergyNotesField"
-        android:layout_width="325dp"
-        android:layout_height="150dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="90dp"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintTop_toBottomOf="@+id/addAllergenNotes"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-
-    <Switch
-        android:id="@+id/clearSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="35dp"
-        android:paddingEnd="16dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintHorizontal_bias="0.676"
-        app:layout_constraintTop_toBottomOf="@+id/allergyNotesField"
-        tools:ignore="MissingConstraints" />
+        <EditText
+            android:id="@+id/allergyNotesField"
+            android:layout_width="325dp"
+            android:layout_height="150dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="90dp"
+            android:textColor="@color/secondary"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintTop_toBottomOf="@+id/addAllergenNotes"
+            tools:ignore="SpeakableTextPresentCheck" />
 
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="250dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/saveButton"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clearedDate" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/enterFieldsGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.35" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
+        <Switch
+            android:id="@+id/clearSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="35dp"
+            android:paddingEnd="16dp"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintHorizontal_bias="0.676"
+            app:layout_constraintTop_toBottomOf="@+id/allergyNotesField"
+            tools:ignore="MissingConstraints" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="250dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="0dp"
+            android:text="@string/saveButton"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            app:backgroundTint="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clearedDate" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/enterFieldsGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.35" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/leftGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/rightGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

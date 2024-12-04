@@ -61,7 +61,7 @@
         android:textColor="@color/primary"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@id/allergenSectionHeader"
-        app:layout_constraintTop_toTopOf="@id/allergenSectionHeader" />
+        app:layout_constraintTop_toTopOf="@id/allergenSectionHeader"/>
 
 
     <ScrollView

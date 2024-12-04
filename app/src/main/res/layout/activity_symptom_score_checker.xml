@@ -1,1077 +1,1229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context="SymptomCheckerActivity">
+    tools:context="SignUpActivity"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/symptomScoreChecker"
-                android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                android:fontFamily="@font/lato_medium"
-                android:textSize="20sp"
-                android:textColor="@color/primary"
-                android:layout_centerInParent="true" />
-
-            <Button
-                android:id="@+id/resultsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/results"
-                android:background="?attr/selectableItemBackground"
-                android:textAllCaps="false"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:textColor="@color/primary"
-                android:layout_marginEnd="16dp" />
-
-        </RelativeLayout>
-    </androidx.appcompat.widget.Toolbar>
-
-    <LinearLayout
-        android:id="@+id/keyOptions"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/HomeLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:orientation="vertical"
-        android:paddingStart="10dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        android:background="@color/primaryBackground"
+        tools:context="SymptomCheckerActivity">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/symptomKey" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/symptomKey0" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/symptomKey1" />
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/symptomScoreChecker"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                    android:fontFamily="@font/lato_medium"
+                    android:textSize="20sp"
+                    android:textColor="@color/primary"
+                    android:layout_centerInParent="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/symptomKey2" />
+                <Button
+                    android:id="@+id/resultsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/results"
+                    android:background="?attr/selectableItemBackground"
+                    android:textAllCaps="false"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/primary"
+                    android:layout_marginEnd="16dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/symptomKey3" />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/symptomKey4" />
-
-        <!-- Repeat for each key option -->
-
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/saveBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/keyOptions">
-
-        <TableLayout
-            android:id="@+id/questionScroll"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/keyOptions"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:paddingHorizontal="10dp"
-            android:stretchColumns="0">
-
-            <TableRow
-                android:id="@+id/row1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/visitDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/dateOfQuiz" />
-
-                <EditText
-                    android:id="@+id/visitDateInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:padding="10dp"
-                    tools:ignore="Autofill"
-                    android:focusable="false"
-                    android:clickable="true"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question2" />
-
-                <EditText
-                    android:id="@+id/answer1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer1"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer2"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question3" />
-
-                <EditText
-                    android:id="@+id/answer2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer2"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer3"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row4"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question4" />
-
-                <EditText
-                    android:id="@+id/answer3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer3"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer4"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question5" />
-
-                <EditText
-                    android:id="@+id/answer4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer4"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer5"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question6" />
-
-                <EditText
-                    android:id="@+id/answer5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer5"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer6"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row7"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question6"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question7" />
-
-                <EditText
-                    android:id="@+id/answer6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer6"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer7"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question7"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question8" />
-
-                <EditText
-                    android:id="@+id/answer7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer7"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer8"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question8"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question9" />
-
-                <EditText
-                    android:id="@+id/answer8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer8"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer9"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row10"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question9"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question10" />
-
-                <EditText
-                    android:id="@+id/answer9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer9"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer10"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row11"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question10"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question11" />
-
-                <EditText
-                    android:id="@+id/answer10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer10"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer11"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question11"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question12" />
-
-                <EditText
-                    android:id="@+id/answer11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer11"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer12"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row13"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question12"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question13" />
-
-                <EditText
-                    android:id="@+id/answer12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer12"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer13"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row14"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question13"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question14" />
-
-                <EditText
-                    android:id="@+id/answer13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer13"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer14"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row15"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question14"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question15" />
-
-                <EditText
-                    android:id="@+id/answer14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer14"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer15"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row16"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question15"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question16" />
-
-                <EditText
-                    android:id="@+id/answer15"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer15"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer16"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row17"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question16"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question17" />
-
-                <EditText
-                    android:id="@+id/answer16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer16"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer17"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row18"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question17"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question18" />
-
-                <EditText
-                    android:id="@+id/answer17"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer17"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer18"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row19"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question18"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question19" />
-
-                <EditText
-                    android:id="@+id/answer18"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer18"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer19"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row20"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question19"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question20" />
-
-                <EditText
-                    android:id="@+id/answer19"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:inputType="number"
-                    android:tag="answer19"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer20"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row21"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question20"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question21" />
-
-                <EditText
-                    android:id="@+id/answer20"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/NumberHint"
-                    android:tag="answer20"
-                    android:padding="10dp"
-                    android:inputType="number"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer21"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row22"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/YesNo"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/YesNo" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row23"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question21"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question23" />
-
-                <EditText
-                    android:id="@+id/answer21"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer21"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer22"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row24"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question22"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question24" />
-
-                <EditText
-                    android:id="@+id/answer22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer22"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer23"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row25"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question23"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question25" />
-
-                <EditText
-                    android:id="@+id/answer23"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer23"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer24"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row26"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question24"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question26" />
-
-                <EditText
-                    android:id="@+id/answer24"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer24"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer25"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row27"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question25"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question27" />
-
-                <EditText
-                    android:id="@+id/answer25"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer25"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer26"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row28"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question26"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question28" />
-
-                <EditText
-                    android:id="@+id/answer26"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer26"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer27"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row29"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question27"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question29" />
-
-                <EditText
-                    android:id="@+id/answer27"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer27"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer28"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row30"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question28"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question30" />
-
-                <EditText
-                    android:id="@+id/answer28"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer28"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer29"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row31"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question29"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question31" />
-
-                <EditText
-                    android:id="@+id/answer29"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer29"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer30"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row32"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question30"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question32" />
-
-                <EditText
-                    android:id="@+id/answer30"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer30"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer31"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row33"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question31"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question33" />
-
-                <EditText
-                    android:id="@+id/answer31"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer31"
-                    android:padding="10dp"
-                    android:imeOptions="actionNext"
-                    android:nextFocusDown="@id/answer32"/>
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/row34"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/question32"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingVertical="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/question34" />
-
-                <EditText
-                    android:id="@+id/answer32"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:hint="@string/YesNoHint"
-                    android:inputType="text"
-                    android:tag="answer32"
-                    android:padding="10dp" />
-
-            </TableRow>
-        </TableLayout>
-    </ScrollView>
-
-    <RelativeLayout
-        android:id="@+id/saveBar"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:background="@color/primaryBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="200dp"
-            android:layout_height="48dp"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/lato_medium"
-            android:paddingLeft="20dp"
+            android:orientation="vertical"
+            android:paddingStart="10dp"
             android:paddingTop="5dp"
-            android:paddingRight="20dp"
+            android:paddingEnd="10dp"
             android:paddingBottom="5dp"
-            android:text="@string/saveButton"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/rounded_edittext_bg"
-            app:backgroundTint="@color/primary"
-            android:textSize="20sp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/symptomKey"
+                android:textColor="#808080"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/symptomKey0"
+                android:textColor="#808080"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/symptomKey1"
+                android:textColor="#808080"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/symptomKey2"
+                android:textColor="#808080"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/symptomKey3"
+                android:textColor="#808080"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/symptomKey4"
+                android:textColor="#808080"/>
+
+            <!-- Repeat for each key option -->
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/saveBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/keyOptions">
+
+            <TableLayout
+                android:id="@+id/questionScroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:paddingHorizontal="10dp"
+                android:stretchColumns="0">
+
+                <TableRow
+                    android:id="@+id/row1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/visitDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/dateOfQuiz"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/visitDateInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:padding="10dp"
+                        tools:ignore="Autofill"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question2"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer1"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer2"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question3"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer2"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer3"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question4"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer3"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer4"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question5"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer4"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer5"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question6"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer5"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer6"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row7"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question7"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer6"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer7"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question7"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question8"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer7"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer8"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question9"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer8"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer9"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row10"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question10"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer9"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer10"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question11"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer10"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer11"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question11"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question12"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer11"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer12"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row13"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question12"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question13"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer12"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer13"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question13"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question14"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer13"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer14"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question14"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question15"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer14"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer15"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row16"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question15"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question16"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer15"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer16"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row17"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question16"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question17"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer16"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer17"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question17"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question18"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer17"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer18"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row19"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question18"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question19"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer18"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer19"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question19"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question20"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:inputType="number"
+                        android:tag="answer19"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer20"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row21"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question20"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question21"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/NumberHint"
+                        android:tag="answer20"
+                        android:padding="10dp"
+                        android:inputType="number"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer21"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row22"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/YesNo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/YesNo"
+                        android:textColor="#808080"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row23"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question21"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question23"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer21"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer22"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row24"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question22"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question24"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer22"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer23"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row25"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question23"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question25"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer23"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer24"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row26"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question24"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question26"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer24"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer25"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row27"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question25"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question27"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:textColor="#808080"
+                    android:textColorHint="#808080"
+                    android:backgroundTint="#808080"
+                        android:id="@+id/answer25"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer25"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer26"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row28"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question26"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question28"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer26"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer26"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer27"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row29"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question27"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question29"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer27"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer27"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer28"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row30"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question28"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question30"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer28"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer28"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer29"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row31"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question29"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question31"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer29"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer29"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer30"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row32"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question30"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question32"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer30"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer30"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer31"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row33"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question31"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question33"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer31"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer31"
+                        android:padding="10dp"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/answer32"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/row34"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/question32"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingVertical="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/question34"
+                        android:textColor="#808080"/>
+
+                    <EditText
+                        android:id="@+id/answer32"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:hint="@string/YesNoHint"
+                        android:inputType="text"
+                        android:tag="answer32"
+                        android:padding="10dp"
+                        android:textColor="#808080"
+                        android:textColorHint="#808080"
+                        android:backgroundTint="#808080"/>
+
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/saveBar"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@color/primaryBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="200dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/lato_medium"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="5dp"
+                android:text="@string/saveButton"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/rounded_edittext_bg"
+                app:backgroundTint="@color/primary"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

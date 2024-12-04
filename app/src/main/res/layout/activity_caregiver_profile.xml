@@ -1,195 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context="AddCaregiverActivity">
+    tools:context="SignUpActivity"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-    <!-- Navigation Bar -->
-
-    <!-- Buttons -->
-
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="150dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/rounded_edittext_bg"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-        app:layout_constraintStart_toEndOf="@id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
-
-    <TextView
-        android:id="@+id/LastName"
-        android:layout_width="100dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="48dp"
-        android:background="#00E0A2A2"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        android:text="@string/LastName"
-        android:textColor="@color/primary"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-        app:layout_constraintHorizontal_bias="0.29"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/FirstName"
-        tools:visibility="visible" />
-
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="150dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/rounded_edittext_bg"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
-
-    <TextView
-        android:id="@+id/FirstName"
-        android:layout_width="100dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="48dp"
-        android:background="#00E0A2A2"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        android:text="@string/FirstName"
-        android:textColor="@color/primary"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-        app:layout_constraintHorizontal_bias="0.29"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/Birthdate"
-        tools:visibility="visible" />
-
-    <RelativeLayout
-        android:id="@+id/navBar"
-        android:layout_width="411dp"
-        android:layout_height="50dp"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/HomeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/primaryBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:context="AddCaregiverActivity">
 
+        <!-- Navigation Bar -->
 
-        <!-- Back Button -->
-        <ImageView
-            android:id="@+id/backButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            app:tint="#ffffff" />
-        <!-- Page Title -->
+        <!-- Buttons -->
+
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="150dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/rounded_edittext_bg"
+            app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+            app:layout_constraintStart_toEndOf="@id/middleGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/editText"
+            android:textColor="#808080"
+            android:textColorHint="#808080"/>
 
         <TextView
+            android:id="@+id/LastName"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="48dp"
+            android:background="#00E0A2A2"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:text="@string/LastName"
+            android:textColor="@color/primary"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
+            app:layout_constraintHorizontal_bias="0.29"
+            app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/FirstName"
+            tools:visibility="visible" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="150dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/rounded_edittext_bg"
+            app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+            app:layout_constraintStart_toStartOf="@+id/middleGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/editText2"
+            android:textColor="#808080"
+            android:textColorHint="#808080"/>
+
+        <TextView
+            android:id="@+id/FirstName"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="48dp"
+            android:background="#00E0A2A2"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:text="@string/FirstName"
+            android:textColor="@color/primary"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
+            app:layout_constraintHorizontal_bias="0.29"
+            app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/Birthdate"
+            tools:visibility="visible" />
+
+        <RelativeLayout
+            android:id="@+id/navBar"
+            android:layout_width="411dp"
+            android:layout_height="50dp"
+            android:background="@color/primaryBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <!-- Back Button -->
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                app:tint="#ffffff" />
+            <!-- Page Title -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/lato_medium"
+                android:text="@string/CaregiverTitle"
+                android:textColor="@color/primary"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="120dp"
+            android:layout_height="108dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/navBar"
+            tools:src="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="157dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="@string/ChangePicture"
+            app:backgroundTint="#BFB8A8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <!-- Guideline for Equal Division -->
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="@string/SaveContinue"
+            app:backgroundTint="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LastName" />
+
+        <TextView
+            android:id="@+id/Birthdate"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
+            app:layout_constraintHorizontal_bias="0.29"
+            app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/button"
+            android:layout_marginTop="48dp"
+            android:background="#00E0A2A2"
+            android:text="@string/Username"
+            android:textColor="@color/primary"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="150dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/rounded_edittext_bg"
+            app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
+            app:layout_constraintHorizontal_bias="0.51"
+            app:layout_constraintStart_toStartOf="@+id/middleGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/button"
+            app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+            android:textColor="#808080"
+            android:textColorHint="#808080"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/middleGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/CaregiverTitle"
-            android:textColor="@color/primary"
-            android:textSize="20sp" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
 
-    </RelativeLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/leftGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="120dp"
-        android:layout_height="108dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navBar"
-        tools:src="@tools:sample/avatars" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/rightGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="157dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:text="@string/ChangePicture"
-        app:backgroundTint="#BFB8A8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <!-- Guideline for Equal Division -->
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="220dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:text="@string/SaveContinue"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LastName" />
-
-    <TextView
-        android:id="@+id/Birthdate"
-        android:layout_width="100dp"
-        android:layout_height="48dp"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-        app:layout_constraintHorizontal_bias="0.29"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        android:layout_marginTop="48dp"
-        android:background="#00E0A2A2"
-        android:text="@string/Username"
-        android:textColor="@color/primary"
-        android:visibility="visible"
-        tools:visibility="visible" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="150dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/rounded_edittext_bg"
-        app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
-        app:layout_constraintHorizontal_bias="0.51"
-        app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuideline" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/middleGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

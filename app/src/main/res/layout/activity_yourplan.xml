@@ -160,8 +160,8 @@
 
     <TextView
         android:id="@+id/planName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="15dp"
         android:fontFamily="@font/lato_medium"
         android:text=""
         android:textColor="@color/primary"
