@@ -462,9 +462,12 @@ class AddChildActivity : AppCompatActivity() {
             },
             year, month, day
         )
+        // Restrict selection to dates not later than today
+        datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
 
         datePickerDialog.show()
     }
+
 
     companion object {
         const val REQUEST_CAMERA_PERMISSION = 1

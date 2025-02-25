@@ -20,4 +20,17 @@
         android:breakStrategy="high_quality"
         android:autoText="false"
         android:textColor="#808080"/>
+
+    <Button
+        android:id="@+id/viewButton"
+        style="?attr/borderlessButtonStyle"
+        android:textColor="@color/primary"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View"
+        android:padding="4dp" />
+
 </TableRow>

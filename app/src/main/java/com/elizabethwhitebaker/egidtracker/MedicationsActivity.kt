@@ -98,41 +98,48 @@ class MedicationsActivity : AppCompatActivity() {
     }
 
     @SuppressLint("InflateParams")
-    private fun addRowToTable(medTableLayout: TableLayout, pastMedTableLayout: TableLayout, name: String, medicationId: String, isDiscontinued: Boolean, startDate: String, endDate: String) {
-
+    private fun addRowToTable(
+        medTableLayout: TableLayout,
+        pastMedTableLayout: TableLayout,
+        name: String,
+        medicationId: String,
+        isDiscontinued: Boolean,
+        startDate: String,
+        endDate: String
+    ) {
         if (isDiscontinued) {
-            // Add to past medications list
+            // For discontinued medications, inflate the past_med_table_row_item layout
             val row = layoutInflater.inflate(R.layout.past_med_table_row_item, null)
             val nameTextView = row.findViewById<TextView>(R.id.nameTextView)
+            val viewButton = row.findViewById<Button>(R.id.viewButton)
 
-            // Show the end date instead of the start date for discontinued medications
-            val nameText = if (endDate.isNotEmpty()) {
+            // Display medication name and end date
+            val displayText = if (endDate.isNotEmpty()) {
                 "$name\nEnd Date: $endDate"
             } else {
-                "$name\nEnd Date: None"  // In case the end date is not set
+                "$name\nEnd Date: None"
             }
+            nameTextView.text = displayText
 
-            nameTextView.text = nameText
+            viewButton.setOnClickListener {
+                navigateToViewMedication(medicationId)
+            }
             pastMedTableLayout.addView(row)
         } else {
-            // Add to current medications list
+            // For active medications, inflate your current layout (e.g., table_row_item.xml) with an Edit button
             val row = layoutInflater.inflate(R.layout.table_row_item, null)
             val nameTextView = row.findViewById<TextView>(R.id.nameTextView)
             val editButton = row.findViewById<Button>(R.id.editButton)
-
-            // Show the start date for active medications
-            val nameText = "$name\nStart Date: $startDate"
-
-            nameTextView.text = nameText
+            val displayText = "$name\nStart Date: $startDate"
+            nameTextView.text = displayText
 
             editButton.setOnClickListener {
                 navigateToEditActivity(medicationId)
             }
-
             medTableLayout.addView(row)
-
         }
     }
+
     private fun navigateToEditActivity(medicationId: String) {
         val intent = Intent(this, AddMedicationActivity::class.java).apply {
             putExtra("medicationId", medicationId)
@@ -153,6 +160,14 @@ class MedicationsActivity : AppCompatActivity() {
                 ).show()
             }
     }
+
+    private fun navigateToViewMedication(medicationId: String) {
+        val intent = Intent(this, AddMedicationActivity::class.java).apply {
+            putExtra("medicationId", medicationId)
+        }
+        startActivity(intent)
+    }
+
 }
 
 
