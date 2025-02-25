@@ -4,12 +4,14 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -51,13 +53,16 @@ class SymptomCheckerActivity : AppCompatActivity() {
         val numberOfQuestions = 32
         for (i in 1..numberOfQuestions) {
             val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            if (answer.text.toString().trim().isEmpty()) {
-                return false // Found an empty field, return false
+            val view = findViewById<View>(answerId)
+            // If it's an EditText, ensure it's not empty.
+            if (view is EditText && view.text.toString().trim().isEmpty()) {
+                return false
             }
+            // For a SwitchCompat, we assume it always has a value.
         }
-        return true // All fields are filled
+        return true
     }
+
     private fun saveScores() {
 
         if (!areAllFieldsFilled()) {
@@ -100,6 +105,8 @@ class SymptomCheckerActivity : AppCompatActivity() {
             }
         }
 
+        // No need once switched to radio buttons
+        /**
         for (i in 21..32) { // Validate Yes/No questions (Y/N)
             val answerId = resources.getIdentifier("answer$i", "id", packageName)
             val answer = findViewById<EditText>(answerId)
@@ -112,7 +119,7 @@ class SymptomCheckerActivity : AppCompatActivity() {
                 return false
             }
         }
-
+        */
         return true // All inputs are valid
     }
 
@@ -126,10 +133,18 @@ class SymptomCheckerActivity : AppCompatActivity() {
             val answer = findViewById<EditText>(answerId)
             score += answer.text.toString().toIntOrNull() ?: 0
         }
-        for (i in 21..32) { // IDs for Y/N questions
+        // Sum yes/no answers (IDs 21–32): add 1 point for a "y"
+        for (i in 21..32) {
             val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            score += if (answer.text.toString().equals("y", ignoreCase = true)) 1 else 0
+            val view = findViewById<View>(answerId)
+            val answerStr = when (view) {
+                is EditText -> view.text.toString().trim()
+                is SwitchCompat -> if (view.isChecked) "y" else "n"
+                else -> ""
+            }
+            if (answerStr.equals("y", ignoreCase = true)) {
+                score += 1
+            }
         }
         return score
     }
@@ -138,18 +153,29 @@ class SymptomCheckerActivity : AppCompatActivity() {
         val responses = mutableListOf<String>()
         for (i in 1..32) {
             val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            responses.add(answer.text.toString())
+            val view = findViewById<View>(answerId)
+            val response = when (view) {
+                is EditText -> view.text.toString().trim()
+                is SwitchCompat -> if (view.isChecked) "y" else "n"
+                else -> ""
+            }
+            responses.add(response)
         }
         return responses
     }
 
+
     private fun collectSymptomDescriptions(): List<String> {
         val descriptions = mutableListOf<String>()
-        for (i in 21..32) { // Assuming IDs 22 to 33 are for Y/N questions
+        for (i in 21..32) {
             val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            if (answer.text.toString().equals("y", ignoreCase = true)) {
+            val view = findViewById<View>(answerId)
+            val answerStr = when (view) {
+                is EditText -> view.text.toString().trim()
+                is SwitchCompat -> if (view.isChecked) "y" else "n"
+                else -> ""
+            }
+            if (answerStr.equals("y", ignoreCase = true)) {
                 val questionId = resources.getIdentifier("question$i", "id", packageName)
                 val question = findViewById<TextView>(questionId)
                 descriptions.add(question.text.toString())
@@ -157,6 +183,7 @@ class SymptomCheckerActivity : AppCompatActivity() {
         }
         return descriptions
     }
+
 
     private fun saveResultsToFirestore(totalScore: Int, responses: List<String>, symptoms: List<String>, date: String) {
         val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)

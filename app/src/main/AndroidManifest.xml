@@ -81,7 +81,8 @@
         <activity android:name=".Diet6Activity"/>
         <activity android:name=".ResultsActivity"/>
         <activity android:name=".ReportActivity"/>
-        <activity android:name=".DBHelper"/>
+        <activity android:name=".DBHelper"
+            tools:ignore="Instantiatable" />
         <activity android:name=".AddFoodActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".EndoscopyActivity"

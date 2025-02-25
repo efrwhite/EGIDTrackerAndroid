@@ -804,22 +804,6 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/YesNo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingVertical="10dp"
-                        android:paddingEnd="10dp"
-                        android:text="@string/YesNo"
-                        android:textColor="#808080"/>
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/row23"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
                         android:id="@+id/question21"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -829,25 +813,43 @@
                         android:text="@string/question23"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer21"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer21"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer22"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer21"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer21"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer22"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row24"
+                    android:id="@+id/row23"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -861,25 +863,43 @@
                         android:text="@string/question24"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer22"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer22"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer23"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer22"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer22"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer23"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row25"
+                    android:id="@+id/row24"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
 
@@ -893,25 +913,42 @@
                         android:text="@string/question25"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer23"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer23"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer24"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer23"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer23"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer24"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row26"
+                    android:id="@+id/row25"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -925,25 +962,43 @@
                         android:text="@string/question26"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer24"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer24"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer25"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer24"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer24"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer25"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row27"
+                    android:id="@+id/row26"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -957,25 +1012,43 @@
                         android:text="@string/question27"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:textColor="#808080"
-                    android:textColorHint="#808080"
-                    android:backgroundTint="#808080"
-                        android:id="@+id/answer25"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer25"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer26"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer25"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer25"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer26"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row28"
+                    android:id="@+id/row27"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
 
@@ -989,25 +1062,43 @@
                         android:text="@string/question28"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer26"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer26"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer27"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer26"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer26"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer27"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row29"
+                    android:id="@+id/row28"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -1021,25 +1112,43 @@
                         android:text="@string/question29"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer27"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer27"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer28"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer27"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer27"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer28"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row30"
+                    android:id="@+id/row29"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -1053,25 +1162,43 @@
                         android:text="@string/question30"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer28"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer28"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer29"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer28"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer28"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer29"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row31"
+                    android:id="@+id/row30"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
 
@@ -1085,25 +1212,43 @@
                         android:text="@string/question31"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer29"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer29"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer30"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer29"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer29"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer30"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row32"
+                    android:id="@+id/row31"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -1117,25 +1262,43 @@
                         android:text="@string/question32"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer30"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer30"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer31"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer30"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer30"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer31"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row33"
+                    android:id="@+id/row32"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -1149,25 +1312,43 @@
                         android:text="@string/question33"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer31"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer31"
-                        android:padding="10dp"
-                        android:imeOptions="actionNext"
-                        android:nextFocusDown="@id/answer32"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer31"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer31"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@id/answer32"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/row34"
+                    android:id="@+id/row33"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
 
@@ -1181,18 +1362,37 @@
                         android:text="@string/question34"
                         android:textColor="#808080"/>
 
-                    <EditText
-                        android:id="@+id/answer32"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:hint="@string/YesNoHint"
-                        android:inputType="text"
-                        android:tag="answer32"
-                        android:padding="10dp"
-                        android:textColor="#808080"
-                        android:textColorHint="#808080"
-                        android:backgroundTint="#808080"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="N"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/answer32"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="10dp"
+                            android:tag="answer32"
+                            android:imeOptions="actionNext"
+                            android:backgroundTint="#808080"
+                            android:showText="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Y"
+                            android:textColor="#808080"
+                            android:padding="10dp"/>
+                    </LinearLayout>
 
                 </TableRow>
             </TableLayout>

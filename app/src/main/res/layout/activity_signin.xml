@@ -51,6 +51,7 @@
             android:fontFamily="@font/lato_medium"
             android:hint="@string/username"
             android:textColorHint="#808080"
+            android:importantForAutofill="no"
             android:inputType="text"
             android:paddingStart="16dp"
             android:paddingTop="5dp"
