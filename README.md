@@ -1,14 +1,14 @@
-#EGID Tracker
+# EGID Tracker
 
-##Overview
+## Overview
 
 EGID Tracker is an Android application developed to assist parents and caregivers in managing and coordinating care for children with Eosinophilic Gastrointestinal Disorders (EGID), primarily Eosinophilic Esophagitis (EoE). This app empowers users to monitor symptoms, medications, and dietary requirements, while also providing educational resources to better understand and manage this complex condition.
 
-###Research Basis
+### Research Basis
 
 The development of EGID Tracker is grounded in the need for effective care coordination tools for children with EoE, as identified in previous studies. Research highlights the importance of information management systems in improving follow-up visits, increasing referrals, and ensuring access to accurate and up-to-date information for families. Mobile health (mHealth) applications have been proven effective in care coordination for chronic conditions like asthma and diabetes, demonstrating their potential for EoE care.
 
-##Key Features
+## Key Features
 
 - Patient Profiles: Create and manage multiple profiles for children, caregivers, and patients.
 
@@ -24,11 +24,11 @@ The development of EGID Tracker is grounded in the need for effective care coord
 
 - Educational Resources: Access a detailed page with information about EoE, including causes, symptoms, affected populations, and treatment options.
 
-##Future Expansion
+## Future Expansion
 
 While the current version of EGID Tracker is designed for parents and caregivers, future iterations aim to include functionality for older patients to manage their own care.
 
-##Installation
+## Installation
 
 1. Clone the repository:
 

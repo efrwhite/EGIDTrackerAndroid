@@ -10,9 +10,7 @@
     android:fillViewport="true"
     android:fitsSystemWindows="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/EndoscopyLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +24,7 @@
         <RelativeLayout
             android:id="@+id/navBar"
             android:layout_width="411dp"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:background="@color/primaryBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -46,7 +44,7 @@
                 android:paddingBottom="5dp"
                 android:text="Endoscopy Results"
                 android:textColor="@color/primary"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <Button
@@ -72,6 +70,7 @@
             android:layout_centerInParent="true"
             android:layout_marginEnd="2dp"
             android:fontFamily="@font/lato_medium"
+            android:layout_marginTop="15dp"
             android:paddingLeft="20dp"
             android:paddingTop="0dp"
             android:paddingRight="20dp"
@@ -80,7 +79,6 @@
             android:textColor="@color/primary"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/eoe"
             app:layout_constraintEnd_toStartOf="@+id/endoscopyDate"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -117,6 +115,7 @@
             android:layout_height="30dp"
             android:layout_centerInParent="true"
             android:fontFamily="@font/lato_medium"
+            android:layout_marginTop="20dp"
             android:paddingLeft="20dp"
             android:paddingTop="0dp"
             android:paddingRight="20dp"
@@ -125,14 +124,13 @@
             android:textColor="@color/primary"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/endoscopyDate" />
 
         <EditText
             android:id="@+id/upper"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
@@ -147,13 +145,14 @@
             android:paddingBottom="5dp"
             android:textColor="@color/secondary"
             android:textSize="17sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/middleGuideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/eoe" />
+            app:layout_constraintTop_toBottomOf="@+id/eoe"
+            />
 
         <EditText
             android:id="@+id/middle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="4dp"
@@ -169,14 +168,14 @@
             android:paddingBottom="5dp"
             android:textColor="@color/secondary"
             android:textSize="17sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/middleGuideline"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/upper" />
 
         <EditText
             android:id="@+id/lower"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
@@ -192,7 +191,7 @@
             android:paddingBottom="5dp"
             android:textColor="@color/secondary"
             android:textSize="17sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/middleGuideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/middle" />
 
@@ -201,7 +200,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/lato_medium"
             android:paddingLeft="20dp"
             android:paddingTop="0dp"
@@ -218,23 +217,22 @@
 
         <EditText
             android:id="@+id/stomach"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginTop="0dp"
             android:background="@drawable/rounded_edittext_bg"
             android:fontFamily="@font/lato_medium"
             android:hint="Enter info:"
-            android:textColorHint="#808080"
             android:inputType="number"
             android:paddingStart="16dp"
             android:paddingTop="5dp"
             android:paddingEnd="16dp"
             android:paddingBottom="5dp"
             android:textColor="@color/secondary"
+            android:textColorHint="#808080"
             android:textSize="17sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/middleGuideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/stomachText" />
 
@@ -243,7 +241,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/lato_medium"
             android:paddingLeft="20dp"
             android:paddingTop="0dp"
@@ -255,12 +253,12 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stomach" />
+            app:layout_constraintStart_toStartOf="@id/middleGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/leftColon" />
 
         <EditText
             android:id="@+id/duodenum"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
@@ -277,7 +275,7 @@
             android:textColor="@color/secondary"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/middleGuideline"
             app:layout_constraintTop_toBottomOf="@+id/duodenumText" />
 
         <TextView
@@ -285,8 +283,8 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
-            android:layout_marginTop="4dp"
             android:fontFamily="@font/lato_medium"
+            android:layout_marginTop="20dp"
             android:paddingLeft="20dp"
             android:paddingTop="0dp"
             android:paddingRight="20dp"
@@ -297,12 +295,12 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/duodenum" />
+            app:layout_constraintStart_toStartOf="@id/middleGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/endoscopyDate" />
 
         <EditText
             android:id="@+id/rightColon"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
@@ -319,12 +317,12 @@
             android:textColor="@color/secondary"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/middleGuideline"
             app:layout_constraintTop_toBottomOf="@+id/colon" />
 
         <EditText
             android:id="@+id/middleColon"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
@@ -341,12 +339,12 @@
             android:textColor="@color/secondary"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/middleGuideline"
             app:layout_constraintTop_toBottomOf="@+id/rightColon" />
 
         <EditText
             android:id="@+id/leftColon"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
@@ -363,8 +361,46 @@
             android:textColor="@color/secondary"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/middleGuideline"
             app:layout_constraintTop_toBottomOf="@+id/middleColon" />
+
+        <TextView
+            android:id="@+id/addEndoscopyNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/lato_medium"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="0dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="0dp"
+            android:text="@string/note"
+            android:textColor="@color/primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stomach" />
+
+        <EditText
+            android:id="@+id/notesField"
+            android:layout_width="365dp"
+            android:layout_height="150dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="90dp"
+            android:textColor="@color/secondary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addEndoscopyNotes"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <Button
             android:id="@+id/saveButton"
@@ -384,8 +420,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/leftColon" />
+            app:layout_constraintTop_toBottomOf="@+id/notesField" />
 
+        <!-- Middle Guideline -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/middleGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

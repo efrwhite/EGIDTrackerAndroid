@@ -19,19 +19,29 @@ class EndoscopyActivity : AppCompatActivity() {
 
     private lateinit var resultsButton: Button
     private lateinit var dateInput: EditText
+    private lateinit var notes: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_endoscopy)
+
+        notes = findViewById(R.id.notesField)
 
         dateInput = findViewById(R.id.endoscopyDate)
         dateInput.setOnClickListener{
             showDatePickerDialog()
         }
 
+        val isEditing = intent.getBooleanExtra("isEditing", false)
+        val reportId = intent.getStringExtra("reportId")
+
+        if (isEditing && reportId != null) {
+            loadReportData(reportId)
+        }
+
         val saveButton: Button = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
-            saveEndoscopyData()
+            saveEndoscopyData(isEditing, reportId)
         }
 
         resultsButton = findViewById(R.id.resultsButton)
@@ -65,12 +75,9 @@ class EndoscopyActivity : AppCompatActivity() {
     }
 
 
-    private fun saveEndoscopyData() {
-        if (!areAllFieldsFilled()) {
-            Toast.makeText(this, "Please enter numeric values only.", Toast.LENGTH_SHORT).show()
-            return
-        }
 
+
+    private fun saveEndoscopyData(isEditing: Boolean, reportId: String?) {
         val totalScore = calculateTotalScore()
         val dateString = dateInput.text.toString()
 
@@ -79,10 +86,12 @@ class EndoscopyActivity : AppCompatActivity() {
             return
         }
 
-        saveResultsToFirestore(totalScore, dateString)
+        saveResultsToFirestore(totalScore, dateString, isEditing, reportId)
 
-        // After saving, go back to the home activity
-        val intent = Intent(this, PlanActivity::class.java)
+        // Navigate back to the home screen without duplicating activities
+        val intent = Intent(this, PlanActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
         startActivity(intent)
         finish()
     }
@@ -103,7 +112,7 @@ class EndoscopyActivity : AppCompatActivity() {
     }
 
 
-    private fun saveResultsToFirestore(totalScore: Int, date: String) {
+    private fun saveResultsToFirestore(totalScore: Int, date: String, isEditing: Boolean, reportId: String?) {
         val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
@@ -127,17 +136,40 @@ class EndoscopyActivity : AppCompatActivity() {
             "rightColon" to findViewById<EditText>(R.id.rightColon).text.toString().toIntOrNull(),
             "middleColon" to findViewById<EditText>(R.id.middleColon).text.toString().toIntOrNull(),
             "leftColon" to findViewById<EditText>(R.id.leftColon).text.toString().toIntOrNull(),
-            "date" to timestamp
+            "date" to timestamp,
+            "notes" to notes.text.toString().trim()
         )
 
-        Firebase.firestore.collection("Children").document(childId)
-            .collection("EndoscopyResults").add(data)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Endoscopy results saved successfully!", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+        val resultsCollection = Firebase.firestore.collection("Children")
+            .document(childId)
+            .collection("EndoscopyResults")
+
+        if (isEditing && reportId != null) {
+            // ✅ If editing, update the existing report
+            resultsCollection.document(reportId)
+                .update(data as Map<String, Any>)  // Force correct type
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Report updated successfully!", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Failed to update: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+        } else {
+            // ✅ If creating new, add a new document
+            resultsCollection.add(data)
+                .addOnSuccessListener {
+                    Toast.makeText(
+                        this,
+                        "Endoscopy results saved successfully!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+        }
     }
 
     private fun showDatePickerDialog() {
@@ -157,28 +189,46 @@ class EndoscopyActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
+    private fun loadReportData(reportId: String) {
+        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
+            Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        Firebase.firestore.collection("Children")
+            .document(childId)
+            .collection("EndoscopyResults")
+            .document(reportId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    // Populate all input fields with the Firestore data
+                    findViewById<EditText>(R.id.upper).setText(document.getLong("proximate")?.toString() ?: "")
+                    findViewById<EditText>(R.id.middle).setText(document.getLong("middle")?.toString() ?: "")
+                    findViewById<EditText>(R.id.lower).setText(document.getLong("lower")?.toString() ?: "")
+                    findViewById<EditText>(R.id.stomach).setText(document.getLong("stomach")?.toString() ?: "")
+                    findViewById<EditText>(R.id.duodenum).setText(document.getLong("duodenum")?.toString() ?: "")
+                    findViewById<EditText>(R.id.rightColon).setText(document.getLong("rightColon")?.toString() ?: "")
+                    findViewById<EditText>(R.id.middleColon).setText(document.getLong("middleColon")?.toString() ?: "")
+                    findViewById<EditText>(R.id.leftColon).setText(document.getLong("leftColon")?.toString() ?: "")
+
+                    // ✅ Populate Notes field if it exists
+                    val notesText = document.getString("notes") ?: ""
+                    findViewById<EditText>(R.id.notesField).setText(notesText)
+
+                    // ✅ Populate Date field properly
+                    val dateTimestamp = document.getTimestamp("date")?.toDate()
+                    if (dateTimestamp != null) {
+                        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                        dateInput.setText(dateFormat.format(dateTimestamp))
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error loading report: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
