@@ -63,8 +63,13 @@ class ResultsActivity : AppCompatActivity() {
                 for (document in documents) {
                     val dateTimestamp = document.getTimestamp("date")?.toDate()  // Assuming 'date' is stored as timestamp
                     val score = document.getLong("totalScore")?.toString() ?: "N/A"
+
                     if (dateTimestamp != null) {
-                        addRowToTable(dateTimestamp, score)
+                        if (sourceActivity == "EndoscopyActivity") {
+                            addEndoscopyRowToTable(document.id, dateTimestamp, score)
+                        } else {
+                            addRowToTable(dateTimestamp, score)
+                        }
                     }
                 }
             }
@@ -86,4 +91,28 @@ class ResultsActivity : AppCompatActivity() {
         scoreTextView.text = score
         tableLayout.addView(row)
     }
+
+    private fun addEndoscopyRowToTable(documentId: String, date: Date, score: String) {
+        val row = layoutInflater.inflate(R.layout.endoscopy_score_row, tableLayout, false)
+        val dateTextView = row.findViewById<TextView>(R.id.date)
+        val scoreTextView = row.findViewById<TextView>(R.id.score)
+
+        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+        val formattedDate = dateFormat.format(date)
+
+        dateTextView.text = formattedDate
+        scoreTextView.text = score
+
+        // Make the row clickable
+        row.setOnClickListener {
+            val intent = Intent(this, EndoscopyActivity::class.java).apply {
+                putExtra("isEditing", true)  // Flag for edit mode
+                putExtra("reportId", documentId)  // Pass report ID
+            }
+            startActivity(intent)
+        }
+
+        tableLayout.addView(row)
+    }
+
 }
