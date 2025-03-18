@@ -426,4 +426,7 @@
     <string name="addFood">Add Food</string>
     <string name="delete">Delete</string>
     <string name="dateOfQuiz">Date of Quiz</string>
+    <string name="colon">Colon</string>
+    <string name="stomach">Stomach</string>
+    <string name="duodenum">Duodenum</string>
 </resources>

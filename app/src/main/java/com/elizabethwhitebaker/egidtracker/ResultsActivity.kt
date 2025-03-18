@@ -28,11 +28,27 @@ class ResultsActivity : AppCompatActivity() {
         val sourceActivity = intent.getStringExtra("sourceActivity") ?: "SymptomChecker"
 
         reportButton.setOnClickListener {
-            val intent = Intent(this, ReportActivity::class.java).apply {
-                putExtra("sourceActivity", sourceActivity)
+            val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+            val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
+                Toast.makeText(this, "No child selected", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
             }
-            startActivity(intent)
+
+            if (sourceActivity == "EndoscopyActivity") {
+                // Navigate to EndoscopyButtonsActivity
+                val intent = Intent(this, EndoscopyButtonsActivity::class.java).apply {
+                    putExtra("childId", childId) // Pass child ID for reference
+                }
+                startActivity(intent)
+            } else {
+                // Default behavior: navigate to ReportActivity
+                val intent = Intent(this, ReportActivity::class.java).apply {
+                    putExtra("sourceActivity", sourceActivity)
+                }
+                startActivity(intent)
+            }
         }
+
 
         tableLayout = findViewById(R.id.reportTableLayout)
 

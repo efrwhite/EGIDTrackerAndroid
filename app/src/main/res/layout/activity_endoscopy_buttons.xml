@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/primaryBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/HomeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primaryBackground"
+        tools:context="MoreInfoActivity">
+
+        <!-- Navigation Bar -->
+
+        <RelativeLayout
+            android:id="@+id/navBar"
+            android:layout_width="411dp"
+            android:layout_height="50dp"
+            android:background="@color/primaryBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <!-- Page Title -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/lato_medium"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="5dp"
+                android:text="@string/endoscopy"
+                android:textColor="@color/primary"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <!-- Buttons -->
+
+        <Button
+            android:id="@+id/eoe"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="0dp"
+            android:text="@string/eoesophagus"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            app:backgroundTint="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/navBar" />
+
+        <Button
+            android:id="@+id/colon"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="0dp"
+            android:text="@string/colon"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            app:backgroundTint="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eoe" />
+
+        <Button
+            android:id="@+id/stomach"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="0dp"
+            android:text="@string/stomach"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            app:backgroundTint="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/colon" />
+
+        <Button
+            android:id="@+id/duodenum"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="0dp"
+            android:text="@string/duodenum"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            app:backgroundTint="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stomach" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
