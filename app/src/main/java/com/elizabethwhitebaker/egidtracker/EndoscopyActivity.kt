@@ -47,35 +47,19 @@ class EndoscopyActivity : AppCompatActivity() {
         resultsButton = findViewById(R.id.resultsButton)
         resultsButton.setOnClickListener {
             val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+            val childId = sharedPreferences.getString("CurrentChildId", null) ?: return@setOnClickListener
+
             val intent = Intent(this, ResultsActivity::class.java).apply {
-                putExtra("sourceActivity", "EndoscopyActivity")
+                putExtra("sourceActivity", "EndoscopyActivity") // Pass source info
+                putExtra("childId", childId) // Pass child ID
             }
             startActivity(intent)
             finish()
         }
 
+
+
     }
-
-
-    // Ensure all fields are filled and numeric
-    private fun areAllFieldsFilled(): Boolean {
-        val fieldIds = arrayOf(
-            R.id.upper, R.id.middle, R.id.lower,
-            R.id.stomach, R.id.duodenum, R.id.rightColon,
-            R.id.middleColon, R.id.leftColon
-        )
-        for (id in fieldIds) {
-            val editText = findViewById<EditText>(id)
-            val inputText = editText.text.toString().trim()
-            if(inputText.toIntOrNull() == null) {
-                return false
-            }
-        }
-        return true
-    }
-
-
-
 
     private fun saveEndoscopyData(isEditing: Boolean, reportId: String?) {
         val totalScore = calculateTotalScore()

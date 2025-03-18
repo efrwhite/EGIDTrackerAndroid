@@ -68,28 +68,34 @@ class AccidentalExposureActivity : AppCompatActivity() {
 
 
     private fun saveItem() {
+        val itemNameText = itemName.text.toString().trim()
+        val selectedDate = datePickerButton.text.toString().trim()
+
+        if (itemNameText.isEmpty() || selectedDate == getString(R.string.datePicker)) {
+            Toast.makeText(this, "Please fill out both the date and item name.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val itemMap = hashMapOf(
-            "itemName" to itemName.text.toString().trim(),
-            "date" to datePickerButton.text.toString().trim(),
+            "itemName" to itemNameText,
+            "date" to selectedDate,
             "childId" to childId
         )
 
         firestore.collection("AccidentalExposure").add(itemMap)
-            .addOnSuccessListener {documentReference ->
-                val exposureId = documentReference.id
-                Toast.makeText(this, "Exposure added successfully", Toast.LENGTH_SHORT).show()}
-            .addOnFailureListener{e ->
+            .addOnSuccessListener {
+                Toast.makeText(this, "Exposure added successfully", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, AccidentalExposureActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to add exposure: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-
-        val intent = Intent(this, AccidentalExposureActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        startActivity(intent)
-        finish()
-
     }
+
 
 
     private fun fetchAndDisplayItems(itemTableLayout: TableLayout) {

@@ -45,13 +45,18 @@ class ReportActivity : AppCompatActivity() {
         descriptionText = findViewById(R.id.descriptionText)
         sendReportButton = findViewById(R.id.sendButton)
 
-        val sourceActivity = intent.getStringExtra("sourceActivity") ?: "SymptomChecker"
-        val childId = getChildId()
-
-        loadChartData(sourceActivity, childId)
-
         sendReportButton.setOnClickListener {
             sendChartAsPdf()
+        }
+
+        val sourceActivity = intent.getStringExtra("sourceActivity") ?: "SymptomChecker"
+        val section = intent.getStringExtra("section") ?: "proximate"  // default section
+        val childId = getChildId()
+
+        if (sourceActivity == "EndoscopyActivity") {
+            loadEndoscopyChart(childId, section)
+        } else {
+            loadChartData(sourceActivity, childId)
         }
     }
 
@@ -61,11 +66,6 @@ class ReportActivity : AppCompatActivity() {
     }
 
     private fun loadChartData(sourceActivity: String, childId: String) {
-        if (sourceActivity == "EndoscopyActivity") {
-            loadEndoscopyChart(childId)
-            return
-        }
-
         val subCollection = when (sourceActivity) {
             "SymptomChecker" -> "Symptom Scores"
             "QoLActivity" -> "Quality of Life Scores"
@@ -116,122 +116,84 @@ class ReportActivity : AppCompatActivity() {
             }
     }
 
-    private fun loadEndoscopyChart(childId: String) {
+    private fun loadEndoscopyChart(childId: String, section: String) {
         Firebase.firestore.collection("Children").document(childId)
             .collection("EndoscopyResults")
-            .orderBy("date", Query.Direction.DESCENDING)
-            .limit(6)
+            .orderBy("date", Query.Direction.ASCENDING) // Ensure chronological order
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val documents = querySnapshot.documents
                 val dateLabels = ArrayList<String>()
 
-                // Initialize lists to store entries for each field
-                val upperEntries = ArrayList<Entry>()
-                val middleEntries = ArrayList<Entry>()
-                val lowerEntries = ArrayList<Entry>()
-                val stomachEntries = ArrayList<Entry>()
-                val duodenumEntries = ArrayList<Entry>()
-                val rightColonEntries = ArrayList<Entry>()
-                val middleColonEntries = ArrayList<Entry>()
-                val leftColonEntries = ArrayList<Entry>()
+                // Define mappings for multiple graph lines per section
+                val fieldMap = when (section) {
+                    "eoe" -> listOf("proximate", "middle", "lower")
+                    "colon" -> listOf("rightColon", "middleColon", "leftColon")
+                    "stomach" -> listOf("stomach")
+                    "duodenum" -> listOf("duodenum")
+                    else -> emptyList()
+                }
 
-                // Track the previous index for each line to handle missing data points
-                val previousIndexMap = mutableMapOf(
-                    "upper" to -1,
-                    "middle" to -1,
-                    "lower" to -1,
-                    "stomach" to -1,
-                    "duodenum" to -1,
-                    "rightColon" to -1,
-                    "middleColon" to -1,
-                    "leftColon" to -1
-                )
+                if (fieldMap.isEmpty()) return@addOnSuccessListener
 
-                // Reverse documents to display chronologically from oldest to newest
-                documents.reversed().forEachIndexed { index, document ->
+                // Create entry lists for each field
+                val dataEntriesMap = mutableMapOf<String, ArrayList<Entry>>()
+                for (field in fieldMap) {
+                    dataEntriesMap[field] = ArrayList()
+                }
+
+                // ✅ Sort documents chronologically
+                val sortedDocuments = documents.sortedBy { it.getDate("date") }
+
+                sortedDocuments.forEachIndexed { index, document ->
                     val date = document.getDate("date")
                     date?.let {
                         dateLabels.add(SimpleDateFormat("MM/dd/yyyy", Locale.US).format(it))
                     } ?: dateLabels.add("Unknown Date")
 
-                    // Fetching data for each field
-                    val upperValue = document.getLong("proximate")?.toFloat()
-                    val middleValue = document.getLong("middle")?.toFloat()
-                    val lowerValue = document.getLong("lower")?.toFloat()
-                    val stomachValue = document.getLong("stomach")?.toFloat()
-                    val duodenumValue = document.getLong("duodenum")?.toFloat()
-                    val rightColonValue = document.getLong("rightColon")?.toFloat()
-                    val middleColonValue = document.getLong("middleColon")?.toFloat()
-                    val leftColonValue = document.getLong("leftColon")?.toFloat()
-
-                    // Adding entries
-                    upperValue?.let { addEntry(upperEntries, index, it, previousIndexMap, "upper") }
-                    middleValue?.let { addEntry(middleEntries, index, it, previousIndexMap, "middle") }
-                    lowerValue?.let { addEntry(lowerEntries, index, it, previousIndexMap, "lower") }
-                    stomachValue?.let { addEntry(stomachEntries, index, it, previousIndexMap, "stomach") }
-                    duodenumValue?.let { addEntry(duodenumEntries, index, it, previousIndexMap, "duodenum") }
-                    rightColonValue?.let { addEntry(rightColonEntries, index, it, previousIndexMap, "rightColon") }
-                    middleColonValue?.let { addEntry(middleColonEntries, index, it, previousIndexMap, "middleColon") }
-                    leftColonValue?.let { addEntry(leftColonEntries, index, it, previousIndexMap, "leftColon") }
-                }
-
-                // Create LineDataSets for each field
-                val dataSets = ArrayList<ILineDataSet>()
-
-                // Define distinct colors for each dataset
-                val colors = listOf(
-                    Color.parseColor("#FF0000"), // Red
-                    Color.parseColor("#0000FF"), // Blue
-                    Color.parseColor("#008000"), // Green
-                    Color.parseColor("#FFA500"), // Orange
-                    Color.parseColor("#800080"), // Purple
-                    Color.parseColor("#00FFFF"), // Cyan
-                    Color.parseColor("#FFC0CB"), // Pink
-                    Color.parseColor("#A52A2A")  // Brown
-                )
-
-                val fieldNames = listOf(
-                    "Upper",
-                    "Middle",
-                    "Lower",
-                    "Stomach",
-                    "Duodenum",
-                    "Right Colon",
-                    "Middle Colon",
-                    "Left Colon"
-                )
-
-                val entriesList = listOf(
-                    upperEntries,
-                    middleEntries,
-                    lowerEntries,
-                    stomachEntries,
-                    duodenumEntries,
-                    rightColonEntries,
-                    middleColonEntries,
-                    leftColonEntries
-                )
-
-                // Add data sets for each line
-                for (i in entriesList.indices) {
-                    if (entriesList[i].isNotEmpty()) {
-                        val dataSet = LineDataSet(entriesList[i], fieldNames[i])
-                        dataSet.color = colors[i]
-                        dataSet.lineWidth = 2f
-                        dataSet.circleRadius = 3f
-                        dataSet.setCircleColor(colors[i])
-                        dataSet.setDrawValues(false) // Disable point values
-                        dataSets.add(dataSet as ILineDataSet)
-
-                        // Debugging print to ensure it's being added
-                        println("Adding dataset for ${fieldNames[i]} with ${entriesList[i].size} entries")
+                    // ✅ Ensure each field has a value (default to `0` if missing)
+                    for (field in fieldMap) {
+                        val fieldValue = document.getLong(field)?.toFloat() ?: 0f
+                        dataEntriesMap[field]?.add(Entry(index.toFloat(), fieldValue))
                     }
                 }
 
-                if (dataSets.isEmpty()) {
-                    Toast.makeText(this, "No data available to display.", Toast.LENGTH_SHORT).show()
+                if (dataEntriesMap.values.all { it.isEmpty() }) {
+                    Toast.makeText(this, "No data available for this section.", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
+                }
+
+                // Define distinct colors for each dataset
+                val colors = listOf(
+                    Color.RED, // First field
+                    Color.BLUE, // Second field
+                    Color.GREEN, // Third field
+                    Color.MAGENTA, // Fourth field if needed
+                    Color.CYAN // Fifth field if needed
+                )
+
+                val dataSets = ArrayList<ILineDataSet>()
+
+                // ✅ Ensure all fields are represented in the legend, even if values are 0
+                fieldMap.forEachIndexed { index, field ->
+                    val entries = dataEntriesMap[field] ?: arrayListOf()
+                    if (entries.isEmpty()) {
+                        // Ensure the dataset exists with zeroed-out entries if missing
+                        for (i in dateLabels.indices) {
+                            entries.add(Entry(i.toFloat(), 0f))
+                        }
+                    }
+
+                    val dataSet = LineDataSet(entries, field.capitalize()).apply {
+                        color = colors[index % colors.size]
+                        valueTextColor = Color.BLACK
+                        valueTextSize = 12f
+                        setDrawValues(true) // Ensure numbers are shown at each point
+                        setCircleColor(colors[index % colors.size])
+                        setDrawCircles(true)
+                        circleRadius = 4f
+                    }
+                    dataSets.add(dataSet)
                 }
 
                 val lineData = LineData(dataSets)
@@ -243,42 +205,27 @@ class ReportActivity : AppCompatActivity() {
                     granularity = 1f
                     valueFormatter = IndexAxisValueFormatter(dateLabels)
                     setDrawGridLines(false)
-                    labelRotationAngle = 45f // Rotate labels to prevent overlap
                 }
-
-                val yAxis = lineChart.axisLeft
-                yAxis.granularity = 1f // Set the granularity to 1, which means whole numbers
-                yAxis.isGranularityEnabled = true // Ensure granularity is enabled
-
-
-                // Increase bottom padding to give space for the legend
-                lineChart.setExtraOffsets(10f, 0f, 30f, 10f) // Adjust this if legend still cuts off
 
                 lineChart.axisLeft.setDrawGridLines(false)
                 lineChart.axisRight.isEnabled = false
                 lineChart.description.isEnabled = false
 
-                // Customize legend appearance
+                // ✅ Customize legend appearance for multiple lines
                 val legend = lineChart.legend
-                legend.isWordWrapEnabled = true // Enable word wrapping
-                legend.setMaxSizePercent(0.95f) // Ensure legend occupies no more than 95% of the width
-                legend.xEntrySpace = 10f // Space between items on the x-axis
-                legend.yEntrySpace = 5f // Space between items on the y-axis
+                legend.isWordWrapEnabled = true
+                legend.setMaxSizePercent(0.95f)
+                legend.xEntrySpace = 10f
+                legend.yEntrySpace = 5f
                 legend.xOffset = 10f
                 legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
 
-
-                // Refresh the chart
-                lineChart.notifyDataSetChanged()  // Ensure chart is aware of new data
-                lineChart.invalidate()            // Redraw the chart
+                lineChart.invalidate()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to load data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-
     }
-
-
 
 
 

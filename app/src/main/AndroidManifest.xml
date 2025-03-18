@@ -87,8 +87,9 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".EndoscopyActivity"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".EndoscopyButtonsActivity"/>
         <activity android:name=".AccidentalExposureActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name="CustomResourcesActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name="AddCustomResourceActivity"
