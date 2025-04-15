@@ -79,6 +79,7 @@
         <activity android:name=".Diet2Activity"/>
         <activity android:name=".Diet4Activity"/>
         <activity android:name=".Diet6Activity"/>
+        <activity android:name=".DietNoneActivity"/>
         <activity android:name=".ResultsActivity"/>
         <activity android:name=".ReportActivity"/>
         <activity android:name=".DBHelper"

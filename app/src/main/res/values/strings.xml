@@ -34,6 +34,7 @@
     </string-array>
 
     <string-array name="diet_options">
+        <item>None</item>
         <item>Diet 1</item>
         <item>Diet 2</item>
         <item>Diet 4</item>
@@ -429,4 +430,5 @@
     <string name="colon">Colon</string>
     <string name="stomach">Stomach</string>
     <string name="duodenum">Duodenum</string>
+    <string name="diet_none">No Current Diet Restrictions</string>
 </resources>

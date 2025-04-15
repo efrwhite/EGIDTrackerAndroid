@@ -99,6 +99,8 @@ class PlanActivity : AppCompatActivity() {
             intent = Intent(this, Diet4Activity::class.java)
         } else if (childDiet == "Diet 6"){
             intent = Intent(this, Diet6Activity::class.java)
+        } else if (childDiet == "None"){
+            intent = Intent(this, DietNoneActivity::class.java)
         } else {
             throw IllegalArgumentException("Invalid diet")
         }
