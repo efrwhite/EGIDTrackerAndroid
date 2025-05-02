@@ -349,7 +349,7 @@ class AddCaregiverActivity : AppCompatActivity() {
                                                 }
                                                 .addOnFailureListener {
                                                     Toast.makeText(this, "Batch delete failed: ${it.message}", Toast.LENGTH_LONG).show()
-                                                }
+                                                } 
                                         }
                                 }
                                 .addOnFailureListener {
