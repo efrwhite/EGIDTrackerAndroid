@@ -431,4 +431,5 @@
     <string name="stomach">Stomach</string>
     <string name="duodenum">Duodenum</string>
     <string name="diet_none">No Current Diet Restrictions</string>
+    <string name="delete_account">Delete Account</string>
 </resources>
