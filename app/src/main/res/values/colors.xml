@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-    primaryBackground = beige
-    primary = royal  blue
-    secondary = charcoal blue
-    tertiary = purple
-    -->
-    <color name="primaryBackground">#e0c9a2</color>
-    <color name="primary">#394390</color>
-    <color name="secondary">#8098ab</color>
-    <color name="tertiary">#695182</color>
+
+    <!-- Base Colors -->
+    <color name="primaryBackground">#F0E3CD</color>    <!-- Champagne -->
+    <color name="primary">#394390</color>            <!-- Deep Navy -->
+    <color name="secondary">#8098AB</color>          <!-- Steel Blue -->
+    <color name="tertiary">#695182</color>           <!-- Dusty Violet -->
     <color name="black">#000000</color>
+
+    <!-- Additional Shades -->
+    <color name="primaryVariant">#2E366F</color>     <!-- Darker Navy -->
+    <color name="secondaryVariant">#667D91</color>   <!-- Muted Blue-Grey -->
+    <color name="tertiaryVariant">#563C6A</color>    <!-- Muted Violet -->
+
+    <!-- Surfaces & Backgrounds -->
+    <color name="surface">#FAF8F4</color>            <!-- Off-White surface -->
+    <color name="surfaceOverlay">#F2EBDD</color>     <!-- Light overlay for cards/dialogs -->
+    <color name="onSurface">#1E1E1E</color>          <!-- Text on surfaces -->
+
+    <!-- Text and Icon Colors -->
+    <color name="onPrimary">#FFFFFF</color>          <!-- White text on primary -->
+    <color name="onSecondary">#FFFFFF</color>
+    <color name="onTertiary">#FFFFFF</color>
+    <color name="onPrimaryBackground">#1E1E1E</color> <!-- Dark text on background -->
+
+    <!-- Outline / Border -->
+    <color name="outline">#B0A083</color>            <!-- Muted gold/bronze for borders -->
+
+    <!-- Error & Success -->
+    <color name="error">#B00020</color>
+    <color name="onError">#FFFFFF</color>
+    <color name="success">#4CAF50</color>
+    <color name="onSuccess">#FFFFFF</color>
+
+    <!-- Accent / Call to Action -->
+    <color name="accent">#FF9E3E</color>             <!-- Warm orange for emphasis -->
+    <color name="onAccent">#1E1E1E</color>
 </resources>

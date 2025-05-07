@@ -32,6 +32,7 @@ class AddCaregiverActivity : AppCompatActivity() {
     private lateinit var saveButton: Button
     private lateinit var imageView: ImageView
     private lateinit var pictureButton: Button
+    private lateinit var deleteAccountButton: Button
     private var imageUri: Uri? = null
     private var currentPhotoPath: String = ""
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
@@ -51,8 +52,13 @@ class AddCaregiverActivity : AppCompatActivity() {
         saveButton = findViewById(R.id.saveButton)
         imageView = findViewById(R.id.imageView)
         pictureButton = findViewById(R.id.button)
+        deleteAccountButton = findViewById(R.id.deleteAccount)
 
         imageView.setImageResource(R.drawable.default_profile_picture)  // Set default image initially
+
+        deleteAccountButton.setOnClickListener {
+            deleteAccount()
+        }
 
         initLaunchers()
 
@@ -279,6 +285,93 @@ class AddCaregiverActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error fetching username: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun deleteAccount() {
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Delete Account")
+        builder.setMessage("Are you sure you want to delete your account? If you are the only caregiver, this will delete all your child profiles as well.")
+        builder.setPositiveButton("Delete") { dialog, _ ->
+            dialog.dismiss()
+
+            val currentUser = firebaseAuth.currentUser
+            val uid = currentUser?.uid ?: return@setPositiveButton
+            val db = Firebase.firestore
+            val batch = db.batch()
+
+            // Step 1: Delete Children
+            db.collection("Children")
+                .whereEqualTo("parentUserId", uid)
+                .get()
+                .addOnSuccessListener { childrenSnapshot ->
+                    for (child in childrenSnapshot.documents) {
+                        batch.delete(child.reference)
+                    }
+
+                    // Step 2: Delete Caregivers
+                    db.collection("Caregivers")
+                        .whereEqualTo("parentUserId", uid)
+                        .get()
+                        .addOnSuccessListener { caregiverSnapshot ->
+                            for (caregiver in caregiverSnapshot.documents) {
+                                batch.delete(caregiver.reference)
+                            }
+
+                            // Step 3: Delete Usernames
+                            db.collection("Usernames")
+                                .whereEqualTo("userId", uid)
+                                .get()
+                                .addOnSuccessListener { usernamesSnapshot ->
+                                    for (usernameDoc in usernamesSnapshot.documents) {
+                                        batch.delete(usernameDoc.reference)
+                                    }
+
+                                    // Step 4: Delete from Users collection (doc ID == UID)
+                                    db.collection("Users").document(uid).get()
+                                        .addOnSuccessListener { userDoc ->
+                                            if (userDoc.exists()) {
+                                                batch.delete(userDoc.reference)
+                                            }
+
+                                            // Step 5: Commit batch
+                                            batch.commit()
+                                                .addOnSuccessListener {
+                                                    // Step 6: Delete Authentication user
+                                                    currentUser.delete()
+                                                        .addOnSuccessListener {
+                                                            Toast.makeText(this, "Account deleted successfully.", Toast.LENGTH_LONG).show()
+                                                            startActivity(Intent(this, MainActivity::class.java).apply {
+                                                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                                            })
+                                                        }
+                                                        .addOnFailureListener {
+                                                            Toast.makeText(this, "Failed to delete auth: ${it.message}", Toast.LENGTH_LONG).show()
+                                                        }
+                                                }
+                                                .addOnFailureListener {
+                                                    Toast.makeText(this, "Batch delete failed: ${it.message}", Toast.LENGTH_LONG).show()
+                                                } 
+                                        }
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(this, "Failed to delete username: ${it.message}", Toast.LENGTH_LONG).show()
+                                }
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Failed to delete caregiver: ${it.message}", Toast.LENGTH_LONG).show()
+                        }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed to delete children: ${it.message}", Toast.LENGTH_LONG).show()
+                }
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.create().show()
+    }
+
 
 
     private fun goToNextActivity() {
