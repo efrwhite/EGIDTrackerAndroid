@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.elizabethwhitebaker.egidtracker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.elizabethwhitebaker.egidtracker"
