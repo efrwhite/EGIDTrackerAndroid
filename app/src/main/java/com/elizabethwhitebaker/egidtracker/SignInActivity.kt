@@ -43,49 +43,49 @@ class SignInActivity : AppCompatActivity() {
         val username = usernameEditText.text.toString().trim()
         val password = passwordEditText.text.toString().trim()
 
-        if (username.isNotEmpty() && password.isNotEmpty()) {
-            // Look up the email associated with the username
-            Firebase.firestore.collection("Users").whereEqualTo("username", username).get()
-                .addOnSuccessListener { documents ->
-                    if (documents.isEmpty) {
-                        Toast.makeText(this, "Invalid username or password.", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val email = documents.documents[0].getString("email")
-                        if (email != null) {
-                            // Use the email to sign in with Firebase Auth
-                            firebaseAuth.signInWithEmailAndPassword(email, password)
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        // Save the username in SharedPreferences
-                                        saveUsernameToSharedPreferences(username)
+        if (username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Username and password are required.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-                                        // Navigate to HomeActivity or the next appropriate activity
-                                        startActivity(Intent(this, HomeActivity::class.java).apply {
-                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                        })
-                                        finish()
-                                    } else {
-                                        Toast.makeText(this, "Sign-in failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+        // Look up the email associated with the username directly from Users
+        Firebase.firestore.collection("Users")
+            .whereEqualTo("username", username)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { docs ->
+                if (docs.isEmpty) {
+                    Toast.makeText(this, "Invalid username or password.", Toast.LENGTH_SHORT).show()
+                    return@addOnSuccessListener
+                }
+
+                val email = docs.documents[0].getString("email")
+                if (email.isNullOrBlank()) {
+                    Toast.makeText(this, "Failed to retrieve email for username.", Toast.LENGTH_SHORT).show()
+                    return@addOnSuccessListener
+                }
+
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            saveUsernameToSharedPreferences(username)
+                            startActivity(Intent(this, HomeActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            })
+                            finish()
                         } else {
-                            Toast.makeText(this, "Failed to retrieve email for username.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Sign-in failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
-                }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(this, "Failed to retrieve user data: ${exception.message}", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(this, "Username and password are required.", Toast.LENGTH_SHORT).show()
-        }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to retrieve user data: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun saveUsernameToSharedPreferences(username: String) {
         val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("CurrentUsername", username)
-        editor.apply()
+        sharedPreferences.edit().putString("CurrentUsername", username).apply()
     }
 }
 

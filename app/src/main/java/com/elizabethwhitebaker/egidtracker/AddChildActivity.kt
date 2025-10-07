@@ -111,9 +111,14 @@ class AddChildActivity : AppCompatActivity() {
             }
         }
 
-
-
         setupDropdownMenus()
+
+        if (childId == null && dietInput.text.isNullOrBlank()) {
+            val diets = resources.getStringArray(R.array.diet_options)
+            val defaultDiet = diets.firstOrNull { it.equals("No Diet", true) } ?: diets.first()
+            dietInput.setText(defaultDiet, /* filter= */ false)  // false prevents filtering the list
+        }
+
 
         requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -217,8 +222,11 @@ class AddChildActivity : AppCompatActivity() {
             "gender" to genderInput.text.toString().trim(),
             "diet" to dietInput.text.toString().trim(),
             "parentUserId" to firebaseAuth.currentUser?.uid,
-            "imageUrl" to (imageUri?.toString() ?: "")  // Save imageUri if it's not null, else empty string
         )
+
+        if (imageUri != null) {
+            userMap["imageUrl"] = imageUri.toString()
+        }
 
         childId?.let { id ->
             Firebase.firestore.collection("Children").document(id).set(userMap)
@@ -235,11 +243,9 @@ class AddChildActivity : AppCompatActivity() {
 
 
     private fun saveCurrentChildId(childId: String) {
-        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        with(sharedPreferences.edit()) {
-            putString("CurrentChildId", childId)
-            apply()
-        }
+        val uid = firebaseAuth.currentUser?.uid ?: return
+        val sp = getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        sp.edit().putString("CurrentChildId_$uid", childId).apply()
     }
 
     private fun setupDropdownMenus() {

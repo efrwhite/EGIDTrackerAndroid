@@ -26,7 +26,6 @@ class SignUpActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        // Initialization
         usernameEditText = findViewById(R.id.signUpUsername)
         phoneEditText = findViewById(R.id.signUpPhone)
         emailEditText = findViewById(R.id.signUpEmail)
@@ -34,9 +33,7 @@ class SignUpActivity : AppCompatActivity() {
         confirmPasswordEditText = findViewById(R.id.signUpConfirm)
         signUpButton = findViewById(R.id.signUpButton)
 
-        signUpButton.setOnClickListener {
-            signUpUser()
-        }
+        signUpButton.setOnClickListener { signUpUser() }
     }
 
     private fun signUpUser() {
@@ -50,69 +47,78 @@ class SignUpActivity : AppCompatActivity() {
             Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show()
             return
         }
-
         if (password != confirmPassword) {
             Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show()
             return
         }
-
         if (!isPasswordValid(password)) {
             Toast.makeText(this, "Password does not meet the requirements.", Toast.LENGTH_SHORT).show()
             return
         }
 
+        // Check uniqueness directly against Users
         checkUsernameUnique(username) { isUnique ->
-            if (isUnique) {
-                firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Create and save user profile
-                        val userId = firebaseAuth.currentUser?.uid ?: ""
-                        val userMap = hashMapOf("email" to email, "username" to username, "phone" to phone)
-                        Firebase.firestore.collection("Users").document(userId).set(userMap).addOnSuccessListener {
-                            // Save the username in SharedPreferences
+            if (!isUnique) {
+                Toast.makeText(this, "Username is already taken. Please choose another.", Toast.LENGTH_LONG).show()
+                return@checkUsernameUnique
+            }
+
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (!task.isSuccessful) {
+                        Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        return@addOnCompleteListener
+                    }
+
+                    val userId = firebaseAuth.currentUser?.uid ?: ""
+                    val userMap = hashMapOf(
+                        "email" to email,
+                        "username" to username,
+                        "phone" to phone
+                    )
+
+                    // Save profile in Users/{uid}
+                    Firebase.firestore.collection("Users").document(userId)
+                        .set(userMap)
+                        .addOnSuccessListener {
                             saveUsernameToSharedPreferences(username)
 
-                            // Save the username mapping
-                            Firebase.firestore.collection("Usernames").document(username).set(mapOf("userId" to userId)).addOnSuccessListener {
-                                // Transition to AddCaregiverActivity
-                                val intent = Intent(this, AddCaregiverActivity::class.java).apply {
-                                    putExtra("username", username)
-                                    putExtra("isFirstTimeUser", true)
-                                }
-                                startActivity(intent)
-                                finish() // Finish to prevent returning to signup screen
+                            // Move forward (no more Usernames write)
+                            val intent = Intent(this, AddCaregiverActivity::class.java).apply {
+                                putExtra("username", username)
+                                putExtra("isFirstTimeUser", true)
                             }
-                        }.addOnFailureListener { e ->
+                            startActivity(intent)
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
                             Toast.makeText(this, "Failed to create user profile: ${e.message}", Toast.LENGTH_SHORT).show()
                         }
-                    } else {
-                        Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                    }
                 }
-            } else {
-                Toast.makeText(this, "Username is already taken. Please choose another.", Toast.LENGTH_LONG).show()
-            }
         }
     }
 
     private fun saveUsernameToSharedPreferences(username: String) {
         val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("CurrentUsername", username)
-        editor.apply()
+        sharedPreferences.edit().putString("CurrentUsername", username).apply()
     }
 
     private fun isPasswordValid(password: String): Boolean {
-        val passwordPattern = "^(?=.*[A-Z])(?=.*[!@#\$])[A-Za-z\\d!@#\$]{7,}$"
+        val passwordPattern = "^(?=.*[A-Z])(?=.*[!@#\\$])[A-Za-z\\d!@#\\$]{7,}$"
         return Regex(passwordPattern).matches(password)
     }
 
     private fun checkUsernameUnique(username: String, onComplete: (Boolean) -> Unit) {
-        Firebase.firestore.collection("Usernames").document(username).get().addOnSuccessListener { document ->
-            onComplete(!document.exists())
-        }.addOnFailureListener { e ->
-            Toast.makeText(this, "Failed to check username uniqueness: ${e.message}", Toast.LENGTH_SHORT).show()
-            onComplete(false)
-        }
+        Firebase.firestore.collection("Users")
+            .whereEqualTo("username", username)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                onComplete(snapshot.isEmpty)
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to check username uniqueness: ${e.message}", Toast.LENGTH_SHORT).show()
+                onComplete(false)
+            }
     }
 }
