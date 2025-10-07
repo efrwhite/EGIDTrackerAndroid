@@ -40,7 +40,7 @@ class AddCaregiverActivity : AppCompatActivity() {
 
     private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private var caregiverId: String? = null
-    private var mode: String = "add" // Mode can be 'add' or 'edit'
+    private var mode: String = "add" // 'add' or 'edit'
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,21 +54,20 @@ class AddCaregiverActivity : AppCompatActivity() {
         pictureButton = findViewById(R.id.button)
         deleteAccountButton = findViewById(R.id.deleteAccount)
 
-        imageView.setImageResource(R.drawable.default_profile_picture)  // Set default image initially
+        imageView.setImageResource(R.drawable.default_profile_picture)
 
-        deleteAccountButton.setOnClickListener {
-            deleteAccount()
-        }
-
+        deleteAccountButton.setOnClickListener { deleteAccount() }
         initLaunchers()
 
-        // Check if this is the first-time user and get the username from the intent
         caregiverId = intent.getStringExtra("caregiverId")
-        val username = intent.getStringExtra("username")
+        val usernameFromIntent = intent.getStringExtra("username")
 
-        if (username != null) {
-            usernameEditText.setText(username)  // Set the username in the EditText
-            usernameEditText.isEnabled = false  // Disable editing of the username
+        if (usernameFromIntent != null) {
+            usernameEditText.setText(usernameFromIntent)
+            usernameEditText.isEnabled = false
+        } else {
+            // First time open without username extra? Fetch from Users using current uid
+            fetchUsernameFromUsers(firebaseAuth.currentUser?.uid)
         }
 
         if (caregiverId != null) {
@@ -76,19 +75,12 @@ class AddCaregiverActivity : AppCompatActivity() {
             populateCaregiverData(caregiverId!!)
         }
 
-        pictureButton.setOnClickListener {
-            showImagePickDialog()
-        }
+        pictureButton.setOnClickListener { showImagePickDialog() }
 
         saveButton.setOnClickListener {
-            if (mode == "add") {
-                saveCaregiverInfo()
-            } else {
-                updateCaregiverInfo()
-            }
+            if (mode == "add") saveCaregiverInfo() else updateCaregiverInfo()
         }
     }
-
 
     private fun initLaunchers() {
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
@@ -114,18 +106,9 @@ class AddCaregiverActivity : AppCompatActivity() {
         val builder = android.app.AlertDialog.Builder(this)
         builder.setItems(options) { dialog, which ->
             when (which) {
-                0 -> {
-                    // Take photo with camera
-                    checkAndRequestCameraPermission()
-                }
-                1 -> {
-                    // Pick image from gallery
-                    pickImageFromGallery()
-                }
-                2 -> {
-                    // Delete profile picture
-                    deleteProfilePicture()
-                }
+                0 -> checkAndRequestCameraPermission()
+                1 -> pickImageFromGallery()
+                2 -> deleteProfilePicture()
                 3 -> dialog.dismiss()
             }
         }
@@ -133,16 +116,14 @@ class AddCaregiverActivity : AppCompatActivity() {
     }
 
     private fun deleteProfilePicture() {
-        imageView.setImageResource(R.drawable.default_profile_picture)  // Set the default image
-        imageUri = null  // Clear the image URI
+        imageView.setImageResource(R.drawable.default_profile_picture)
+        imageUri = null
 
-        // Update Firestore to remove the image URL
         caregiverId?.let { id ->
             Firebase.firestore.collection("Caregivers").document(id)
-                .update("imageUrl", "")  // Clear the imageUrl field in Firestore
+                .update("imageUrl", "")
         }
     }
-
 
     private fun checkAndRequestCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -173,7 +154,6 @@ class AddCaregiverActivity : AppCompatActivity() {
 
     private fun saveImageInfoToDatabase() {
         val imageUrl = imageUri?.toString() ?: ""
-
         caregiverId?.let { id ->
             Firebase.firestore.collection("Caregivers").document(id)
                 .update("imageUrl", imageUrl)
@@ -183,31 +163,28 @@ class AddCaregiverActivity : AppCompatActivity() {
     private fun populateCaregiverData(caregiverId: String) {
         Firebase.firestore.collection("Caregivers").document(caregiverId).get()
             .addOnSuccessListener { caregiverSnapshot ->
-                if (caregiverSnapshot.exists()) {
-                    firstNameEditText.setText(caregiverSnapshot.getString("firstName") ?: "")
-                    lastNameEditText.setText(caregiverSnapshot.getString("lastName") ?: "")
-
-                    // Fetch and populate the username
-                    val parentUserId = caregiverSnapshot.getString("parentUserId") ?: ""
-                    fetchUsername(parentUserId)
-
-                    // Load the profile picture
-                    val imageUrl = caregiverSnapshot.getString("imageUrl") ?: ""
-                    if (imageUrl.isNotEmpty()) {
-                        Glide.with(this).load(imageUrl).into(imageView)
-                    } else {
-                        imageView.setImageResource(R.drawable.default_profile_picture)
-                    }
-                } else {
+                if (!caregiverSnapshot.exists()) {
                     Toast.makeText(this, "Caregiver not found.", Toast.LENGTH_SHORT).show()
+                    return@addOnSuccessListener
+                }
+
+                firstNameEditText.setText(caregiverSnapshot.getString("firstName") ?: "")
+                lastNameEditText.setText(caregiverSnapshot.getString("lastName") ?: "")
+
+                val parentUserId = caregiverSnapshot.getString("parentUserId") ?: ""
+                fetchUsernameFromUsers(parentUserId)
+
+                val imageUrl = caregiverSnapshot.getString("imageUrl") ?: ""
+                if (imageUrl.isNotEmpty()) {
+                    Glide.with(this).load(imageUrl).into(imageView)
+                } else {
+                    imageView.setImageResource(R.drawable.default_profile_picture)
                 }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error fetching caregiver details: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
-
 
     private fun saveCaregiverInfo() {
         val firstName = firstNameEditText.text.toString().trim()
@@ -265,20 +242,20 @@ class AddCaregiverActivity : AppCompatActivity() {
         } ?: Toast.makeText(this, "Error: Caregiver ID is missing.", Toast.LENGTH_SHORT).show()
     }
 
-    private fun fetchUsername(parentUserId: String) {
-        // Since document IDs are usernames and contain a 'userId' field for matching,
-        // the query should fetch based on 'userId' being equal to parentUserId.
-        Firebase.firestore.collection("Usernames")
-            .whereEqualTo("userId", parentUserId)
+    private fun fetchUsernameFromUsers(parentUserId: String?) {
+        val uid = parentUserId ?: return
+        Firebase.firestore.collection("Users")
+            .document(uid)
             .get()
-            .addOnSuccessListener { documents ->
-                if (documents.documents.isNotEmpty()) {
-                    // Assuming the document ID (username) is what we need to display
-                    val username = documents.documents.first().id
-                    usernameEditText.setText(username)
-                    usernameEditText.isEnabled = false // Make the EditText uneditable
+            .addOnSuccessListener { doc ->
+                if (doc.exists()) {
+                    val username = doc.getString("username") ?: ""
+                    if (username.isNotBlank()) {
+                        usernameEditText.setText(username)
+                        usernameEditText.isEnabled = false
+                    }
                 } else {
-                    Toast.makeText(this, "Username not found.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "User not found.", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { e ->
@@ -316,44 +293,33 @@ class AddCaregiverActivity : AppCompatActivity() {
                                 batch.delete(caregiver.reference)
                             }
 
-                            // Step 3: Delete Usernames
-                            db.collection("Usernames")
-                                .whereEqualTo("userId", uid)
-                                .get()
-                                .addOnSuccessListener { usernamesSnapshot ->
-                                    for (usernameDoc in usernamesSnapshot.documents) {
-                                        batch.delete(usernameDoc.reference)
+                            // (REMOVED) Step: Delete Usernames — no longer exists
+
+                            // Step 3: Delete from Users collection (doc ID == UID)
+                            db.collection("Users").document(uid).get()
+                                .addOnSuccessListener { userDoc ->
+                                    if (userDoc.exists()) {
+                                        batch.delete(userDoc.reference)
                                     }
 
-                                    // Step 4: Delete from Users collection (doc ID == UID)
-                                    db.collection("Users").document(uid).get()
-                                        .addOnSuccessListener { userDoc ->
-                                            if (userDoc.exists()) {
-                                                batch.delete(userDoc.reference)
-                                            }
-
-                                            // Step 5: Commit batch
-                                            batch.commit()
+                                    // Step 4: Commit batch
+                                    batch.commit()
+                                        .addOnSuccessListener {
+                                            // Step 5: Delete Authentication user
+                                            currentUser.delete()
                                                 .addOnSuccessListener {
-                                                    // Step 6: Delete Authentication user
-                                                    currentUser.delete()
-                                                        .addOnSuccessListener {
-                                                            Toast.makeText(this, "Account deleted successfully.", Toast.LENGTH_LONG).show()
-                                                            startActivity(Intent(this, MainActivity::class.java).apply {
-                                                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                                            })
-                                                        }
-                                                        .addOnFailureListener {
-                                                            Toast.makeText(this, "Failed to delete auth: ${it.message}", Toast.LENGTH_LONG).show()
-                                                        }
+                                                    Toast.makeText(this, "Account deleted successfully.", Toast.LENGTH_LONG).show()
+                                                    startActivity(Intent(this, MainActivity::class.java).apply {
+                                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                                    })
                                                 }
                                                 .addOnFailureListener {
-                                                    Toast.makeText(this, "Batch delete failed: ${it.message}", Toast.LENGTH_LONG).show()
-                                                } 
+                                                    Toast.makeText(this, "Failed to delete auth: ${it.message}", Toast.LENGTH_LONG).show()
+                                                }
                                         }
-                                }
-                                .addOnFailureListener {
-                                    Toast.makeText(this, "Failed to delete username: ${it.message}", Toast.LENGTH_LONG).show()
+                                        .addOnFailureListener {
+                                            Toast.makeText(this, "Batch delete failed: ${it.message}", Toast.LENGTH_LONG).show()
+                                        }
                                 }
                         }
                         .addOnFailureListener {
@@ -365,14 +331,9 @@ class AddCaregiverActivity : AppCompatActivity() {
                 }
         }
 
-        builder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.dismiss()
-        }
-
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
         builder.create().show()
     }
-
-
 
     private fun goToNextActivity() {
         val nextActivityIntent = when {
