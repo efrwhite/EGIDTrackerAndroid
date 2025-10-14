@@ -14,6 +14,7 @@
     android:id="@+id/HomeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
     android:background="@color/primaryBackground"
     tools:context="WhatIsEoEActivity">
 
@@ -29,16 +30,16 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="38dp"
+            android:layout_height="45dp"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/lato_medium"
+            android:fontFamily="@font/lato_bold"
             android:paddingLeft="20dp"
             android:paddingTop="5dp"
             android:paddingRight="20dp"
             android:paddingBottom="5dp"
             android:text="@string/whatEoE"
             android:textColor="@color/primary"
-            android:textSize="20sp" />
+            android:textSize="28sp" />
 
     </RelativeLayout>
 

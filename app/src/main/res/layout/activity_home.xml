@@ -19,9 +19,9 @@
 
     <Button
         android:id="@+id/profileButton"
-        android:layout_width="250dp"
+        android:layout_width="290dp"
         android:layout_height="58dp"
-        android:background="@drawable/rounded_edittext_bg"
+        android:background="@drawable/educationcard1_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
         android:layout_marginTop="10dp"
@@ -32,6 +32,7 @@
         android:text="@string/profiles"
         android:textColor="#ffffff"
         android:textSize="17sp"
+        android:letterSpacing="0.045"
         app:backgroundTint="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,19 +89,19 @@
 
     <ImageView
         android:id="@+id/homeImage"
-        android:layout_width="140dp"
-        android:layout_height="114dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="135dp"
+        android:layout_height="117dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childName" />
+        app:layout_constraintTop_toBottomOf="@+id/childName"/>
 
     <Button
         android:id="@+id/planButton"
-        android:layout_width="250dp"
+        android:layout_width="290dp"
         android:layout_height="58dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/rounded_edittext_bg"
+        android:background="@drawable/educationcard1_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
         android:paddingStart="16dp"
@@ -118,10 +119,10 @@
 
     <Button
         android:id="@+id/foodTrackerButton"
-        android:layout_width="250dp"
+        android:layout_width="290dp"
         android:layout_height="58dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/rounded_edittext_bg"
+        android:background="@drawable/educationcard1_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
         android:paddingStart="16dp"
@@ -139,10 +140,10 @@
 
     <Button
         android:id="@+id/symptomCheckerButton"
-        android:layout_width="250dp"
+        android:layout_width="290dp"
         android:layout_height="58dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/rounded_edittext_bg"
+        android:background="@drawable/educationcard1_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
         android:paddingStart="16dp"
@@ -152,6 +153,7 @@
         android:text="@string/symptomScore"
         android:textColor="#ffffff"
         android:textSize="17sp"
+
         app:backgroundTint="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -159,10 +161,10 @@
 
     <Button
         android:id="@+id/QoLButton"
-        android:layout_width="250dp"
+        android:layout_width="290dp"
         android:layout_height="58dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/rounded_edittext_bg"
+        android:background="@drawable/educationcard1_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
         android:paddingStart="16dp"
@@ -172,6 +174,7 @@
         android:text="@string/QoLChecker"
         android:textColor="#ffffff"
         android:textSize="17sp"
+
         app:backgroundTint="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -179,10 +182,10 @@
 
     <Button
         android:id="@+id/EOEedButton"
-        android:layout_width="250dp"
+        android:layout_width="290dp"
         android:layout_height="58dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/rounded_edittext_bg"
+        android:background="@drawable/educationcard1_bg"
         android:fontFamily="@font/lato_medium"
         android:gravity="center"
         android:paddingStart="16dp"
@@ -193,6 +196,7 @@
         android:text="@string/education"
         android:textColor="#ffffff"
         android:textSize="17sp"
+
         app:backgroundTint="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
