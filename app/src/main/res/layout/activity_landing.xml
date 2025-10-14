@@ -1,156 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context="MainActivity">
+    tools:context=".MainActivity">
+
 
     <!-- Navigation Bar -->
-
     <!-- Buttons -->
 
     <RelativeLayout
         android:id="@+id/navBar"
-        android:layout_width="418dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="107dp"
-        android:background="@color/primaryBackground"
-        app:layout_constraintBottom_toTopOf="@+id/landingImage"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/navTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/lato_bold"
+            android:padding="12dp"
             android:text="EGID Tracker"
             android:textAlignment="center"
             android:textColor="@color/primary"
-            android:textSize="40sp" />
+            android:textSize="30sp"
+            android:fontFamily="@font/lato_bold" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/landingImage"
+        android:layout_width="165dp"
+        android:layout_height="172dp"
+        android:contentDescription="@string/EGIDinfo"
+        app:layout_constraintBottom_toTopOf="@+id/loginBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/navBar"
+        app:srcCompat="@drawable/egid_logo" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_half"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.50" />
+
+    <ImageView
+        android:id="@+id/loginBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/vector_background"
+        app:layout_constraintTop_toBottomOf="@id/guideline_half"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- Text: Share with provider -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_textblock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.56" />
+
+    <TextView
+        android:id="@+id/textViewHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_bold"
+        android:text="Let's Get Started!"
+        android:textColor="@color/onPrimary"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_textblock" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/lato_medium"
+        android:text="Track your symptoms, medications and diet plans"
+        android:textColor="@color/onPrimary"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewHeader" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monitor your progress and response to therapy"
+        android:textSize="15sp"
+        android:textColor="@color/onPrimary"
+        android:fontFamily="@font/lato_medium"
+        app:layout_constraintTop_toBottomOf="@+id/textView1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Text: Monitor progress -->
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share results directly with your provider"
+        android:textSize="15sp"
+        android:textColor="@color/onPrimary"
+        android:fontFamily="@font/lato_medium"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Sign In Button -->
+
+    <!-- Sign Up Button -->
 
     <Button
         android:id="@+id/signInButton"
-        android:layout_width="191dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/signup_roundedbg"
+        android:fontFamily="@font/lato_bold"
         android:text="@string/signIn"
-        android:textColor="#ffffff"
+        android:textColor="@color/primary"
         android:textSize="17sp"
-        app:backgroundTint="@color/primary"
+        app:backgroundTint="@color/onPrimary"
         app:layout_constraintBottom_toTopOf="@+id/signUpButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
         android:id="@+id/signUpButton"
-        android:layout_width="191dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="48dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/outline_roundedbg"
+        android:fontFamily="@font/lato_bold"
         android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
         android:text="@string/signUp"
-        android:textColor="#ffffff"
+        android:textColor="@color/onPrimary"
         android:textSize="17sp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@null"
+        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="@+id/signInButton"
         app:layout_constraintStart_toStartOf="@+id/signInButton"
         app:layout_constraintTop_toBottomOf="@+id/signInButton" />
 
-    <ImageView
-        android:id="@+id/landingImage"
-        android:layout_width="307dp"
-        android:layout_height="187dp"
-        android:layout_marginBottom="75dp"
-        android:contentDescription="@string/EGIDinfo"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navBar"
-        app:srcCompat="@drawable/landingimage" />
+    <androidx.constraintlayout.helper.widget.Layer android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="Easily track your symptoms, medications, and diet plans"
-        android:textColor="@color/primary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Easily track your symptoms, medications, and diet plans" />
+    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="Track response to therapy "
-        android:textColor="@color/primary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Track response to therapy " />
+    <androidx.constraintlayout.widget.Group android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="Share the results directly with your healthcare provider"
-        android:textColor="@color/primary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/landingImage"
-        tools:text="Share the results directly with your healthcare provider" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:fontFamily="@font/lato_bold"
-        android:text="Get Started"
-        android:textColor="@color/primary"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/signInButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        tools:text="Get Started" />
+    <androidx.constraintlayout.helper.widget.Flow android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

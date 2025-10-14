@@ -4,7 +4,7 @@
     <string name="appName">EGID Tracker</string>
 
     <!-- Strings for Sign In and Sign Up Activity -->
-    <string name="signIn">Sign In</string>
+    <string name="signIn">Login</string>
     <string name="signUp">Sign Up</string>
     <string name="login">Login</string>
     <string name="username">Username</string>
