@@ -87,6 +87,7 @@
             android:fontFamily="@font/lato_bold"
             android:text="Sign Up!"
             android:textColor="@color/onPrimary"
+            android:letterSpacing="0.0013"
             android:textSize="55sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -110,11 +111,11 @@
             android:paddingTop="5dp"
             android:paddingEnd="42dp"
             android:paddingBottom="5dp"
-            android:textColor="@color/secondary"
+            android:textColor="@color/primary"
             android:textColorHint="@color/primary"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.511"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/navBar" />
 
@@ -127,7 +128,7 @@
             android:text="@string/passwordRequirements"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signUpButton" />
 
@@ -169,7 +170,7 @@
             android:textColorHint="@color/primary"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.511"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signUpEmail" />
 
@@ -234,7 +235,7 @@
             android:textColorHint="@color/primary"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.509"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signUpPassword" />
 

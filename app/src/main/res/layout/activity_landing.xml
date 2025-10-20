@@ -50,19 +50,21 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.50" />
 
+
+    <!-- Text: Share with provider -->
     <ImageView
         android:id="@+id/loginBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="fitXY"
         android:src="@drawable/vector_background"
-        app:layout_constraintTop_toBottomOf="@id/guideline_half"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/guideline_half"
+        app:layout_constraintVertical_bias="1.0" />
 
-
-    <!-- Text: Share with provider -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_textblock"
         android:layout_width="wrap_content"
@@ -161,17 +163,5 @@
         app:layout_constraintEnd_toEndOf="@+id/signInButton"
         app:layout_constraintStart_toStartOf="@+id/signInButton"
         app:layout_constraintTop_toBottomOf="@+id/signInButton" />
-
-    <androidx.constraintlayout.helper.widget.Layer android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <androidx.constraintlayout.widget.Group android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <androidx.constraintlayout.helper.widget.Flow android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
