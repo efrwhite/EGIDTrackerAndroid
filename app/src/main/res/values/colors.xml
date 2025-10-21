@@ -2,8 +2,8 @@
 <resources>
 
     <!-- Base Colors -->
-    <color name="primaryBackground">#F2F0EB</color>    <!-- Champagne -->
-    <color name="primary">#A683BF</color>            <!-- Dark Purple -->
+    <color name="primaryBackground">#EDEBF2</color>    <!-- Champagne -->
+    <color name="primary">#926DB4</color>            <!-- Dark Purple -->
     <color name="secondary">#8098AB</color>          <!-- Steel Blue -->
     <color name="tertiary">#695182</color>           <!-- Dusty Violet -->
     <color name="black">#000000</color>
