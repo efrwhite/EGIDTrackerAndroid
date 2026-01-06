@@ -52,6 +52,28 @@
         app:layout_constraintTop_toTopOf="@id/childSectionHeader"
         android:textColor="#808080"/>
 
+    <TextView
+        android:id="@+id/activePatientBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:text="Active: Lauren"
+        android:textColor="@color/primary"
+        android:textSize="14sp"
+        android:fontFamily="@font/lato_medium"
+        android:background="@drawable/active_badge_bg"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/childListTitle"
+        app:layout_constraintEnd_toStartOf="@id/addChildlink"
+        app:layout_constraintTop_toTopOf="@id/childListTitle"
+        app:layout_constraintBottom_toBottomOf="@id/childListTitle"
+        />
+
     <Button
         android:id="@+id/addChildlink"
         style="?attr/borderlessButtonStyle"

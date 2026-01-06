@@ -146,12 +146,46 @@
             app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
             app:layout_constraintTop_toBottomOf="@id/date"/>
 
+        <!-- NEW: Description -->
+        <TextView
+            android:id="@+id/descriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/lato_medium"
+            android:text="Description"
+            android:textColor="@color/primary"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/itemExposedTo" />
+
+        <EditText
+            android:id="@+id/descriptionTextField"
+            android:layout_width="225dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="-20dp"
+            android:background="@drawable/rounded_edittext_bg"
+            android:fontFamily="@font/lato_medium"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="127dp"
+            android:paddingBottom="2dp"
+            android:hint="Enter description"
+            android:textColorHint="#808080"
+            android:textColor="@color/secondary"
+            android:textSize="11sp"
+            app:backgroundTint="#ffffff"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
+            app:layout_constraintTop_toBottomOf="@id/itemExposedTo" />
 
         <Button
             android:id="@+id/addAEButton"
             android:layout_width="150dp"
             android:layout_height="42dp"
-            android:layout_marginTop="34dp"
+            android:layout_marginTop="28dp"
             android:background="@drawable/rounded_edittext_bg"
             android:fontFamily="@font/lato_medium"
             android:gravity="center"
@@ -167,9 +201,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemExposedTo" />
-
-
+            app:layout_constraintTop_toBottomOf="@id/descriptionTextField" />
 
         <!-- Guideline for Equal Division -->
         <androidx.constraintlayout.widget.Guideline
@@ -249,9 +281,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

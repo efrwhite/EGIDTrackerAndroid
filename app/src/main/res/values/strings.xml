@@ -309,7 +309,7 @@
     <!-- Strings for Symptom Score Checker -->
     <string name="symptomScoreChecker">Symptom Score</string>
     <string name="results">Results</string>
-    <string name="genReport">Create Report</string>
+    <string name="genReport">Generate Report</string>
     <string name="symptomKey">Key:</string>
     <string name="symptomKey0">0 - None</string>
     <string name="symptomKey1">1 - Mild</string>
@@ -418,7 +418,6 @@
     <string name="diet4String">Diet 4:\nDairy, Gluten, &amp; Egg-Free Diet</string>
     <string name="diet6String">Diet 6:\nDairy, Gluten, Egg, &amp; Soy-Free Diet</string>
     <string name="editMed">Edit Medication</string>
-    <string name="clearedDate">Date Cleared</string>
     <string name="diagnosedDate">Date of Diagnosis</string>
     <string name="procedureDate">Procedure Date</string>
     <string name="custombutton">Custom Resources\n</string>
