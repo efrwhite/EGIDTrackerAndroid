@@ -5,8 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
@@ -34,6 +38,9 @@ class AddAllergiesActivity : AppCompatActivity() {
     private var childId: String? = null
     private var allergenId: String? = null
 
+    private lateinit var severitySpinner: Spinner
+    private lateinit var severity: String
+
     private val firestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
     private var isViewOnly = false // flag for view-only mode
@@ -51,7 +58,35 @@ class AddAllergiesActivity : AppCompatActivity() {
         igE = findViewById(R.id.igESwitch)
         notes = findViewById(R.id.allergyNotesField)
 
+        severitySpinner = findViewById(R.id.severitySpinner)
+
         calendar = Calendar.getInstance()
+
+        val severityOptions = listOf("Select Severity", "Mild", "Moderate", "Severe")
+
+        val severityAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            severityOptions
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+
+        severitySpinner.adapter = severityAdapter
+
+        severitySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val textView = view as? TextView
+                if (position == 0) {
+                    // Gray like EditText hint
+                    textView?.setTextColor(android.graphics.Color.parseColor("#808080"))
+                } else {
+                    textView?.setTextColor(getColor(R.color.secondary))
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
 
         // Get the view mode flag from intent
         isViewOnly = intent.getBooleanExtra("isViewOnly", false)
@@ -120,6 +155,7 @@ class AddAllergiesActivity : AppCompatActivity() {
         val allergenMap = hashMapOf(
             "allergenName" to allergenName.text.toString().trim(),
             "diagnosisDate" to diagnosisDatePickerButton.text.toString().trim(),
+            "severity" to severitySpinner.selectedItem.toString(),
             "igE" to igE.isChecked,
             "cleared" to cleared.isChecked,
             "clearedDate" to clearedDatePickerButton.text.toString().trim(),
@@ -128,7 +164,7 @@ class AddAllergiesActivity : AppCompatActivity() {
         )
 
         firestore.collection("Allergens").add(allergenMap)
-            .addOnSuccessListener { documentReference ->
+            .addOnSuccessListener { _ ->
                 Toast.makeText(this, "Allergen added successfully", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, AllergiesActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -147,6 +183,7 @@ class AddAllergiesActivity : AppCompatActivity() {
         val allergenMap = hashMapOf(
             "allergenName" to allergenName.text.toString().trim(),
             "diagnosisDate" to diagnosisDatePickerButton.text.toString().trim(),
+            "severity" to severitySpinner.selectedItem.toString(),
             "igE" to igE.isChecked,
             "cleared" to cleared.isChecked,
             "clearedDate" to clearedDatePickerButton.text.toString().trim(),
@@ -184,6 +221,11 @@ class AddAllergiesActivity : AppCompatActivity() {
 
                     diagnosisDatePickerButton.text = diagnosisDate
                     clearedDatePickerButton.text = clearedDate
+
+                    val savedSeverity = document.getString("severity") ?: "Select Severity"
+                    val options = listOf("Select Severity", "Mild", "Moderate", "Severe")
+                    val index = options.indexOf(savedSeverity).takeIf { it >= 0 } ?: 0
+                    severitySpinner.setSelection(index)
 
                     if (isViewOnly) {
                         disableInteraction() // Disable all interactions except notes
@@ -224,6 +266,11 @@ class AddAllergiesActivity : AppCompatActivity() {
     }
 
     private fun validateClearedFields(): Boolean {
+        if (severitySpinner.selectedItem.toString() == "Select Severity") {
+            Toast.makeText(this, "Please select a severity", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
         if (cleared.isChecked && clearedDatePickerButton.text.toString() == "Enter Date") {
             Toast.makeText(this, "Please enter a cleared date when clearing an allergen", Toast.LENGTH_SHORT).show()
             return false
@@ -274,6 +321,7 @@ class AddAllergiesActivity : AppCompatActivity() {
         clearedDatePickerButton.isEnabled = false
         igE.isEnabled = false
         cleared.isEnabled = false
+        severitySpinner.isEnabled = false
         // Notes remain editable
     }
 }

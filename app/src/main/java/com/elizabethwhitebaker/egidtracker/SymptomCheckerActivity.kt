@@ -23,6 +23,7 @@ class SymptomCheckerActivity : AppCompatActivity() {
 
     private lateinit var resultsButton: Button
     private lateinit var visitDateInput: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_symptom_score_checker)
@@ -38,15 +39,19 @@ class SymptomCheckerActivity : AppCompatActivity() {
         }
 
         resultsButton = findViewById(R.id.resultsButton)
-
         resultsButton.setOnClickListener {
             val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+            val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
+                Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val intent = Intent(this, ResultsActivity::class.java).apply {
                 putExtra("sourceActivity", "SymptomChecker")
+                putExtra("childId", childId)
             }
             startActivity(intent)
         }
-
     }
 
     private fun areAllFieldsFilled(): Boolean {
@@ -54,49 +59,66 @@ class SymptomCheckerActivity : AppCompatActivity() {
         for (i in 1..numberOfQuestions) {
             val answerId = resources.getIdentifier("answer$i", "id", packageName)
             val view = findViewById<View>(answerId)
-            // If it's an EditText, ensure it's not empty.
             if (view is EditText && view.text.toString().trim().isEmpty()) {
                 return false
             }
-            // For a SwitchCompat, we assume it always has a value.
         }
         return true
     }
 
     private fun saveScores() {
-
         if (!areAllFieldsFilled()) {
             Toast.makeText(this, "Please fill out all fields before saving.", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (!validateInputs()) {
-            return  // Stop further execution if validation fails
+            return
+        }
+
+        val dateString = visitDateInput.text.toString().trim()
+        if (dateString.isBlank()) {
+            Toast.makeText(this, "Please enter a valid date.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Validate date format
+        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        dateFormat.isLenient = false
+        val dateObject = try {
+            dateFormat.parse(dateString)
+        } catch (e: Exception) {
+            null
+        }
+
+        if (dateObject == null) {
+            Toast.makeText(this, "Please enter a valid date.", Toast.LENGTH_SHORT).show()
+            return
         }
 
         val totalScore = calculateTotalScore()
         val responses = collectResponses()
         val symptomDescriptions = collectSymptomDescriptions()
-        val dateInput: EditText = findViewById(R.id.visitDateInput)
-        val dateString = dateInput.text.toString()
 
         saveResultsToFirestore(totalScore, responses, symptomDescriptions, dateString)
 
         val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        val childId = sharedPreferences.getString("CurrentChildId", null)
+
         val intent = Intent(this, ResultsActivity::class.java).apply {
             putExtra("sourceActivity", "SymptomChecker")
+            childId?.let { putExtra("childId", it) }
         }
         startActivity(intent)
         finish()
     }
 
     private fun validateInputs(): Boolean {
-        for (i in 1..20) { // Validate numerical score questions (0-4)
+        for (i in 1..20) {
             val answerId = resources.getIdentifier("answer$i", "id", packageName)
             val answer = findViewById<EditText>(answerId)
-            val input = answer.text.toString().trim()  // Trim the input
+            val input = answer.text.toString().trim()
 
-            // Check if input is a valid number between 0 and 4
             val number = input.toIntOrNull()
             if (number == null || number !in 0..4) {
                 answer.error = "Enter a number between 0 and 4"
@@ -104,36 +126,18 @@ class SymptomCheckerActivity : AppCompatActivity() {
                 return false
             }
         }
-
-        // No need once switched to radio buttons
-        /**
-        for (i in 21..32) { // Validate Yes/No questions (Y/N)
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            val input = answer.text.toString().trim()  // Trim the input
-
-            // Check if input is 'Y', 'y', 'N', or 'n'
-            if (input.isNotEmpty() && !input.equals("y", true) && !input.equals("n", true)) {
-                answer.error = "Enter 'Y' or 'N'"
-                Toast.makeText(this, "Question $i: Enter 'Y' or 'N'", Toast.LENGTH_SHORT).show()
-                return false
-            }
-        }
-        */
-        return true // All inputs are valid
+        return true
     }
-
-
-
 
     private fun calculateTotalScore(): Int {
         var score = 0
-        for (i in 1..20) { // IDs for numerical score questions
+
+        for (i in 1..20) {
             val answerId = resources.getIdentifier("answer$i", "id", packageName)
             val answer = findViewById<EditText>(answerId)
             score += answer.text.toString().toIntOrNull() ?: 0
         }
-        // Sum yes/no answers (IDs 21–32): add 1 point for a "y"
+
         for (i in 21..32) {
             val answerId = resources.getIdentifier("answer$i", "id", packageName)
             val view = findViewById<View>(answerId)
@@ -146,6 +150,7 @@ class SymptomCheckerActivity : AppCompatActivity() {
                 score += 1
             }
         }
+
         return score
     }
 
@@ -163,7 +168,6 @@ class SymptomCheckerActivity : AppCompatActivity() {
         }
         return responses
     }
-
 
     private fun collectSymptomDescriptions(): List<String> {
         val descriptions = mutableListOf<String>()
@@ -184,8 +188,12 @@ class SymptomCheckerActivity : AppCompatActivity() {
         return descriptions
     }
 
-
-    private fun saveResultsToFirestore(totalScore: Int, responses: List<String>, symptoms: List<String>, date: String) {
+    private fun saveResultsToFirestore(
+        totalScore: Int,
+        responses: List<String>,
+        symptoms: List<String>,
+        date: String
+    ) {
         val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
@@ -193,8 +201,19 @@ class SymptomCheckerActivity : AppCompatActivity() {
         }
 
         val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        val dateObject = dateFormat.parse(date) // Parse the date string into a Date object
-        val timestamp = dateObject?.let { Timestamp(it) } ?: Timestamp.now() // Convert to Timestamp or use current timestamp if parsing fails
+        dateFormat.isLenient = false
+        val dateObject = try {
+            dateFormat.parse(date)
+        } catch (e: Exception) {
+            null
+        }
+
+        if (dateObject == null) {
+            Toast.makeText(this, "Invalid date format.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val timestamp = Timestamp(dateObject)
 
         val data = hashMapOf(
             "totalScore" to totalScore,
@@ -222,7 +241,6 @@ class SymptomCheckerActivity : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(
             this,
             { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-                // Format the date and set it to the EditText
                 val formattedDate = "${selectedMonth + 1}/$selectedDay/$selectedYear"
                 visitDateInput.setText(formattedDate)
             },
@@ -231,5 +249,4 @@ class SymptomCheckerActivity : AppCompatActivity() {
 
         datePickerDialog.show()
     }
-
 }

@@ -29,6 +29,7 @@ import com.google.firebase.ktx.Firebase
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class ReportActivity : AppCompatActivity() {
@@ -72,11 +73,35 @@ class ReportActivity : AppCompatActivity() {
             else -> "Symptom Scores"
         }
 
-        Firebase.firestore.collection("Children").document(childId)
+        // ✅ Read date range passed from ResultsActivity
+        val startDateMillis = intent.getLongExtra("startDateMillis", -1L).takeIf { it != -1L }
+        val endDateMillis = intent.getLongExtra("endDateMillis", -1L).takeIf { it != -1L }
+
+        var q: Query = Firebase.firestore.collection("Children").document(childId)
             .collection(subCollection)
             .orderBy("date", Query.Direction.ASCENDING)
-            .limit(6)
-            .get()
+
+        if (startDateMillis != null) {
+            q = q.whereGreaterThanOrEqualTo("date", com.google.firebase.Timestamp(Date(startDateMillis)))
+        }
+
+        if (endDateMillis != null) {
+            // inclusive through end-of-day
+            val endInclusiveMillis = java.util.Calendar.getInstance().apply {
+                timeInMillis = endDateMillis
+                set(java.util.Calendar.HOUR_OF_DAY, 23)
+                set(java.util.Calendar.MINUTE, 59)
+                set(java.util.Calendar.SECOND, 59)
+                set(java.util.Calendar.MILLISECOND, 999)
+            }.timeInMillis
+
+            q = q.whereLessThanOrEqualTo("date", com.google.firebase.Timestamp(Date(endInclusiveMillis)))
+        }
+
+        // Keep your existing limit behavior (optional)
+        q = q.limit(6)
+
+        q.get()
             .addOnSuccessListener { querySnapshot ->
                 val documents = querySnapshot.documents
                 val entries = ArrayList<Entry>()
@@ -107,7 +132,7 @@ class ReportActivity : AppCompatActivity() {
                 lineChart.axisLeft.setDrawGridLines(false)
                 lineChart.axisRight.isEnabled = false
                 lineChart.description.isEnabled = false
-                lineChart.invalidate() // Refresh the graph
+                lineChart.invalidate()
 
                 updateDescriptions(documents, sourceActivity)
             }
@@ -117,15 +142,38 @@ class ReportActivity : AppCompatActivity() {
     }
 
     private fun loadEndoscopyChart(childId: String, section: String) {
-        Firebase.firestore.collection("Children").document(childId)
+        val startDateMillis = intent.getLongExtra("startDateMillis", -1L).takeIf { it != -1L }
+        val endDateMillis = intent.getLongExtra("endDateMillis", -1L).takeIf { it != -1L }
+
+        var q: Query = Firebase.firestore.collection("Children").document(childId)
             .collection("EndoscopyResults")
-            .orderBy("date", Query.Direction.ASCENDING) // Ensure chronological order
-            .get()
+            .orderBy("date", Query.Direction.ASCENDING)
+
+        if (startDateMillis != null) {
+            q = q.whereGreaterThanOrEqualTo("date", com.google.firebase.Timestamp(
+                Date(
+                    startDateMillis
+                )
+            ))
+        }
+
+        if (endDateMillis != null) {
+            val endInclusiveMillis = java.util.Calendar.getInstance().apply {
+                timeInMillis = endDateMillis
+                set(java.util.Calendar.HOUR_OF_DAY, 23)
+                set(java.util.Calendar.MINUTE, 59)
+                set(java.util.Calendar.SECOND, 59)
+                set(java.util.Calendar.MILLISECOND, 999)
+            }.timeInMillis
+
+            q = q.whereLessThanOrEqualTo("date", com.google.firebase.Timestamp(Date(endInclusiveMillis)))
+        }
+
+        q.get()
             .addOnSuccessListener { querySnapshot ->
                 val documents = querySnapshot.documents
                 val dateLabels = ArrayList<String>()
 
-                // Define mappings for multiple graph lines per section
                 val fieldMap = when (section) {
                     "eoe" -> listOf("proximate", "middle", "lower")
                     "colon" -> listOf("rightColon", "middleColon", "leftColon")
@@ -136,13 +184,9 @@ class ReportActivity : AppCompatActivity() {
 
                 if (fieldMap.isEmpty()) return@addOnSuccessListener
 
-                // Create entry lists for each field
                 val dataEntriesMap = mutableMapOf<String, ArrayList<Entry>>()
-                for (field in fieldMap) {
-                    dataEntriesMap[field] = ArrayList()
-                }
+                for (field in fieldMap) dataEntriesMap[field] = ArrayList()
 
-                // ✅ Sort documents chronologically
                 val sortedDocuments = documents.sortedBy { it.getDate("date") }
 
                 sortedDocuments.forEachIndexed { index, document ->
@@ -151,7 +195,6 @@ class ReportActivity : AppCompatActivity() {
                         dateLabels.add(SimpleDateFormat("MM/dd/yyyy", Locale.US).format(it))
                     } ?: dateLabels.add("Unknown Date")
 
-                    // ✅ Ensure each field has a value (default to `0` if missing)
                     for (field in fieldMap) {
                         val fieldValue = document.getLong(field)?.toFloat() ?: 0f
                         dataEntriesMap[field]?.add(Entry(index.toFloat(), fieldValue))
@@ -163,33 +206,28 @@ class ReportActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
-                // Define distinct colors for each dataset
                 val colors = listOf(
-                    Color.RED, // First field
-                    Color.BLUE, // Second field
-                    Color.GREEN, // Third field
-                    Color.MAGENTA, // Fourth field if needed
-                    Color.CYAN // Fifth field if needed
+                    Color.RED,
+                    Color.BLUE,
+                    Color.GREEN,
+                    Color.MAGENTA,
+                    Color.CYAN
                 )
 
                 val dataSets = ArrayList<ILineDataSet>()
 
-                // ✅ Ensure all fields are represented in the legend, even if values are 0
-                fieldMap.forEachIndexed { index, field ->
+                fieldMap.forEachIndexed { idx, field ->
                     val entries = dataEntriesMap[field] ?: arrayListOf()
                     if (entries.isEmpty()) {
-                        // Ensure the dataset exists with zeroed-out entries if missing
-                        for (i in dateLabels.indices) {
-                            entries.add(Entry(i.toFloat(), 0f))
-                        }
+                        for (i in dateLabels.indices) entries.add(Entry(i.toFloat(), 0f))
                     }
 
                     val dataSet = LineDataSet(entries, field.capitalize()).apply {
-                        color = colors[index % colors.size]
+                        color = colors[idx % colors.size]
                         valueTextColor = Color.BLACK
                         valueTextSize = 12f
-                        setDrawValues(true) // Ensure numbers are shown at each point
-                        setCircleColor(colors[index % colors.size])
+                        setDrawValues(true)
+                        setCircleColor(colors[idx % colors.size])
                         setDrawCircles(true)
                         circleRadius = 4f
                     }
@@ -199,7 +237,6 @@ class ReportActivity : AppCompatActivity() {
                 val lineData = LineData(dataSets)
                 lineChart.data = lineData
 
-                // Configure chart appearance
                 lineChart.xAxis.apply {
                     position = XAxis.XAxisPosition.BOTTOM
                     granularity = 1f
@@ -211,7 +248,6 @@ class ReportActivity : AppCompatActivity() {
                 lineChart.axisRight.isEnabled = false
                 lineChart.description.isEnabled = false
 
-                // ✅ Customize legend appearance for multiple lines
                 val legend = lineChart.legend
                 legend.isWordWrapEnabled = true
                 legend.setMaxSizePercent(0.95f)
