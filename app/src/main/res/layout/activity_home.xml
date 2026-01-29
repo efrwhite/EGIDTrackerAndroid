@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackground">
+    android:background="@color/primaryBackground"
+    android:fitsSystemWindows="true">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/HomeLayout"
@@ -39,7 +40,7 @@
 
     <RelativeLayout
         android:id="@+id/navBar"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/primaryBackground"
         app:layout_constraintEnd_toEndOf="parent"
