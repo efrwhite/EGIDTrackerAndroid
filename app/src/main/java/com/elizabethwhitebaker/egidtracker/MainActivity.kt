@@ -1,7 +1,6 @@
 package com.elizabethwhitebaker.egidtracker
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -9,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -20,18 +18,10 @@ class MainActivity : AppCompatActivity() {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_landing)
 
-            // Hide the default ActionBar (it duplicates the in-layout "EGID TRACKER" title
-            // and shows as an extra purple band above it).
-            supportActionBar?.hide()
-
-            // Draw the purple background edge-to-edge (behind the status/nav bars)
-            // instead of leaving those bars in the theme's default color.
+            // Draw the background edge-to-edge (behind the status/nav bars); their
+            // color/icon appearance and hiding the ActionBar are set via
+            // Theme.EGIDTracker.Landing in the manifest instead of here.
             WindowCompat.setDecorFitsSystemWindows(window, false)
-            window.statusBarColor = Color.TRANSPARENT
-            window.navigationBarColor = Color.TRANSPARENT
-            val insetsController = WindowInsetsControllerCompat(window, window.decorView)
-            insetsController.isAppearanceLightStatusBars = false
-            insetsController.isAppearanceLightNavigationBars = false
 
             val landingRoot = findViewById<View>(R.id.landingRoot)
             ViewCompat.setOnApplyWindowInsetsListener(landingRoot) { view, insets ->
@@ -42,19 +32,18 @@ class MainActivity : AppCompatActivity() {
 
             auth = FirebaseAuth.getInstance()
 
-            // signUpButton displays "Login" text; signInButton displays "Register" text
-            // (see activity_landing.xml) - wire each to match what it says, not its id.
             val signUp = findViewById<Button>(R.id.signUpButton)
             val signIn = findViewById<Button>(R.id.signInButton)
 
+            // Set click listeners for Register and Login buttons
             signUp.setOnClickListener {
-                // "Login" button -> Sign In activity
-                startActivity(Intent(this, SignInActivity::class.java))
+                // Navigate to the Sign Up activity
+                startActivity(Intent(this, SignUpActivity::class.java))
             }
 
             signIn.setOnClickListener {
-                // "Register" button -> Sign Up activity
-                startActivity(Intent(this, SignUpActivity::class.java))
+                // Navigate to the Log In activity
+                startActivity(Intent(this, SignInActivity::class.java))
             }
         }
     }
