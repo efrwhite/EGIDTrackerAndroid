@@ -3,6 +3,7 @@
 
     <!-- Base Colors -->
     <color name="primaryBackground">#EDEBF2</color>    <!-- Champagne -->
+    <color name="landingBackground">#5B3A82</color>  <!-- Landing page background -->
     <color name="primary">#926DB4</color>            <!-- Dark Purple -->
     <color name="secondary">#8098AB</color>          <!-- Steel Blue -->
     <color name="tertiary">#695182</color>           <!-- Dusty Violet -->
