@@ -29,7 +29,9 @@ class MainActivity : AppCompatActivity() {
             WindowCompat.setDecorFitsSystemWindows(window, false)
             window.statusBarColor = Color.TRANSPARENT
             window.navigationBarColor = Color.TRANSPARENT
-            WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
+            val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+            insetsController.isAppearanceLightStatusBars = false
+            insetsController.isAppearanceLightNavigationBars = false
 
             val landingRoot = findViewById<View>(R.id.landingRoot)
             ViewCompat.setOnApplyWindowInsetsListener(landingRoot) { view, insets ->
