@@ -42,18 +42,19 @@ class MainActivity : AppCompatActivity() {
 
             auth = FirebaseAuth.getInstance()
 
+            // signUpButton displays "Login" text; signInButton displays "Register" text
+            // (see activity_landing.xml) - wire each to match what it says, not its id.
             val signUp = findViewById<Button>(R.id.signUpButton)
             val signIn = findViewById<Button>(R.id.signInButton)
 
-            // Set click listeners for Sign Up and Log In buttons
             signUp.setOnClickListener {
-                // Navigate to the Sign Up activity
-                startActivity(Intent(this, SignUpActivity::class.java))
+                // "Login" button -> Sign In activity
+                startActivity(Intent(this, SignInActivity::class.java))
             }
 
             signIn.setOnClickListener {
-                // Navigate to the Log In activity
-                startActivity(Intent(this, SignInActivity::class.java))
+                // "Register" button -> Sign Up activity
+                startActivity(Intent(this, SignUpActivity::class.java))
             }
         }
     }
