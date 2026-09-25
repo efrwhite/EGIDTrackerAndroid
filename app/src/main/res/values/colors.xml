@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base Colors -->
-    <color name="primaryBackground">#EDEBF2</color>    <!-- Champagne -->
+    <color name="primaryBackground">#5B3A82</color>    <!-- Purple -->
     <color name="primary">#926DB4</color>            <!-- Dark Purple -->
     <color name="secondary">#8098AB</color>          <!-- Steel Blue -->
     <color name="tertiary">#695182</color>           <!-- Dusty Violet -->
@@ -38,8 +38,6 @@
     <color name="onAccent">#1E1E1E</color>
 
     <!-- Landing Page -->
-    <color name="landingBackground">#5B3A82</color>  <!-- Landing page background -->
-    <color name="landingAccentText">#D96545</color>  <!-- Landing page title -->
-    <color name="landingCta">#FF8F70</color>         <!-- Landing page button border/fill -->
+    <color name="landingCta">#FF8F70</color>         <!-- Landing page title, button border/fill -->
     <color name="landingIntroBox">#8B6FB3</color>    <!-- Landing page intro card background -->
 </resources>
