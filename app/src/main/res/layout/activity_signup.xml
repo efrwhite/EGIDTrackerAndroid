@@ -144,7 +144,7 @@
             android:paddingTop="0dp"
             android:paddingEnd="16dp"
             android:paddingBottom="0dp"
-            android:text="@string/signUp"
+            android:text="@string/register"
             android:textColor="#ffffff"
             android:textSize="17sp"
             app:backgroundTint="@color/primary"
