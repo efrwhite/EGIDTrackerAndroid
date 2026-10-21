@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -21,7 +20,6 @@ class PlanActivity : AppCompatActivity() {
 
     private var childDiet: String? = null  // set after fetch
 
-    private val auth by lazy { FirebaseAuth.getInstance() }
     private val db by lazy { Firebase.firestore }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -39,3 +39,23 @@ While the current version of EGID Tracker is designed for parents and caregivers
 3. Sync the Gradle files to download dependencies.
 
 4. Build and run the project on an emulator or physical device with a minimum SDK of 24.
+
+## Firebase
+
+Each build type has its own Firebase project, chosen by which `google-services.json` it finds. Both files are gitignored.
+
+| Build | Firebase project | Config file |
+|---|---|---|
+| Debug | `egidproject-68665`, the testing database | `app/src/debug/google-services.json` |
+| Release | Production project (not created yet) | `app/src/release/google-services.json` |
+
+Release builds fail with "google-services.json is missing" until a production project exists. To set one up, create a new Firebase project and enable Email/Password sign-in and Firestore. Register the Android app (`com.elizabethwhitebaker.egidtracker`), save its `google-services.json` to `app/src/release/`, and deploy the rules to it.
+
+Debug builds write to the real testing database, so use clearly fake test accounts.
+
+To deploy the security rules in `firestore.rules`, install the Firebase CLI (`npm install -g firebase-tools`) and run `firebase login` once. Then:
+
+```
+firebase deploy --only firestore:rules                      # testing project (default in .firebaserc)
+firebase deploy --only firestore:rules -P <production-id>   # production, once it exists
+```

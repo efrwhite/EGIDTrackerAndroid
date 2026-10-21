@@ -67,6 +67,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signUpFirstName"
+                android:nextFocusDown="@+id/signUpLastName"
+                android:nextFocusForward="@+id/signUpLastName"
                 style="@style/Widget.EGIDTracker.AuthField.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -89,6 +91,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signUpLastName"
+                android:nextFocusDown="@+id/signUpEmail"
+                android:nextFocusForward="@+id/signUpEmail"
                 style="@style/Widget.EGIDTracker.AuthField.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -118,6 +122,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signUpEmail"
+                android:nextFocusDown="@+id/signUpPassword"
+                android:nextFocusForward="@+id/signUpPassword"
                 style="@style/Widget.EGIDTracker.AuthField.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -149,6 +155,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signUpPassword"
+                android:nextFocusDown="@+id/signUpConfirm"
+                android:nextFocusForward="@+id/signUpConfirm"
                 style="@style/Widget.EGIDTracker.AuthField.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -180,6 +188,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signUpConfirm"
+                android:nextFocusDown="@+id/signUpPhone"
+                android:nextFocusForward="@+id/signUpPhone"
                 style="@style/Widget.EGIDTracker.AuthField.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -209,6 +219,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signUpPhone"
+                android:nextFocusDown="@+id/signUpUsername"
+                android:nextFocusForward="@+id/signUpUsername"
                 style="@style/Widget.EGIDTracker.AuthField.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

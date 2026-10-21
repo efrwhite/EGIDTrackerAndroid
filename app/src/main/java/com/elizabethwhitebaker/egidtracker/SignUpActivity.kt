@@ -87,8 +87,11 @@ class SignUpActivity : AppCompatActivity() {
             Toast.makeText(this, R.string.password_requirements_error, Toast.LENGTH_LONG).show()
             return
         }
+        if (!Usernames.isValid(username)) {
+            Toast.makeText(this, R.string.username_requirements_error, Toast.LENGTH_LONG).show()
+            return
+        }
 
-        // Check uniqueness directly against Users
         checkUsernameUnique(username) { isUnique ->
             if (!isUnique) {
                 Toast.makeText(this, "Username is already taken. Please choose another.", Toast.LENGTH_LONG).show()
@@ -102,22 +105,25 @@ class SignUpActivity : AppCompatActivity() {
                         return@addOnCompleteListener
                     }
 
-                    val userId = firebaseAuth.currentUser?.uid ?: ""
+                    val user = firebaseAuth.currentUser ?: return@addOnCompleteListener
+                    // Auth's normalized copy (lowercased); the rules compare against it
+                    val authEmail = user.email ?: email
                     val userMap = hashMapOf(
                         "firstName" to firstName,
                         "lastName" to lastName,
-                        "email" to email,
+                        "email" to authEmail,
                         "username" to username,
                         "phone" to phone
                     )
 
-                    // Save profile in Users/{uid}
-                    Firebase.firestore.collection("Users").document(userId)
-                        .set(userMap)
+                    // Profile and username claim together: if the username was taken in the
+                    // meantime, the rules reject the claim and neither is written
+                    val db = Firebase.firestore
+                    db.batch()
+                        .set(db.collection("Users").document(user.uid), userMap)
+                        .set(Usernames.ref(username), Usernames.entry(user.uid, authEmail))
+                        .commit()
                         .addOnSuccessListener {
-                            saveUsernameToSharedPreferences(username)
-
-                            // Move forward (no more Usernames write)
                             val intent = Intent(this, AddCaregiverActivity::class.java).apply {
                                 putExtra("username", username)
                                 putExtra("isFirstTimeUser", true)
@@ -126,15 +132,12 @@ class SignUpActivity : AppCompatActivity() {
                             finish()
                         }
                         .addOnFailureListener { e ->
-                            Toast.makeText(this, "Failed to create user profile: ${e.message}", Toast.LENGTH_SHORT).show()
+                            // Don't leave a login behind with no profile or username
+                            user.delete()
+                            Toast.makeText(this, "Failed to create user profile: ${e.message}", Toast.LENGTH_LONG).show()
                         }
                 }
         }
-    }
-
-    private fun saveUsernameToSharedPreferences(username: String) {
-        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        sharedPreferences.edit().putString("CurrentUsername", username).apply()
     }
 
     private fun isPasswordValid(password: String): Boolean {
@@ -143,12 +146,9 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun checkUsernameUnique(username: String, onComplete: (Boolean) -> Unit) {
-        Firebase.firestore.collection("Users")
-            .whereEqualTo("username", username)
-            .limit(1)
-            .get()
-            .addOnSuccessListener { snapshot ->
-                onComplete(snapshot.isEmpty)
+        Usernames.ref(username).get()
+            .addOnSuccessListener { doc ->
+                onComplete(!doc.exists())
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to check username uniqueness: ${e.message}", Toast.LENGTH_SHORT).show()

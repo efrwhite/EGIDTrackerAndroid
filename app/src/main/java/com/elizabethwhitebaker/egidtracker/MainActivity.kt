@@ -17,13 +17,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
-import com.google.firebase.auth.FirebaseAuth
 import kotlin.math.hypot
 
 
 class MainActivity : AppCompatActivity() {
-        private lateinit var auth: FirebaseAuth
-
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_landing)
@@ -43,8 +40,6 @@ class MainActivity : AppCompatActivity() {
                 view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
             }
-
-            auth = FirebaseAuth.getInstance()
 
             val signUp = findViewById<Button>(R.id.signUpButton)
             val signIn = findViewById<Button>(R.id.signInButton)

@@ -9,8 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 class SignInActivity : AppCompatActivity() {
 
@@ -56,12 +54,8 @@ class SignInActivity : AppCompatActivity() {
             return
         }
 
-        Firebase.firestore.collection("Users")
-            .whereEqualTo("username", username)
-            .limit(1)
-            .get()
-            .addOnSuccessListener { docs ->
-                val email = docs.documents.firstOrNull()?.getString("email")
+        Usernames.lookupEmail(username)
+            .addOnSuccessListener { email ->
                 if (email.isNullOrBlank()) {
                     Toast.makeText(this, "No account found for that username.", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
@@ -88,27 +82,16 @@ class SignInActivity : AppCompatActivity() {
             return
         }
 
-        // Look up the email associated with the username directly from Users
-        Firebase.firestore.collection("Users")
-            .whereEqualTo("username", username)
-            .limit(1)
-            .get()
-            .addOnSuccessListener { docs ->
-                if (docs.isEmpty) {
-                    Toast.makeText(this, "Invalid username or password.", Toast.LENGTH_SHORT).show()
-                    return@addOnSuccessListener
-                }
-
-                val email = docs.documents[0].getString("email")
+        Usernames.lookupEmail(username)
+            .addOnSuccessListener { email ->
                 if (email.isNullOrBlank()) {
-                    Toast.makeText(this, "Failed to retrieve email for username.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Invalid username or password.", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
                 }
 
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            saveUsernameToSharedPreferences(username)
                             startActivity(Intent(this, HomeActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             })
@@ -122,10 +105,4 @@ class SignInActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to retrieve user data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
-    private fun saveUsernameToSharedPreferences(username: String) {
-        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        sharedPreferences.edit().putString("CurrentUsername", username).apply()
-    }
 }
-

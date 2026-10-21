@@ -9,11 +9,8 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="confirmPassword">Confirm Password</string>
-    <string name="email">Email</string>
     <string name="phoneNumber">Mobile Number</string>
     <string name="backDescription">Back Button</string>
-    <string name="dontHavAcc">Don\'t have an account?</string>
-    <string name="passwordRequirements">Password Requirements:\n- 7 Characters long\n- 1 Capital letter\n- 1 Symbol (!, @, #, $)</string>
 
     <!-- Strings for Home Activity -->
     <string name="home">Home</string>
@@ -453,4 +450,5 @@
     <string name="password_requirements_error">Password must be at least 7 characters, with a capital letter and a symbol (!, @, #, $).</string>
     <!-- Text inside <annotation type="link"> is styled as a link in SignUpActivity -->
     <string name="terms_agreement">By continuing, you agree to our <annotation type="link">Terms of Service</annotation> and <annotation type="link">Privacy Policy</annotation>.</string>
+    <string name="username_requirements_error">Username must be 3–30 characters: letters, numbers, dots, dashes or underscores, starting with a letter or number.</string>
 </resources>
