@@ -74,7 +74,7 @@ class HomeActivity : AppCompatActivity() {
     /** --- Core logic fixes --- */
 
     private fun ensureValidChildSelected(uid: String) {
-        val childId = getCurrentChildId(uid)
+        val childId = CurrentChild.getId(this)
         if (childId == null) {
             // No selection saved yet — choose a default for this user
             selectDefaultChildForUser(uid)
@@ -86,7 +86,7 @@ class HomeActivity : AppCompatActivity() {
             .addOnSuccessListener { doc ->
                 if (!doc.exists()) {
                     // Stale id — pick default
-                    removeCurrentChildId(uid)
+                    CurrentChild.clear(this)
                     selectDefaultChildForUser(uid)
                     return@addOnSuccessListener
                 }
@@ -94,7 +94,7 @@ class HomeActivity : AppCompatActivity() {
                 val parentUserId = doc.getString("parentUserId")
                 if (parentUserId != uid) {
                     // Belongs to someone else — fix and choose default
-                    removeCurrentChildId(uid)
+                    CurrentChild.clear(this)
                     selectDefaultChildForUser(uid)
                     return@addOnSuccessListener
                 }
@@ -128,7 +128,7 @@ class HomeActivity : AppCompatActivity() {
 
                 val childDoc = snap.documents.first()
                 val newChildId = childDoc.id
-                setCurrentChildId(uid, newChildId)
+                CurrentChild.set(this, newChildId, childDoc.getString("firstName"))
 
                 bindChildUI(
                     name = childDoc.getString("firstName") ?: "No Name",
@@ -152,31 +152,11 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    /** --- Namespaced SharedPreferences helpers --- */
-
-    private fun prefKeyFor(uid: String) = "CurrentChildId_$uid"
-
-    private fun getCurrentChildId(uid: String): String? {
-        val sp = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        return sp.getString(prefKeyFor(uid), null)
-    }
-
-    fun setCurrentChildId(uid: String, childId: String) {
-        val sp = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        sp.edit().putString(prefKeyFor(uid), childId).apply()
-    }
-
-    private fun removeCurrentChildId(uid: String) {
-        val sp = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        sp.edit().remove(prefKeyFor(uid)).apply()
-    }
-
     /** --- Logout: also clear this user's selected child id --- */
 
     private fun setupLogout() {
         logoutButton.setOnClickListener {
-            val uid = auth.currentUser?.uid
-            if (uid != null) removeCurrentChildId(uid)
+            CurrentChild.clear(this) // must run before signOut(); keys are per-uid
 
             auth.signOut()
             val intent = Intent(this, MainActivity::class.java)

@@ -1,6 +1,5 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -88,11 +87,7 @@ class PlanActivity : AppCompatActivity() {
     }
 
     // Read the namespaced key (per-user)
-    private fun getCurrentChildId(): String? {
-        val uid = auth.currentUser?.uid ?: return null
-        val sp = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        return sp.getString("CurrentChildId_$uid", null)
-    }
+    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
 
     private fun goToDietActivity(dietRaw: String) {
         val diet = dietRaw.trim().lowercase()

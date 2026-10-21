@@ -205,7 +205,7 @@ class AddChildActivity : AppCompatActivity() {
         Firebase.firestore.collection("Children").add(userMap)
             .addOnSuccessListener { documentReference ->
                 val newChildId = documentReference.id
-                saveCurrentChildId(newChildId)
+                CurrentChild.set(this, newChildId, userMap["firstName"])
                 Toast.makeText(this, "Child added successfully", Toast.LENGTH_SHORT).show()
                 goToNextActivity()
             }
@@ -242,11 +242,6 @@ class AddChildActivity : AppCompatActivity() {
     }
 
 
-    private fun saveCurrentChildId(childId: String) {
-        val uid = firebaseAuth.currentUser?.uid ?: return
-        val sp = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        sp.edit().putString("CurrentChildId_$uid", childId).apply()
-    }
 
     private fun setupDropdownMenus() {
         val genderOptions = resources.getStringArray(R.array.gender_options)

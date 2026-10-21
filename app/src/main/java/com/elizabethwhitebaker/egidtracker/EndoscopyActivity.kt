@@ -1,7 +1,6 @@
 package com.elizabethwhitebaker.egidtracker
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -46,8 +45,7 @@ class EndoscopyActivity : AppCompatActivity() {
 
         resultsButton = findViewById(R.id.resultsButton)
         resultsButton.setOnClickListener {
-            val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-            val childId = sharedPreferences.getString("CurrentChildId", null) ?: return@setOnClickListener
+            val childId = CurrentChild.getId(this) ?: return@setOnClickListener
 
             val intent = Intent(this, ResultsActivity::class.java).apply {
                 putExtra("sourceActivity", "EndoscopyActivity") // Pass source info
@@ -97,8 +95,7 @@ class EndoscopyActivity : AppCompatActivity() {
 
 
     private fun saveResultsToFirestore(totalScore: Int, date: String, isEditing: Boolean, reportId: String?) {
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
+        val childId = CurrentChild.getId(this) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
             return
         }
@@ -174,8 +171,7 @@ class EndoscopyActivity : AppCompatActivity() {
     }
 
     private fun loadReportData(reportId: String) {
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
+        val childId = CurrentChild.getId(this) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
             finish()
             return

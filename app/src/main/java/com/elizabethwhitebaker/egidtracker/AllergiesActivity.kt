@@ -1,7 +1,6 @@
 package com.elizabethwhitebaker.egidtracker
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -37,10 +36,7 @@ class AllergiesActivity : AppCompatActivity() {
 
     }
 
-    private fun getCurrentChildId(): String? {
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("CurrentChildId", null)
-    }
+    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
 
     private fun fetchAndDisplayAllergies(allergyTableLayout: TableLayout, pastAllergyTableLayout: TableLayout) {
         val childId = getCurrentChildId()
