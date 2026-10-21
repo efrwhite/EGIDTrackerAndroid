@@ -50,6 +50,7 @@
             android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".SignUpActivity"
+            android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".HomeActivity" />
         <activity android:name=".ProfilesActivity" />

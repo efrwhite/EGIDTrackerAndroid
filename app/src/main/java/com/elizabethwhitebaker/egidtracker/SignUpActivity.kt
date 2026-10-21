@@ -2,16 +2,25 @@ package com.elizabethwhitebaker.egidtracker
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Annotation
+import android.text.SpannableString
+import android.text.SpannedString
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class SignUpActivity : AppCompatActivity() {
 
+    private lateinit var firstNameEditText: EditText
+    private lateinit var lastNameEditText: EditText
     private lateinit var usernameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var phoneEditText: EditText
@@ -26,6 +35,8 @@ class SignUpActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
+        firstNameEditText = findViewById(R.id.signUpFirstName)
+        lastNameEditText = findViewById(R.id.signUpLastName)
         usernameEditText = findViewById(R.id.signUpUsername)
         phoneEditText = findViewById(R.id.signUpPhone)
         emailEditText = findViewById(R.id.signUpEmail)
@@ -34,16 +45,37 @@ class SignUpActivity : AppCompatActivity() {
         signUpButton = findViewById(R.id.signUpButton)
 
         signUpButton.setOnClickListener { signUpUser() }
+
+        styleTermsLinks(findViewById(R.id.termsText))
+    }
+
+    /** Colors and underlines the <annotation type="link"> parts of the terms text. */
+    private fun styleTermsLinks(textView: TextView) {
+        val source = getText(R.string.terms_agreement) as SpannedString
+        val styled = SpannableString(source)
+        val linkColor = ContextCompat.getColor(this, R.color.lavender)
+        source.getSpans(0, source.length, Annotation::class.java)
+            .filter { it.key == "type" && it.value == "link" }
+            .forEach { link ->
+                val start = source.getSpanStart(link)
+                val end = source.getSpanEnd(link)
+                styled.setSpan(ForegroundColorSpan(linkColor), start, end, 0)
+                styled.setSpan(UnderlineSpan(), start, end, 0)
+            }
+        textView.text = styled
     }
 
     private fun signUpUser() {
+        val firstName = firstNameEditText.text.toString().trim()
+        val lastName = lastNameEditText.text.toString().trim()
         val username = usernameEditText.text.toString().trim()
         val phone = phoneEditText.text.toString().trim()
         val email = emailEditText.text.toString().trim()
         val password = passwordEditText.text.toString().trim()
         val confirmPassword = confirmPasswordEditText.text.toString().trim()
 
-        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || username.isEmpty() || phone.isEmpty()) {
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() ||
+            confirmPassword.isEmpty() || username.isEmpty() || phone.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -52,7 +84,7 @@ class SignUpActivity : AppCompatActivity() {
             return
         }
         if (!isPasswordValid(password)) {
-            Toast.makeText(this, "Password does not meet the requirements.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.password_requirements_error, Toast.LENGTH_LONG).show()
             return
         }
 
@@ -72,6 +104,8 @@ class SignUpActivity : AppCompatActivity() {
 
                     val userId = firebaseAuth.currentUser?.uid ?: ""
                     val userMap = hashMapOf(
+                        "firstName" to firstName,
+                        "lastName" to lastName,
                         "email" to email,
                         "username" to username,
                         "phone" to phone

@@ -440,4 +440,17 @@
     <string name="social_login_unavailable">%1$s sign-in isn\'t available yet.</string>
     <string name="forgot_password_need_username">Enter your username first.</string>
     <string name="forgot_password_sent">Password reset email sent.</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name_hint">John</string>
+    <string name="last_name_hint">Doe</string>
+    <string name="email_label">E-mail</string>
+    <string name="enter_email">Enter your email</string>
+    <string name="password_hint">*********</string>
+    <string name="enter_mobile_number">Enter your mobile number</string>
+    <string name="choose_username">Choose a username</string>
+    <string name="create_account">Create Account</string>
+    <string name="password_requirements_error">Password must be at least 7 characters, with a capital letter and a symbol (!, @, #, $).</string>
+    <!-- Text inside <annotation type="link"> is styled as a link in SignUpActivity -->
+    <string name="terms_agreement">By continuing, you agree to our <annotation type="link">Terms of Service</annotation> and <annotation type="link">Privacy Policy</annotation>.</string>
 </resources>

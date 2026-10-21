@@ -40,11 +40,21 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
+    <!-- Field label above a white input on the purple auth screens -->
+    <style name="Widget.EGIDTracker.AuthLabel" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textColor">@color/onPrimary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <!-- White rounded input field on the purple auth screens -->
     <style name="Widget.EGIDTracker.AuthField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxBackgroundColor">@color/onPrimary</item>
-        <item name="boxStrokeWidth">0dp</item>
-        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxStrokeColor">@color/auth_field_stroke</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
         <item name="boxCornerRadiusTopStart">8dp</item>
         <item name="boxCornerRadiusTopEnd">8dp</item>
         <item name="boxCornerRadiusBottomStart">8dp</item>
