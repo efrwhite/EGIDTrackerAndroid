@@ -3,6 +3,7 @@
 
     <!-- Base Colors -->
     <color name="primaryBackground">#5B3A82</color>    <!-- Purple -->
+    <color name="splashCenter">#3D2557</color>         <!-- Dark purple: center of the launch glow -->
     <color name="lightSalmon">#FF8F70</color>         <!-- Light salmon -->
     <color name="softPurple">#8B6FB3</color>    <!-- Soft purple -->
     <color name="primary">#926DB4</color>            <!-- Dark Purple -->

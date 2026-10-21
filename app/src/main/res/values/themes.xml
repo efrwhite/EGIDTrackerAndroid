@@ -16,7 +16,9 @@
 
     <!-- Landing page: no ActionBar (has its own in-layout title), background drawn
          edge-to-edge with light icons for a dark background. -->
-    <style name="Theme.EGIDTracker.Landing" parent="Theme.EGIDTracker">
+    <style name="Base.Theme.EGIDTracker.Landing" parent="Theme.EGIDTracker">
+        <!-- Also the launch screen: shown while the app starts, before the layout draws. -->
+        <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -24,4 +26,7 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
     </style>
+
+    <!-- Splash-screen attributes for Android 12+ are added in values-v31. -->
+    <style name="Theme.EGIDTracker.Landing" parent="Base.Theme.EGIDTracker.Landing" />
 </resources>
