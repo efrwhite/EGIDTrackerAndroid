@@ -47,6 +47,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignInActivity"
+            android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".SignUpActivity"
             android:windowSoftInputMode="adjustResize"/>

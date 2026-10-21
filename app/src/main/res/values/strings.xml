@@ -430,4 +430,14 @@
     <string name="duodenum">Duodenum</string>
     <string name="diet_none">No Current Diet Restrictions</string>
     <string name="delete_account">Delete Account</string>
+    <string name="enter_username">Enter your Username</string>
+    <string name="enter_password">Enter your password</string>
+    <string name="forgot_password"><u>Forgot Password?</u></string>
+    <string name="or">OR</string>
+    <string name="continue_with_apple">Continue with Apple</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="continue_with_facebook">Continue with Facebook</string>
+    <string name="social_login_unavailable">%1$s sign-in isn\'t available yet.</string>
+    <string name="forgot_password_need_username">Enter your username first.</string>
+    <string name="forgot_password_sent">Password reset email sent.</string>
 </resources>

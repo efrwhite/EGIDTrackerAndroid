@@ -36,6 +36,11 @@
     <color name="success">#4CAF50</color>
     <color name="onSuccess">#FFFFFF</color>
 
+    <!-- Auth screens (Login) -->
+    <color name="fieldHint">#8A94A6</color>           <!-- Slate grey: hints and icons in white fields -->
+    <color name="authDivider">#2D2438</color>         <!-- EGID palette near-black: "OR" divider lines -->
+    <color name="required">#E5484D</color>            <!-- Required-field asterisk -->
+
     <!-- Accent / Call to Action -->
     <color name="accent">#FF9E3E</color>             <!-- Warm orange for emphasis -->
     <color name="onAccent">#1E1E1E</color>

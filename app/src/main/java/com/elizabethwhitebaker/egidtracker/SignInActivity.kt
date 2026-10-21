@@ -2,8 +2,10 @@ package com.elizabethwhitebaker.egidtracker
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -15,7 +17,6 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var signInButton: Button
-    private lateinit var signUpLink: Button
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,16 +28,55 @@ class SignInActivity : AppCompatActivity() {
         usernameEditText = findViewById(R.id.signInUsername)
         passwordEditText = findViewById(R.id.signInPassword)
         signInButton = findViewById(R.id.signInButton)
-        signUpLink = findViewById(R.id.signUpLink)
 
         signInButton.setOnClickListener {
             signInUser()
         }
 
-        signUpLink.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
-            finish()
+        findViewById<TextView>(R.id.forgotPassword).setOnClickListener { sendPasswordReset() }
+
+        // Social sign-in isn't set up in Firebase yet; the buttons are in place for the design
+        mapOf(
+            R.id.appleButton to "Apple",
+            R.id.googleButton to "Google",
+            R.id.facebookButton to "Facebook"
+        ).forEach { (id, provider) ->
+            findViewById<View>(id).setOnClickListener {
+                Toast.makeText(this, getString(R.string.social_login_unavailable, provider), Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    /** Users sign in with a username, so look up its email before sending the reset link. */
+    private fun sendPasswordReset() {
+        val username = usernameEditText.text.toString().trim()
+        if (username.isEmpty()) {
+            Toast.makeText(this, R.string.forgot_password_need_username, Toast.LENGTH_SHORT).show()
+            usernameEditText.requestFocus()
+            return
+        }
+
+        Firebase.firestore.collection("Users")
+            .whereEqualTo("username", username)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { docs ->
+                val email = docs.documents.firstOrNull()?.getString("email")
+                if (email.isNullOrBlank()) {
+                    Toast.makeText(this, "No account found for that username.", Toast.LENGTH_SHORT).show()
+                    return@addOnSuccessListener
+                }
+                firebaseAuth.sendPasswordResetEmail(email)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, R.string.forgot_password_sent, Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Failed to send reset email: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to retrieve user data: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun signInUser() {
