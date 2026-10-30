@@ -130,8 +130,7 @@ class QoLActivity : AppCompatActivity() {
     }
 
     private fun saveResultsToFirestore(totalScore: Int, responses: List<Int>, date: String) {
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
+        val childId = CurrentChild.getId(this) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
             return
         }

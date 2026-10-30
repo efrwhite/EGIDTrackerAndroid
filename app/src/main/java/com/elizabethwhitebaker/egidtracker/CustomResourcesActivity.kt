@@ -18,9 +18,6 @@ class CustomResourcesActivity : AppCompatActivity() {
     private lateinit var addResourceButton: Button
     private lateinit var resourceTableLayout: TableLayout
 
-    private val auth by lazy { FirebaseAuth.getInstance() }
-    private val db by lazy { Firebase.firestore }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom_resources)

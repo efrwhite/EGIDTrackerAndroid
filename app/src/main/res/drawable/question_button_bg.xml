@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Education question button: purple pill with a lavender outline, ripple on tap -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#33FFFFFF">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/primaryBackground" />
+            <stroke android:width="1.5dp" android:color="@color/lavender" />
+            <corners android:radius="35dp" />
+        </shape>
+    </item>
+</ripple>

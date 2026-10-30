@@ -1,225 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightBackground"
     android:fillViewport="true"
-    android:background="@color/primaryBackground"
-    tools:context="EducationActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".EducationActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/HomeLayout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="40dp"
-        android:background="@color/primaryBackground">
-    <!-- Navigation Bar -->
+        android:layout_height="wrap_content">
 
-    <!-- Buttons -->
-    <ImageView
-        android:id="@+id/signUpBackground"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:fitsSystemWindows="false"
-        android:src="@drawable/resources_background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- One button per EGID/EoE question; each opens its answer screen -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="64dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="40dp">
 
+            <LinearLayout
+                android:id="@+id/whatEoEButton"
+                style="@style/Widget.EGIDTracker.QuestionButton"
+                android:contentDescription="@string/whatEoE">
 
-    <RelativeLayout
-        android:id="@+id/navBar"
-        android:layout_width="411dp"
-        android:layout_height="140dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    style="@style/Widget.EGIDTracker.QuestionIcon"
+                    android:src="@drawable/ic_q_search" />
 
+                <TextView
+                    style="@style/Widget.EGIDTracker.QuestionLabel"
+                    android:text="@string/whatEoE" />
+            </LinearLayout>
 
-        <!-- Page Title -->
+            <LinearLayout
+                android:id="@+id/causesEoEButton"
+                style="@style/Widget.EGIDTracker.QuestionButton"
+                android:contentDescription="@string/causesEoE"
+                android:layout_marginTop="35dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/lato_bold"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="5dp"
-            android:text="@string/education"
-            android:textColor="#ffff"
-            android:textSize="35sp" />
+                <ImageView
+                    style="@style/Widget.EGIDTracker.QuestionIcon"
+                    android:src="@drawable/ic_q_folder" />
 
-    </RelativeLayout>
+                <TextView
+                    style="@style/Widget.EGIDTracker.QuestionLabel"
+                    android:text="@string/causesEoE" />
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/whatEoEButton"
-        android:layout_width="350dp"
-        android:layout_height="62dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/educationcard1_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center_vertical"
-        android:paddingStart="65dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/whatEoE"
-        android:textColor="#ffff"
-        android:textSize="19sp"
-        android:letterSpacing="0.015"
-        android:textAllCaps="false"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+            <LinearLayout
+                android:id="@+id/affectedEoEButton"
+                style="@style/Widget.EGIDTracker.QuestionButton"
+                android:contentDescription="@string/affectedEoE"
+                android:layout_marginTop="35dp">
 
-    <Button
-        android:id="@+id/causesEoEButton"
-        android:layout_width="350dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/educationcard2_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center_vertical"
-        android:paddingStart="65dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/causesEoE"
-        android:textColor="#ffffff"
-        android:textSize="19sp"
-        android:letterSpacing="0.015"
-        android:textAllCaps="false"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/whatEoEButton" />
+                <ImageView
+                    style="@style/Widget.EGIDTracker.QuestionIcon"
+                    android:src="@drawable/ic_q_people" />
 
-    <Button
-        android:id="@+id/affectedEoEButton"
-        android:layout_width="350dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/educationcard3_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center_vertical"
-        android:paddingStart="65dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/affectedEoE"
-        android:textColor="#ffffff"
-        android:textSize="19sp"
-        android:letterSpacing="0.015"
-        android:textAllCaps="false"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/causesEoEButton" />
+                <TextView
+                    style="@style/Widget.EGIDTracker.QuestionLabel"
+                    android:text="@string/affectedEoE" />
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/symptomsEoEButton"
-        android:layout_width="350dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/educationcard4_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center_vertical"
-        android:paddingStart="65dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/symptomsEoE"
-        android:textColor="#ffffff"
-        android:textSize="19sp"
-        android:letterSpacing="0.015"
-        android:textAllCaps="false"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/affectedEoEButton" />
+            <LinearLayout
+                android:id="@+id/symptomsEoEButton"
+                style="@style/Widget.EGIDTracker.QuestionButton"
+                android:contentDescription="@string/symptomsEoE"
+                android:layout_marginTop="35dp">
 
-    <Button
-        android:id="@+id/diagnosedEoEButton"
-        android:layout_width="350dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/educationcard5_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center_vertical"
-        android:paddingStart="65dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/diagnosedEoE"
-        android:textColor="#ffffff"
-        android:textSize="19sp"
-        android:letterSpacing="0.015"
-        android:textAllCaps="false"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/symptomsEoEButton" />
+                <ImageView
+                    style="@style/Widget.EGIDTracker.QuestionIcon"
+                    android:src="@drawable/ic_q_flask" />
 
-    <Button
-        android:id="@+id/treatedEoEButton"
-        android:layout_width="350dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/educationcard6_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center_vertical"
-        android:paddingStart="65dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/treatedEoE"
-        android:textColor="#ffffff"
-        android:textSize="19sp"
-        android:letterSpacing="0.015"
-        android:textAllCaps="false"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/diagnosedEoEButton" />
+                <TextView
+                    style="@style/Widget.EGIDTracker.QuestionLabel"
+                    android:text="@string/symptomsEoE" />
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/moreInfoButton"
-        android:layout_width="350dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/educationcard7_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="65dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/moreInfo"
-        android:textColor="#ffffff"
-        android:textSize="19sp"
-        android:letterSpacing="0.015"
-        android:textAllCaps="false"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/treatedEoEButton" />
+            <LinearLayout
+                android:id="@+id/diagnosedEoEButton"
+                style="@style/Widget.EGIDTracker.QuestionButton"
+                android:contentDescription="@string/diagnosedEoE"
+                android:layout_marginTop="35dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    style="@style/Widget.EGIDTracker.QuestionIcon"
+                    android:src="@drawable/ic_q_notepad" />
+
+                <TextView
+                    style="@style/Widget.EGIDTracker.QuestionLabel"
+                    android:text="@string/diagnosedEoE" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/treatedEoEButton"
+                style="@style/Widget.EGIDTracker.QuestionButton"
+                android:contentDescription="@string/treatedEoE"
+                android:layout_marginTop="35dp">
+
+                <ImageView
+                    style="@style/Widget.EGIDTracker.QuestionIcon"
+                    android:src="@drawable/ic_q_dna" />
+
+                <TextView
+                    style="@style/Widget.EGIDTracker.QuestionLabel"
+                    android:text="@string/treatedEoE" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/moreInfoButton"
+                style="@style/Widget.EGIDTracker.QuestionButton"
+                android:contentDescription="@string/moreInfo"
+                android:layout_marginTop="35dp">
+
+                <ImageView
+                    style="@style/Widget.EGIDTracker.QuestionIcon"
+                    android:src="@drawable/ic_q_bulb" />
+
+                <TextView
+                    style="@style/Widget.EGIDTracker.QuestionLabel"
+                    android:text="@string/moreInfo" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.elizabethwhitebaker.egidtracker.BackButton
+            style="@style/Widget.EGIDTracker.BackButton"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            app:tint="@color/primaryBackground" />
+    </FrameLayout>
 </ScrollView>

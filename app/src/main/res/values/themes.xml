@@ -2,26 +2,210 @@
     <!-- Base application theme. -->
     <style name="Theme.EGIDTracker" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#8A60B0</item>
-        <item name="colorPrimaryVariant">@color/design_default_color_primary_variant</item>
-        <item name="colorOnPrimary">@color/design_default_color_on_primary</item>
+        <item name="colorPrimary">@color/primaryBackground</item>
+        <item name="colorPrimaryVariant">@color/deepPurple</item>
+        <item name="colorOnPrimary">@color/onPrimary</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/design_default_color_secondary</item>
-        <item name="colorSecondaryVariant">@color/design_default_color_secondary_variant</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/lightSalmon</item>
+        <item name="colorSecondaryVariant">@color/darkSalmon</item>
+        <item name="colorOnSecondary">@color/nearBlack</item>
+        <!-- Each screen draws its own header with a back arrow, so no default ActionBar -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@color/primaryBackground</item>
     </style>
 
     <!-- Landing page: no ActionBar (has its own in-layout title), background drawn
          edge-to-edge with light icons for a dark background. -->
-    <style name="Theme.EGIDTracker.Landing" parent="Theme.EGIDTracker">
+    <style name="Base.Theme.EGIDTracker.Landing" parent="Theme.EGIDTracker">
+        <!-- Also the launch screen: shown while the app starts, before the layout draws. -->
+        <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <!-- Splash-screen attributes for Android 12+ are added in values-v31. -->
+    <style name="Theme.EGIDTracker.Landing" parent="Base.Theme.EGIDTracker.Landing" />
+
+    <!-- Login and other auth screens: no ActionBar, bars match the purple background. -->
+    <style name="Theme.EGIDTracker.Auth" parent="Theme.EGIDTracker">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/primaryBackground</item>
+        <item name="android:statusBarColor">@color/primaryBackground</item>
+        <item name="android:navigationBarColor">@color/primaryBackground</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <!-- Field label above a white input on the purple auth screens -->
+    <style name="Widget.EGIDTracker.AuthLabel" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textColor">@color/onPrimary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- White rounded input field on the purple auth screens -->
+    <style name="Widget.EGIDTracker.AuthField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/onPrimary</item>
+        <item name="boxStrokeColor">@color/auth_field_stroke</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="endIconTint">@color/fieldHint</item>
+        <!-- Errors and hints show under the field, readable on the purple background -->
+        <item name="errorTextColor">@color/lightSalmon</item>
+        <item name="boxStrokeErrorColor">@color/lightSalmon</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="helperTextTextColor">@color/lavender</item>
+        <item name="helperTextTextAppearance">@style/TextAppearance.EGIDTracker.FieldNote</item>
+        <item name="errorTextAppearance">@style/TextAppearance.EGIDTracker.FieldNote</item>
+    </style>
+
+    <!-- Helper and error text under auth fields, in the app font -->
+    <style name="TextAppearance.EGIDTracker.FieldNote" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="fontFamily">@font/lato_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="Widget.EGIDTracker.AuthField.EditText" parent="">
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/onSurface</item>
+        <item name="android:textColorHint">@color/fieldHint</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <!-- Outlined pill "Continue with ..." button -->
+    <style name="Widget.EGIDTracker.SocialButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/onPrimary</item>
+        <item name="cornerRadius">22dp</item>
+        <item name="strokeColor">@color/onPrimary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">12dp</item>
+        <item name="iconSize">22dp</item>
+        <item name="iconTint">@null</item>
+        <item name="rippleColor">#33FFFFFF</item>
+    </style>
+
+    <!-- Light screens (Home, Education): no ActionBar, light background with dark
+         status/navigation bar icons -->
+    <style name="Theme.EGIDTracker.Light" parent="Theme.EGIDTracker">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/lightBackground</item>
+        <item name="android:statusBarColor">@color/lightBackground</item>
+        <item name="android:navigationBarColor">@color/lightBackground</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <!-- Home grid tile: centered icon and label on a rounded colored background -->
+    <style name="Widget.EGIDTracker.HomeTile" parent="">
+        <item name="android:layout_height">118dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="Widget.EGIDTracker.HomeTileLabel" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textColor">@color/onPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- One column of the Home stats pill: value and label -->
+    <style name="Widget.EGIDTracker.HomeStat" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textColor">@color/softPurple</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineSpacingExtra">1sp</item>
+    </style>
+
+    <!-- Rounded-square child photo on the Home card -->
+    <style name="ShapeAppearance.EGIDTracker.HomeAvatar" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">32%</item>
+    </style>
+
+    <!-- Education question button: icon in a salmon circle, then the question -->
+    <style name="Widget.EGIDTracker.QuestionButton" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/question_button_bg</item>
+        <item name="android:paddingStart">19dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="Widget.EGIDTracker.QuestionIcon" parent="">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:background">@drawable/question_icon_circle</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="Widget.EGIDTracker.QuestionLabel" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/onPrimary</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Longer questions shrink to fit narrow screens instead of wrapping -->
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">14sp</item>
+        <item name="autoSizeMaxTextSize">20sp</item>
+    </style>
+
+    <!-- Top-left back arrow in screen headers (BackButton). White by default for the purple
+         screens; light screens override app:tint with @color/primaryBackground. -->
+    <style name="Widget.EGIDTracker.BackButton" parent="">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:src">@drawable/ic_arrow_back</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:contentDescription">@string/back</item>
+        <item name="tint">@color/onPrimary</item>
     </style>
 </resources>

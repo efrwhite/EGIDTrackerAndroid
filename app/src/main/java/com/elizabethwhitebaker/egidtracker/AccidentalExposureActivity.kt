@@ -2,7 +2,6 @@ package com.elizabethwhitebaker.egidtracker
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -62,10 +61,7 @@ class AccidentalExposureActivity : AppCompatActivity() {
         fetchAndDisplayItems(itemTableLayout)
     }
 
-    private fun getCurrentChildId(): String? {
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("CurrentChildId", null)
-    }
+    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
 
     private fun saveItem() {
         val itemNameText = itemName.text.toString().trim()

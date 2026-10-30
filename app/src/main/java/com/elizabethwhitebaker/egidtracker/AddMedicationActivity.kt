@@ -1,7 +1,6 @@
 package com.elizabethwhitebaker.egidtracker
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -82,10 +81,7 @@ class AddMedicationActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCurrentChildId(): String? {
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("CurrentChildId", null)
-    }
+    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
 
     private fun saveMedication() {
         val discontinueChecked = discontinue.isChecked

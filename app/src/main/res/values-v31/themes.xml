@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ launch splash: landing-page purple with the logo on a dark radial
+         glow (no icon background circle). MainActivity.playIntro continues from it. -->
+    <style name="Theme.EGIDTracker.Landing" parent="Base.Theme.EGIDTracker.Landing">
+        <item name="android:windowSplashScreenBackground">@color/primaryBackground</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+    </style>
+</resources>

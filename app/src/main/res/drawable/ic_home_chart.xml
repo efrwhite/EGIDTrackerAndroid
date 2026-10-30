@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="44dp"
+    android:height="40dp"
+    android:viewportWidth="48"
+    android:viewportHeight="44">
+    <!-- Bars -->
+    <path
+        android:fillColor="@color/primaryBackground"
+        android:pathData="M5,30h5v12h-5zM15,24h5v18h-5zM25,28h5v14h-5zM35,22h5v20h-5z" />
+    <!-- Trend line and points -->
+    <path
+        android:pathData="M7.5,19L17.5,11L27.5,16L37.5,7"
+        android:strokeWidth="1.4"
+        android:strokeColor="@color/darkSalmon" />
+    <path
+        android:fillColor="@color/lightSalmon"
+        android:pathData="M7.5,15.5a3.5,3.5 0,1 0,0.01 0zM17.5,7.5a3.5,3.5 0,1 0,0.01 0zM27.5,12.5a3.5,3.5 0,1 0,0.01 0zM37.5,3.5a3.5,3.5 0,1 0,0.01 0z" />
+</vector>
