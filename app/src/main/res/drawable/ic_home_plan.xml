@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Clipboard -->
+    <path
+        android:pathData="M14,5h20a4,4 0,0 1,4 4v30a4,4 0,0 1,-4 4h-20a4,4 0,0 1,-4 -4v-30a4,4 0,0 1,4 -4z"
+        android:strokeWidth="1.6"
+        android:strokeColor="#FFFFFF" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M15.5,10h17a1.5,1.5 0,0 1,1.5 1.5v4a1.5,1.5 0,0 1,-1.5 1.5h-17a1.5,1.5 0,0 1,-1.5 -1.5v-4a1.5,1.5 0,0 1,1.5 -1.5z" />
+    <!-- Checklist rows -->
+    <path
+        android:pathData="M15,22h5a1,1 0,0 1,1 1v5a1,1 0,0 1,-1 1h-5a1,1 0,0 1,-1 -1v-5a1,1 0,0 1,1 -1zM15,32h5a1,1 0,0 1,1 1v5a1,1 0,0 1,-1 1h-5a1,1 0,0 1,-1 -1v-5a1,1 0,0 1,1 -1zM24,24h10M24,27.5h6M24,34h10M24,37.5h6"
+        android:strokeWidth="1.6"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M15.8,25.5l1.5,1.5l2.6,-3M15.8,35.5l1.5,1.5l2.6,-3"
+        android:strokeWidth="1.4"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

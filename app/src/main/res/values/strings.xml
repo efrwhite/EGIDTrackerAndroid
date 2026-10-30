@@ -83,7 +83,6 @@
     <string name="CEGIRtext">Consortium of Eosinophilic Gastrointestinal Disease Researchers</string>
 
     <!-- Strings for Your Plan Layout -->
-    <string name="checkPlan">Check Plan For:</string>
     <string name="planName">Name</string>
     <string name="diet">Diet</string>
     <string name="medications">Medications</string>
@@ -447,8 +446,26 @@
     <string name="enter_mobile_number">Enter your mobile number</string>
     <string name="choose_username">Choose a username</string>
     <string name="create_account">Create Account</string>
-    <string name="password_requirements_error">Password must be at least 7 characters, with a capital letter and a symbol (!, @, #, $).</string>
+    <string name="password_requirements">At least 8 characters, with a capital letter and a symbol (! @ # $). Only letters, numbers and ! @ # $ are allowed.</string>
     <!-- Text inside <annotation type="link"> is styled as a link in SignUpActivity -->
     <string name="terms_agreement">By continuing, you agree to our <annotation type="link">Terms of Service</annotation> and <annotation type="link">Privacy Policy</annotation>.</string>
-    <string name="username_requirements_error">Username must be 3–30 characters: letters, numbers, dots, dashes or underscores, starting with a letter or number.</string>
+    <string name="username_requirements_error">Use 3–30 letters, numbers, dots, dashes or underscores, starting with a letter or number.</string>
+    <string name="stat_logged_streak">LOGGED\nSTREAK</string>
+    <string name="stat_day_streak">DAY\nSTREAK</string>
+    <string name="stat_symptom_score">SYMPTOM\nSCORE</string>
+    <string name="stat_logged_value">%1$d / 7</string>
+    <string name="stat_empty">–</string>
+    <string name="no_child_selected">No child selected</string>
+    <string name="log_out_confirm">Log out of EGID Tracker?</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    <string name="check_plans_for">Check Plans For</string>
+    <string name="error_required">Required</string>
+    <string name="error_email_invalid">Enter a valid email address.</string>
+    <string name="error_email_in_use">An account with this email already exists.</string>
+    <string name="error_passwords_dont_match">Passwords don\'t match.</string>
+    <string name="error_phone_invalid">Enter a 10-digit phone number.</string>
+    <string name="error_username_taken">That username is taken. Try another one.</string>
+    <string name="error_network">Couldn\'t reach the server. Check your internet connection and try again.</string>
+    <string name="error_sign_up_failed">Couldn\'t create your account. Please try again.</string>
 </resources>

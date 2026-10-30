@@ -75,7 +75,8 @@ class SignInActivity : AppCompatActivity() {
 
     private fun signInUser() {
         val username = usernameEditText.text.toString().trim()
-        val password = passwordEditText.text.toString().trim()
+        // Not trimmed: spaces are part of the password
+        val password = passwordEditText.text.toString()
 
         if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Username and password are required.", Toast.LENGTH_SHORT).show()

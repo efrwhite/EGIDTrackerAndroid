@@ -9,290 +9,309 @@
     android:fitsSystemWindows="true"
     tools:context=".SignUpActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="40dp"
-        android:paddingTop="32dp"
-        android:paddingEnd="40dp"
-        android:paddingBottom="48dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/registerTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/lato_bold"
-            android:text="@string/register"
-            android:textColor="@color/onPrimary"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="40dp"
+            android:paddingTop="32dp"
+            android:paddingEnd="40dp"
+            android:paddingBottom="48dp">
 
-        <!-- Splits the First / Last Name row in half -->
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/nameGuide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <TextView
-            android:id="@+id/firstNameLabel"
-            style="@style/Widget.EGIDTracker.AuthLabel"
-            android:layout_marginTop="30dp"
-            android:text="@string/first_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerTitle" />
-
-        <TextView
-            android:id="@+id/lastNameLabel"
-            style="@style/Widget.EGIDTracker.AuthLabel"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="6.5dp"
-            android:text="@string/last_name"
-            app:layout_constraintStart_toStartOf="@+id/nameGuide"
-            app:layout_constraintTop_toBottomOf="@+id/registerTitle" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/firstNameLayout"
-            style="@style/Widget.EGIDTracker.AuthField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/nameGuide"
-            android:layout_marginEnd="6.5dp"
-            app:layout_constraintTop_toBottomOf="@+id/firstNameLabel">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signUpFirstName"
-                android:nextFocusDown="@+id/signUpLastName"
-                android:nextFocusForward="@+id/signUpLastName"
-                style="@style/Widget.EGIDTracker.AuthField.EditText"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/registerTitle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints="personGivenName"
-                android:hint="@string/first_name_hint"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName|textCapWords" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/register"
+                android:textColor="@color/onPrimary"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/lastNameLayout"
-            style="@style/Widget.EGIDTracker.AuthField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@+id/nameGuide"
-            android:layout_marginStart="6.5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lastNameLabel">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signUpLastName"
-                android:nextFocusDown="@+id/signUpEmail"
-                android:nextFocusForward="@+id/signUpEmail"
-                style="@style/Widget.EGIDTracker.AuthField.EditText"
-                android:layout_width="match_parent"
+            <!-- Splits the First / Last Name row in half -->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/nameGuide"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints="personFamilyName"
-                android:hint="@string/last_name_hint"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName|textCapWords" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
-        <TextView
-            android:id="@+id/emailLabel"
-            style="@style/Widget.EGIDTracker.AuthLabel"
-            android:layout_marginTop="14dp"
-            android:text="@string/email_label"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/firstNameLayout" />
+            <TextView
+                android:id="@+id/firstNameLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="30dp"
+                android:text="@string/first_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/registerTitle" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailLayout"
-            style="@style/Widget.EGIDTracker.AuthField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailLabel">
+            <TextView
+                android:id="@+id/lastNameLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="6.5dp"
+                android:text="@string/last_name"
+                app:layout_constraintStart_toStartOf="@+id/nameGuide"
+                app:layout_constraintTop_toBottomOf="@+id/registerTitle" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signUpEmail"
-                android:nextFocusDown="@+id/signUpPassword"
-                android:nextFocusForward="@+id/signUpPassword"
-                style="@style/Widget.EGIDTracker.AuthField.EditText"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:autofillHints="emailAddress"
-                android:hint="@string/enter_email"
-                android:imeOptions="actionNext"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nameGuide"
+                android:layout_marginEnd="6.5dp"
+                app:layout_constraintTop_toBottomOf="@+id/firstNameLabel">
 
-        <TextView
-            android:id="@+id/passwordLabel"
-            style="@style/Widget.EGIDTracker.AuthLabel"
-            android:layout_marginTop="14dp"
-            android:text="@string/password"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailLayout" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/signUpFirstName"
+                    android:nextFocusDown="@+id/signUpLastName"
+                    android:nextFocusForward="@+id/signUpLastName"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="personGivenName"
+                    android:hint="@string/first_name_hint"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName|textCapWords"
+                    android:maxLength="50" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordLayout"
-            style="@style/Widget.EGIDTracker.AuthField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:endIconMode="password_toggle"
-            app:endIconDrawable="@drawable/password_toggle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordLabel">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signUpPassword"
-                android:nextFocusDown="@+id/signUpConfirm"
-                android:nextFocusForward="@+id/signUpConfirm"
-                style="@style/Widget.EGIDTracker.AuthField.EditText"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lastNameLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:autofillHints="newPassword"
-                android:hint="@string/password_hint"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="@+id/nameGuide"
+                android:layout_marginStart="6.5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lastNameLabel">
 
-        <TextView
-            android:id="@+id/confirmLabel"
-            style="@style/Widget.EGIDTracker.AuthLabel"
-            android:layout_marginTop="14dp"
-            android:text="@string/confirmPassword"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/signUpLastName"
+                    android:nextFocusDown="@+id/signUpEmail"
+                    android:nextFocusForward="@+id/signUpEmail"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="personFamilyName"
+                    android:hint="@string/last_name_hint"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName|textCapWords"
+                    android:maxLength="50" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/confirmLayout"
-            style="@style/Widget.EGIDTracker.AuthField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:endIconMode="password_toggle"
-            app:endIconDrawable="@drawable/password_toggle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/confirmLabel">
+            <TextView
+                android:id="@+id/emailLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="14dp"
+                android:text="@string/email_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstNameLayout" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signUpConfirm"
-                android:nextFocusDown="@+id/signUpPhone"
-                android:nextFocusForward="@+id/signUpPhone"
-                style="@style/Widget.EGIDTracker.AuthField.EditText"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:autofillHints="newPassword"
-                android:hint="@string/password_hint"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailLabel">
 
-        <TextView
-            android:id="@+id/phoneLabel"
-            style="@style/Widget.EGIDTracker.AuthLabel"
-            android:layout_marginTop="14dp"
-            android:text="@string/phoneNumber"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/confirmLayout" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/signUpEmail"
+                    android:nextFocusDown="@+id/signUpPassword"
+                    android:nextFocusForward="@+id/signUpPassword"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="emailAddress"
+                    android:hint="@string/enter_email"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="254" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phoneLayout"
-            style="@style/Widget.EGIDTracker.AuthField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phoneLabel">
+            <TextView
+                android:id="@+id/passwordLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="14dp"
+                android:text="@string/password"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailLayout" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signUpPhone"
-                android:nextFocusDown="@+id/signUpUsername"
-                android:nextFocusForward="@+id/signUpUsername"
-                style="@style/Widget.EGIDTracker.AuthField.EditText"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                app:helperText="@string/password_requirements"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:autofillHints="phone"
-                android:hint="@string/enter_mobile_number"
-                android:imeOptions="actionNext"
-                android:inputType="phone" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="5dp"
+                app:endIconMode="password_toggle"
+                app:endIconDrawable="@drawable/password_toggle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/passwordLabel">
 
-        <TextView
-            android:id="@+id/usernameLabel"
-            style="@style/Widget.EGIDTracker.AuthLabel"
-            android:layout_marginTop="14dp"
-            android:text="@string/username"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phoneLayout" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/signUpPassword"
+                    android:nextFocusDown="@+id/signUpConfirm"
+                    android:nextFocusForward="@+id/signUpConfirm"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="newPassword"
+                    android:hint="@string/password_hint"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:maxLength="64" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/usernameLayout"
-            style="@style/Widget.EGIDTracker.AuthField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/usernameLabel">
+            <TextView
+                android:id="@+id/confirmLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="14dp"
+                android:text="@string/confirmPassword"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signUpUsername"
-                style="@style/Widget.EGIDTracker.AuthField.EditText"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confirmLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:autofillHints="newUsername"
-                android:hint="@string/choose_username"
-                android:imeOptions="actionDone"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="5dp"
+                app:endIconMode="password_toggle"
+                app:endIconDrawable="@drawable/password_toggle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/confirmLabel">
 
-        <!-- Same salmon pill as the landing and Login buttons -->
-        <Button
-            android:id="@+id/signUpButton"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="76dp"
-            android:background="@drawable/filled_roundedbg_accent"
-            android:backgroundTint="@null"
-            android:fontFamily="@font/lato_bold"
-            android:letterSpacing="0"
-            android:stateListAnimator="@null"
-            android:text="@string/create_account"
-            android:textAllCaps="false"
-            android:textColor="@color/onPrimary"
-            android:textSize="15sp"
-            app:backgroundTint="@null"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/usernameLayout" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/signUpConfirm"
+                    android:nextFocusDown="@+id/signUpPhone"
+                    android:nextFocusForward="@+id/signUpPhone"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="newPassword"
+                    android:hint="@string/password_hint"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:maxLength="64" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/termsText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/lato_regular"
-            android:gravity="center"
-            android:lineSpacingExtra="6sp"
-            android:text="@string/terms_agreement"
-            android:textColor="@color/onPrimary"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signUpButton" />
+            <TextView
+                android:id="@+id/phoneLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="14dp"
+                android:text="@string/phoneNumber"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/confirmLayout" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phoneLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phoneLabel">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/signUpPhone"
+                    android:nextFocusDown="@+id/signUpUsername"
+                    android:nextFocusForward="@+id/signUpUsername"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="phone"
+                    android:hint="@string/enter_mobile_number"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:maxLength="20" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/usernameLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="14dp"
+                android:text="@string/username"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phoneLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/usernameLabel">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/signUpUsername"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="newUsername"
+                    android:hint="@string/choose_username"
+                    android:imeOptions="actionDone"
+                    android:inputType="text|textNoSuggestions"
+                    android:maxLength="30" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Same salmon pill as the landing and Login buttons -->
+            <Button
+                android:id="@+id/signUpButton"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="76dp"
+                android:background="@drawable/filled_roundedbg_accent"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0"
+                android:stateListAnimator="@null"
+                android:text="@string/create_account"
+                android:textAllCaps="false"
+                android:textColor="@color/onPrimary"
+                android:textSize="15sp"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/usernameLayout" />
+
+            <TextView
+                android:id="@+id/termsText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/terms_agreement"
+                android:textColor="@color/onPrimary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signUpButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.elizabethwhitebaker.egidtracker.BackButton
+            style="@style/Widget.EGIDTracker.BackButton"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp" />
+    </FrameLayout>
 </ScrollView>

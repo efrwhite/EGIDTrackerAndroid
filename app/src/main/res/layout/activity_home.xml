@@ -4,223 +4,260 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackground"
-    android:fitsSystemWindows="true">
+    android:background="@color/lightBackground"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    tools:context=".HomeActivity">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/HomeLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/primaryBackground"
-    tools:context="HomeActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="34dp"
+        android:paddingEnd="34dp"
+        android:paddingBottom="24dp">
 
-    <!-- Navigation Bar -->
-
-    <!-- Buttons -->
-
-    <Button
-        android:id="@+id/profileButton"
-        android:layout_width="290dp"
-        android:layout_height="58dp"
-        android:background="@drawable/educationcard1_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/profiles"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="#A784C0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childDiet" />
-
-    <RelativeLayout
-        android:id="@+id/navBar"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="@color/primaryBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <!-- Back Button -->
-
-        <!-- Page Title -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/lato_medium"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="5dp"
-            android:text="@string/home"
-            android:textColor="@color/primary"
-            android:textSize="20sp" />
-
-        <!-- Logout Button -->
-        <Button
+        <ImageButton
             android:id="@+id/logoutButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="-12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/logOut"
+            android:src="@drawable/ic_logout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/primaryBackground" />
+
+        <!-- Selected child; tapping it opens Profiles to switch or add children -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/childCard"
+            android:layout_width="0dp"
+            android:layout_height="196dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/home_card_bg"
+            android:clickable="true"
+            android:contentDescription="@string/profiles"
+            android:elevation="6dp"
+            android:focusable="true"
+            android:paddingStart="34dp"
+            android:paddingEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoutButton">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/homeImage"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
+                android:background="@color/lightSalmon"
+                android:importantForAccessibility="no"
+                android:padding="0.5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.EGIDTracker.HomeAvatar"
+                app:strokeColor="@color/onPrimary"
+                app:strokeWidth="1dp" />
+
+            <TextView
+                android:id="@+id/childName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/lato_bold"
+                android:maxLines="2"
+                android:textColor="@color/onPrimary"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/childDiet"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/homeImage"
+                app:layout_constraintTop_toTopOf="@+id/homeImage"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Ginger Baker" />
+
+            <TextView
+                android:id="@+id/childDiet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/home_diet_pill"
+                android:fontFamily="@font/lato_regular"
+                android:paddingStart="20dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="8dp"
+                android:textAllCaps="true"
+                android:textColor="@color/onPrimary"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@+id/homeImage"
+                app:layout_constraintStart_toStartOf="@+id/childName"
+                app:layout_constraintTop_toBottomOf="@+id/childName"
+                tools:text="Diet 2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Activity stats for the selected child (see HomeActivity.loadStats) -->
+        <LinearLayout
+            android:id="@+id/statsRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/home_stats_bg"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/childCard">
+
+            <TextView
+                android:id="@+id/loggedStreakStat"
+                style="@style/Widget.EGIDTracker.HomeStat"
+                tools:text="3 / 7\nLOGGED\nSTREAK" />
+
+            <TextView
+                android:id="@+id/dayStreakStat"
+                style="@style/Widget.EGIDTracker.HomeStat"
+                tools:text="12\nDAY\nSTREAK" />
+
+            <TextView
+                android:id="@+id/symptomScoreStat"
+                style="@style/Widget.EGIDTracker.HomeStat"
+                tools:text="8\nSYMPTOM\nSCORE" />
+        </LinearLayout>
+
+        <!-- Splits the two-tile rows in half -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/tileGuide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:fontFamily="@font/lato_medium"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="5dp"
-            android:background="@android:color/transparent"
-            android:text="@string/logOut"
-            android:textColor="@color/primary"
-            android:textAllCaps="false"
-            android:textSize="17sp"/>
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
+        <LinearLayout
+            android:id="@+id/planButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/home_tile_deep"
+            android:contentDescription="@string/yourPlan"
+            app:layout_constraintEnd_toStartOf="@+id/tileGuide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/statsRow">
 
-    </RelativeLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_home_plan" />
 
-    <ImageView
-        android:id="@+id/homeImage"
-        android:layout_width="135dp"
-        android:layout_height="117dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childName"/>
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginTop="12dp"
+                android:text="@string/yourPlan" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/planButton"
-        android:layout_width="290dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/educationcard1_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/yourPlan"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="#A784C0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileButton" />
+        <LinearLayout
+            android:id="@+id/foodTrackerButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/home_tile_salmon"
+            android:contentDescription="@string/foodTracker"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tileGuide"
+            app:layout_constraintTop_toTopOf="@+id/planButton">
 
-    <Button
-        android:id="@+id/foodTrackerButton"
-        android:layout_width="290dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/educationcard1_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/foodTracker"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="#A784C0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/planButton" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_home_food" />
 
-    <Button
-        android:id="@+id/symptomCheckerButton"
-        android:layout_width="290dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/educationcard1_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/symptomScore"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="#A784C0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/foodTrackerButton" />
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginTop="12dp"
+                android:text="@string/foodTracker" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/QoLButton"
-        android:layout_width="290dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/educationcard1_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/QoLChecker"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="#A784C0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/symptomCheckerButton" />
+        <LinearLayout
+            android:id="@+id/symptomCheckerButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_height="108dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/home_tile_lavender"
+            android:contentDescription="@string/symptomScore"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="22dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/planButton">
 
-    <Button
-        android:id="@+id/EOEedButton"
-        android:layout_width="290dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/educationcard1_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="5dp"
-        android:layout_marginBottom="30dp"
-        android:text="@string/education"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="#A784C0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QoLButton" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_home_chart" />
 
-    <TextView
-        android:id="@+id/childName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navBar"
-        android:textColor="#808080" />
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginStart="24dp"
+                android:text="@string/symptomScore" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/childDiet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeImage"
-        android:textColor="#808080"/>
+        <LinearLayout
+            android:id="@+id/QoLButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/home_tile_purple"
+            android:contentDescription="@string/QoLChecker"
+            app:layout_constraintEnd_toStartOf="@+id/tileGuide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/symptomCheckerButton">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_home_qol" />
+
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginTop="12dp"
+                android:text="@string/QoLChecker" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/EOEedButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/home_tile_salmon"
+            android:contentDescription="@string/education"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tileGuide"
+            app:layout_constraintTop_toTopOf="@+id/QoLButton">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_home_education" />
+
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginTop="12dp"
+                android:text="@string/education" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
