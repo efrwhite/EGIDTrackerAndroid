@@ -1,174 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackground"
-    tools:context="PlanActivity">
+    android:background="@color/lightBackground"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    tools:context=".PlanActivity">
 
-    <!-- Navigation Bar -->
-
-    <RelativeLayout
-        android:id="@+id/navBar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/primaryBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        android:paddingBottom="40dp"
+        android:clipToPadding="false">
 
-
-        <!-- Page Title -->
+        <!-- Shifted left so it lines up with the back arrow on other screens -->
+        <com.elizabethwhitebaker.egidtracker.BackButton
+            style="@style/Widget.EGIDTracker.BackButton"
+            android:layout_marginTop="4dp"
+            android:translationX="-21dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/primaryBackground" />
 
         <TextView
+            android:id="@+id/checkPlan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/check_plans_for"
+            android:textColor="@color/onSurface"
+            android:textSize="36sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Selected child's first name, so it's clear whose plans these are -->
+        <TextView
+            android:id="@+id/planName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/lato_bold"
+            android:maxLines="1"
+            android:textColor="@color/primaryBackground"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/checkPlan"
+            app:layout_constraintTop_toBottomOf="@+id/checkPlan"
+            tools:text="Ginger" />
+
+        <!-- Splits the two-tile rows in half -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/tileGuide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/lato_medium"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="5dp"
-            android:text="@string/yourPlan"
-            android:textColor="@color/primary"
-            android:textSize="20sp" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
-    </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/accidentalExposureButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_height="149dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/plan_tile_deep"
+            android:contentDescription="@string/accidentalExposure"
+            app:layout_constraintEnd_toStartOf="@+id/tileGuide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/planName">
 
-    <!-- Buttons -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_plan_exposure" />
 
-    <Button
-        android:id="@+id/dietButton"
-        android:layout_width="250dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="62dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/diet"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/planName" />
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/accidentalExposure"
+                android:textAllCaps="true" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/medicationsButton"
-        android:layout_width="250dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/medications"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accidentalExposureButton" />
+        <LinearLayout
+            android:id="@+id/dietButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_height="149dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/plan_tile_salmon"
+            android:contentDescription="@string/diet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tileGuide"
+            app:layout_constraintTop_toTopOf="@+id/accidentalExposureButton">
 
-    <Button
-        android:id="@+id/documentsButton"
-        android:layout_width="250dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/documents"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/medicationsButton" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_plan_diet" />
 
-    <Button
-        android:id="@+id/endoscopyButton"
-        android:layout_width="250dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/endoscopy"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/documentsButton" />
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/diet"
+                android:textAllCaps="true" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/accidentalExposureButton"
-        android:layout_width="250dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="0dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="0dp"
-        android:paddingBottom="0dp"
-        android:text="@string/accidentalExposure"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dietButton" />
+        <LinearLayout
+            android:id="@+id/documentsButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_height="109dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="11dp"
+            android:background="@drawable/home_tile_lavender"
+            android:contentDescription="@string/documents"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/accidentalExposureButton">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_plan_documents" />
 
-    <!-- Text Views -->
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginStart="32dp"
+                android:text="@string/documents"
+                android:textAllCaps="true" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/checkPlan"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/checkPlan"
-        android:textSize="17sp"
-        android:textColor="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+        <LinearLayout
+            android:id="@+id/medicationsButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_height="149dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/plan_tile_purple"
+            android:contentDescription="@string/medications"
+            app:layout_constraintEnd_toStartOf="@+id/tileGuide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/documentsButton">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_plan_medication" />
 
-    <TextView
-        android:id="@+id/planName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/lato_medium"
-        android:text=""
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkPlan"
-        tools:ignore="MissingConstraints" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/medications"
+                android:textAllCaps="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/endoscopyButton"
+            style="@style/Widget.EGIDTracker.HomeTile"
+            android:layout_width="0dp"
+            android:layout_height="149dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/plan_tile_salmon"
+            android:contentDescription="@string/endoscopy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tileGuide"
+            app:layout_constraintTop_toTopOf="@+id/medicationsButton">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_plan_endoscopy" />
+
+            <TextView
+                style="@style/Widget.EGIDTracker.HomeTileLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/endoscopy"
+                android:textAllCaps="true" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

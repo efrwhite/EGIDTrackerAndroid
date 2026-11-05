@@ -293,13 +293,15 @@ class AddCaregiverActivity : AppCompatActivity() {
                                 batch.delete(caregiver.reference)
                             }
 
-                            // (REMOVED) Step: Delete Usernames — no longer exists
-
-                            // Step 3: Delete from Users collection (doc ID == UID)
+                            // Step 3: Delete from Users collection (doc ID == UID), and free
+                            // the username for someone else
                             db.collection("Users").document(uid).get()
                                 .addOnSuccessListener { userDoc ->
                                     if (userDoc.exists()) {
                                         batch.delete(userDoc.reference)
+                                        userDoc.getString("username")
+                                            ?.takeIf { Usernames.isValid(it) }
+                                            ?.let { batch.delete(Usernames.ref(it)) }
                                     }
 
                                     // Step 4: Commit batch

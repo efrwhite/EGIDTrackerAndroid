@@ -3,7 +3,14 @@
 
     <!-- Base Colors -->
     <color name="primaryBackground">#5B3A82</color>    <!-- Purple -->
+    <color name="deepPurple">#3D2557</color>           <!-- EGID palette darkest purple -->
+    <color name="splashCenter">@color/deepPurple</color> <!-- Center of the launch glow -->
+    <color name="lightBackground">#FBF8FF</color>      <!-- EGID palette off-white: Home background -->
+    <color name="statBorder">@color/lavender</color>   <!-- Outline of the Home stats pill -->
     <color name="lightSalmon">#FF8F70</color>         <!-- Light salmon -->
+    <color name="darkSalmon">#D96545</color>          <!-- EGID palette: deeper salmon -->
+    <color name="nearBlack">#2D2438</color>           <!-- EGID palette: text on light backgrounds -->
+    <color name="mutedPurple">#8A82A0</color>         <!-- EGID palette: grey-purple for hints -->
     <color name="softPurple">#8B6FB3</color>    <!-- Soft purple -->
     <color name="primary">#926DB4</color>            <!-- Dark Purple -->
     <color name="secondary">#8098AB</color>          <!-- Steel Blue -->
@@ -18,7 +25,7 @@
     <!-- Surfaces & Backgrounds -->
     <color name="surface">#FAF8F4</color>            <!-- Off-White surface -->
     <color name="surfaceOverlay">#F2EBDD</color>     <!-- Light overlay for cards/dialogs -->
-    <color name="onSurface">#1E1E1E</color>          <!-- Text on surfaces -->
+    <color name="onSurface">@color/nearBlack</color>  <!-- Text on surfaces -->
 
     <!-- Text and Icon Colors -->
     <color name="onPrimary">#FFFFFF</color>          <!-- White text on primary -->
@@ -34,6 +41,13 @@
     <color name="onError">#FFFFFF</color>
     <color name="success">#4CAF50</color>
     <color name="onSuccess">#FFFFFF</color>
+
+    <!-- Auth screens (Login) -->
+    <color name="fieldHint">@color/mutedPurple</color> <!-- Hints and icons in white fields -->
+    <color name="authDivider">@color/nearBlack</color> <!-- "OR" divider lines -->
+    <color name="required">@color/darkSalmon</color>  <!-- Required-field asterisk -->
+    <color name="fieldBorder">@color/lavender</color> <!-- Thin border around white fields -->
+    <color name="lavender">#C9B6E4</color>            <!-- EGID palette: links on purple -->
 
     <!-- Accent / Call to Action -->
     <color name="accent">#FF9E3E</color>             <!-- Warm orange for emphasis -->

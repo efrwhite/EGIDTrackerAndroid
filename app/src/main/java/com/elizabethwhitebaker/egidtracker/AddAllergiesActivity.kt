@@ -144,10 +144,7 @@ class AddAllergiesActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCurrentChildId(): String? {
-        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        return sharedPreferences.getString("CurrentChildId", null)
-    }
+    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
 
     private fun saveAllergen() {
         if (!validateClearedFields()) return
