@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:fitsSystemWindows="true"
-    android:paddingTop="?attr/actionBarSize"
     tools:context="ProfilesActivity">
 
     <!-- Navigation Bar -->
@@ -20,6 +19,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <com.elizabethwhitebaker.egidtracker.BackButton
+            style="@style/Widget.EGIDTracker.BackButton"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="4dp" />
 
         <!-- Page Title -->
         <TextView

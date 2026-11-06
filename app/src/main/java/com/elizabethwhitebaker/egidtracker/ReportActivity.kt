@@ -62,8 +62,7 @@ class ReportActivity : AppCompatActivity() {
     }
 
     private fun getChildId(): String {
-        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        return sharedPreferences.getString("CurrentChildId", "") ?: ""
+        return CurrentChild.getId(this) ?: ""
     }
 
     private fun loadChartData(sourceActivity: String, childId: String) {

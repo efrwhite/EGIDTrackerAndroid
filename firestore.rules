@@ -1,0 +1,109 @@
+rules_version = '2';
+
+// Security rules for the Firebase project. Deploy with: firebase deploy --only firestore:rules
+//
+// Ownership model:
+//   Users/{uid}                 the signed-in user
+//   Usernames/{username}        username -> login email lookup (see below)
+//   Children, Caregivers        parentUserId == the signed-in user
+//   Children/{id}/<scores...>   whoever owns that child
+//   Allergens, Medications,
+//   AccidentalExposure          childId points at a child the user owns
+//   FoodEntries/{childId}/...   whoever owns that child
+//   CustomResources             userId == the signed-in user
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isUser(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function ownsChild(childId) {
+      return signedIn()
+        && get(/databases/$(database)/documents/Children/$(childId)).data.parentUserId == request.auth.uid;
+    }
+
+    // Login takes a username, so the app needs its email before the user is signed in.
+    // Anyone may look up one exact username ("get"), but not list them, so usernames and
+    // emails can't be harvested in bulk. A username can only be claimed once (create, never
+    // update), for the caller's own account and verified email address.
+    match /Usernames/{username} {
+      allow get: if true;
+      allow create: if isUser(request.resource.data.uid)
+        && request.resource.data.keys().hasOnly(['uid', 'email'])
+        && request.resource.data.email == request.auth.token.email;
+      allow delete: if isUser(resource.data.uid);
+    }
+
+    match /Users/{uid} {
+      allow read, write: if isUser(uid);
+    }
+
+    match /Children/{childId} {
+      // A missing child (e.g. a stale saved selection) reads as "doesn't exist", not "denied"
+      allow get: if signedIn() && (resource == null || resource.data.parentUserId == request.auth.uid);
+      allow list, delete: if signedIn() && resource.data.parentUserId == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.parentUserId == request.auth.uid;
+      allow update: if signedIn()
+        && resource.data.parentUserId == request.auth.uid
+        && request.resource.data.parentUserId == request.auth.uid;
+
+      // Symptom Scores, Quality of Life Scores, EndoscopyResults
+      match /{subcollection}/{docId} {
+        allow read, write: if ownsChild(childId);
+      }
+    }
+
+    match /Caregivers/{caregiverId} {
+      allow read, delete: if signedIn() && resource.data.parentUserId == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.parentUserId == request.auth.uid;
+      allow update: if signedIn()
+        && resource.data.parentUserId == request.auth.uid
+        && request.resource.data.parentUserId == request.auth.uid;
+    }
+
+    // Records tied to a child through their childId field: the stored record, and the
+    // record being written
+    function ownsStoredRecord() {
+      return ownsChild(resource.data.childId);
+    }
+
+    function ownsIncomingRecord() {
+      return ownsChild(request.resource.data.childId);
+    }
+
+    match /Allergens/{docId} {
+      allow read, delete: if ownsStoredRecord();
+      allow create: if ownsIncomingRecord();
+      allow update: if ownsStoredRecord() && ownsIncomingRecord();
+    }
+
+    match /Medications/{docId} {
+      allow read, delete: if ownsStoredRecord();
+      allow create: if ownsIncomingRecord();
+      allow update: if ownsStoredRecord() && ownsIncomingRecord();
+    }
+
+    match /AccidentalExposure/{docId} {
+      allow read, delete: if ownsStoredRecord();
+      allow create: if ownsIncomingRecord();
+      allow update: if ownsStoredRecord() && ownsIncomingRecord();
+    }
+
+    match /FoodEntries/{childId}/Entries/{entryId} {
+      allow read, write: if ownsChild(childId);
+    }
+
+    match /CustomResources/{resourceId} {
+      allow read, delete: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid;
+    }
+  }
+}

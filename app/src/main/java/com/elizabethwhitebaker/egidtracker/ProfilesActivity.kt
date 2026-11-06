@@ -130,29 +130,13 @@ class ProfilesActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun getCurrentChildId(): String? {
-        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        return sharedPreferences.getString("CurrentChildId", null)
-    }
+    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
 
-    private fun saveCurrentChildId(childId: String) {
-        getSharedPreferences("AppPreferences", MODE_PRIVATE)
-            .edit()
-            .putString("CurrentChildId", childId)
-            .apply()
-    }
+    private fun saveCurrentChildId(childId: String) = CurrentChild.set(this, childId)
 
-    private fun getCurrentChildName(): String? {
-        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        return sharedPreferences.getString("CurrentChildName", null)
-    }
+    private fun getCurrentChildName(): String? = CurrentChild.getName(this)
 
-    private fun saveCurrentChildName(childName: String) {
-        getSharedPreferences("AppPreferences", MODE_PRIVATE)
-            .edit()
-            .putString("CurrentChildName", childName)
-            .apply()
-    }
+    private fun saveCurrentChildName(childName: String) = CurrentChild.setName(this, childName)
 
     private fun updateActivePatientBadge(childName: String?) {
         if (childName.isNullOrBlank()) {

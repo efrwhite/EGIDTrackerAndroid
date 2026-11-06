@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Same thin border whether or not the field is focused. The explicit focused item makes
+     this a stateful list; otherwise TextInputLayout ignores it for the unfocused border. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/fieldBorder" android:state_focused="true" />
+    <item android:color="@color/fieldBorder" />
+</selector>

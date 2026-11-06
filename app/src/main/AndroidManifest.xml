@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name=".EGIDTrackerApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -47,16 +46,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignInActivity"
+            android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".SignUpActivity"
+            android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".HomeActivity"
+            android:theme="@style/Theme.EGIDTracker.Light" />
         <activity android:name=".ProfilesActivity" />
         <activity android:name=".FoodTrackerActivity" />
-        <activity android:name=".EducationActivity" />
+        <activity android:name=".EducationActivity"
+            android:theme="@style/Theme.EGIDTracker.Light" />
         <activity android:name=".QoLActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".PlanActivity" />
+        <activity android:name=".PlanActivity"
+            android:theme="@style/Theme.EGIDTracker.Light" />
         <activity android:name=".SymptomCheckerActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".DiagnosedActivity" />

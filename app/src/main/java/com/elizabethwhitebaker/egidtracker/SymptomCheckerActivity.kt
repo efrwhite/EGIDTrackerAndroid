@@ -1,7 +1,6 @@
 package com.elizabethwhitebaker.egidtracker
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -40,8 +39,7 @@ class SymptomCheckerActivity : AppCompatActivity() {
 
         resultsButton = findViewById(R.id.resultsButton)
         resultsButton.setOnClickListener {
-            val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-            val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
+            val childId = CurrentChild.getId(this) ?: run {
                 Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -102,8 +100,7 @@ class SymptomCheckerActivity : AppCompatActivity() {
 
         saveResultsToFirestore(totalScore, responses, symptomDescriptions, dateString)
 
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val childId = sharedPreferences.getString("CurrentChildId", null)
+        val childId = CurrentChild.getId(this)
 
         val intent = Intent(this, ResultsActivity::class.java).apply {
             putExtra("sourceActivity", "SymptomChecker")
@@ -194,8 +191,7 @@ class SymptomCheckerActivity : AppCompatActivity() {
         symptoms: List<String>,
         date: String
     ) {
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
+        val childId = CurrentChild.getId(this) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
             return
         }
