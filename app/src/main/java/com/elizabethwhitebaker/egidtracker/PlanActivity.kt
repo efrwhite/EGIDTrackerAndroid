@@ -1,45 +1,32 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class PlanActivity : AppCompatActivity() {
 
-    private lateinit var dietButton: Button
-    private lateinit var accidentalExposureButton: Button
-    private lateinit var medicationsButton: Button
-    private lateinit var documentsButton: Button
-    private lateinit var endoscopyButton: Button
     private lateinit var planName: TextView
 
     private var childDiet: String? = null  // set after fetch
 
-    private val auth by lazy { FirebaseAuth.getInstance() }
     private val db by lazy { Firebase.firestore }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_yourplan)
 
-        dietButton = findViewById(R.id.dietButton)
-        accidentalExposureButton = findViewById(R.id.accidentalExposureButton)
-        medicationsButton = findViewById(R.id.medicationsButton)
-        documentsButton = findViewById(R.id.documentsButton)
-        endoscopyButton = findViewById(R.id.endoscopyButton)
         planName = findViewById(R.id.planName)
 
         // initial fetch
         getCurrentChildId()?.let { fetchChildDiet(it) }
 
-        dietButton.setOnClickListener {
+        findViewById<View>(R.id.dietButton).setOnClickListener {
             val diet = childDiet?.trim().orEmpty()
             if (diet.isEmpty()) {
                 Toast.makeText(this, "No diet is selected for Child", Toast.LENGTH_SHORT).show()
@@ -48,17 +35,13 @@ class PlanActivity : AppCompatActivity() {
             }
         }
 
-        accidentalExposureButton.setOnClickListener {
-            startActivity(Intent(this, AccidentalExposureActivity::class.java))
-        }
-        medicationsButton.setOnClickListener {
-            startActivity(Intent(this, MedicationsActivity::class.java))
-        }
-        documentsButton.setOnClickListener {
-            startActivity(Intent(this, DocumentsActivity::class.java))
-        }
-        endoscopyButton.setOnClickListener {
-            startActivity(Intent(this, EndoscopyActivity::class.java))
+        mapOf(
+            R.id.accidentalExposureButton to AccidentalExposureActivity::class.java,
+            R.id.medicationsButton to MedicationsActivity::class.java,
+            R.id.documentsButton to DocumentsActivity::class.java,
+            R.id.endoscopyButton to EndoscopyActivity::class.java
+        ).forEach { (buttonId, screen) ->
+            findViewById<View>(buttonId).setOnClickListener { startActivity(Intent(this, screen)) }
         }
     }
 
@@ -88,11 +71,7 @@ class PlanActivity : AppCompatActivity() {
     }
 
     // Read the namespaced key (per-user)
-    private fun getCurrentChildId(): String? {
-        val uid = auth.currentUser?.uid ?: return null
-        val sp = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        return sp.getString("CurrentChildId_$uid", null)
-    }
+    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
 
     private fun goToDietActivity(dietRaw: String) {
         val diet = dietRaw.trim().lowercase()

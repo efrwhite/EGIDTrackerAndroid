@@ -125,8 +125,7 @@ class DocumentsActivity : AppCompatActivity() {
 
 
     private fun getChildId(): String {
-        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        return sharedPreferences.getString("CurrentChildId", "") ?: ""
+        return CurrentChild.getId(this) ?: ""
     }
 
     private fun processDocumentUri(uri: Uri) {

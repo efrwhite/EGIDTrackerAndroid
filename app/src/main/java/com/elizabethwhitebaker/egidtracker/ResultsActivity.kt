@@ -1,7 +1,6 @@
 package com.elizabethwhitebaker.egidtracker
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -50,8 +49,7 @@ class ResultsActivity : AppCompatActivity() {
 
         val sourceActivity = intent.getStringExtra("sourceActivity") ?: "SymptomChecker"
 
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val childId = sharedPreferences.getString("CurrentChildId", null) ?: run {
+        val childId = CurrentChild.getId(this) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_LONG).show()
             finish()
             return
