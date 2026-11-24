@@ -32,6 +32,15 @@ object Photos {
         uriFor(context, file)
     }.getOrNull()
 
+    /** Deletes the file behind [url] if it's one of this app's photos; ignores anything else. */
+    fun deleteIfOwned(context: Context, url: String?) {
+        val uri = url?.takeIf { it.isNotEmpty() }?.let(Uri::parse) ?: return
+        // "my_images" is the app's Pictures folder in res/xml/file_paths.xml
+        if (uri.authority != AUTHORITY || uri.pathSegments.size != 2 || uri.pathSegments[0] != "my_images") return
+        val name = uri.lastPathSegment ?: return
+        File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), name).delete()
+    }
+
     private fun newPhotoFile(context: Context): File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg",

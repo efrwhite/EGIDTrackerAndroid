@@ -315,52 +315,23 @@ class AddCaregiverActivity : AppCompatActivity() {
         }
     }
 
-    /** Deletes the user's children, caregivers, profile and username, then the login itself. */
+    /** Deletes all the user's data (see AccountDeletion), then the login itself. */
     private fun deleteAccountData(user: FirebaseUser) {
-        val uid = user.uid
-        val db = Firebase.firestore
-        val batch = db.batch()
-        val onFailure = { e: Exception ->
-            Toast.makeText(this, "Couldn't delete the account: ${e.message}", Toast.LENGTH_LONG).show()
-        }
-
-        db.collection("Children").whereEqualTo("parentUserId", uid).get()
-            .addOnSuccessListener { children ->
-                children.documents.forEach { batch.delete(it.reference) }
-
-                db.collection("Caregivers").whereEqualTo("parentUserId", uid).get()
-                    .addOnSuccessListener { caregivers ->
-                        caregivers.documents.forEach { batch.delete(it.reference) }
-
-                        // The profile (doc ID == UID), and the username so someone else can use it
-                        db.collection("Users").document(uid).get()
-                            .addOnSuccessListener { userDoc ->
-                                if (userDoc.exists()) {
-                                    batch.delete(userDoc.reference)
-                                    userDoc.getString("username")
-                                        ?.takeIf { Usernames.isValid(it) }
-                                        ?.let { batch.delete(Usernames.ref(it)) }
-                                }
-
-                                batch.commit()
-                                    .addOnSuccessListener {
-                                        CurrentChild.clear(this) // needs the uid, so before delete()
-                                        user.delete()
-                                            .addOnSuccessListener {
-                                                Toast.makeText(this, "Account deleted.", Toast.LENGTH_LONG).show()
-                                                startActivity(Intent(this, MainActivity::class.java).apply {
-                                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                                })
-                                            }
-                                            .addOnFailureListener(onFailure)
-                                    }
-                                    .addOnFailureListener(onFailure)
-                            }
-                            .addOnFailureListener(onFailure)
-                    }
-                    .addOnFailureListener(onFailure)
+        AccountDeletion.deleteAllData(this, user.uid)
+            .onSuccessTask {
+                CurrentChild.clear(this) // needs the uid, so before delete()
+                user.delete()
             }
-            .addOnFailureListener(onFailure)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Account deleted.", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                })
+            }
+            .addOnFailureListener { e ->
+                // The login still exists, so trying again picks up where this stopped
+                Toast.makeText(this, "Couldn't delete the account: ${e.message}. Please try again.", Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun goToNextActivity() {

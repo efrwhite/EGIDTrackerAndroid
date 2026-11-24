@@ -78,6 +78,22 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return documents
     }
 
+    /** Deletes a child's saved documents: the files on this device and their rows. */
+    fun deleteDocumentsForChild(context: Context, childId: String) {
+        val db = writableDatabase
+        db.query(
+            DocumentEntry.TABLE_NAME, arrayOf(DocumentEntry.COLUMN_NAME_URL),
+            "${DocumentEntry.COLUMN_NAME_CHILD_ID} = ?", arrayOf(childId), null, null, null
+        ).use { c ->
+            while (c.moveToNext()) {
+                val url = c.getString(0) ?: continue
+                // Uploaded files are stored by path; camera photos by the app's own photo URI
+                if (url.startsWith("/")) java.io.File(url).delete() else Photos.deleteIfOwned(context, url)
+            }
+        }
+        db.delete(DocumentEntry.TABLE_NAME, "${DocumentEntry.COLUMN_NAME_CHILD_ID} = ?", arrayOf(childId))
+    }
+
     object DocumentEntry : BaseColumns {
         const val TABLE_NAME = "documents"
         const val COLUMN_NAME_CHILD_ID = "childId"

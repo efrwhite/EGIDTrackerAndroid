@@ -172,7 +172,8 @@ class HomeActivity : AppCompatActivity() {
 
                 val loggedDays = food.documents.mapNotNull { it.getString("date") }.toMutableSet()
                 symptoms.documents.mapNotNullTo(loggedDays) { doc ->
-                    doc.getTimestamp("date")?.let { dayFormat.format(it.toDate()) }
+                    // Skip records whose date isn't a timestamp rather than crash on them
+                    (doc.get("date") as? Timestamp)?.let { dayFormat.format(it.toDate()) }
                 }
                 val latestScore = symptoms.documents.firstOrNull()?.get("totalScore") as? Number
 
