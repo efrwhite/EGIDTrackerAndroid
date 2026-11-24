@@ -94,6 +94,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".AddCaregiverActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".AddChildActivity"
             android:screenOrientation="portrait"

@@ -592,4 +592,7 @@
     <string name="report_latest_symptoms">Symptoms on %1$s: %2$s</string>
     <string name="report_no_symptoms">No yes/no symptoms reported in these scores.</string>
     <string name="report_score_label">Total score</string>
+    <string name="add_caregiver_title">Add a Caregiver</string>
+    <string name="edit_caregiver_title">Edit Caregiver</string>
+    <string name="username_fixed">Used to log in. It can\'t be changed.</string>
 </resources>
