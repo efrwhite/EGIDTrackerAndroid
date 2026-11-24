@@ -60,7 +60,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Light" />
         <activity android:name=".ProfilesActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EGIDTracker.Page" />
         <activity android:name=".FoodTrackerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page" />

@@ -478,7 +478,6 @@
     <string name="delete_account_title">Delete account?</string>
     <string name="delete_account_message">This permanently deletes your account and all your child and caregiver profiles. Enter your password to confirm.</string>
     <string name="error_wrong_password">Incorrect password.</string>
-    <string name="active_child">Active: %1$s</string>
     <string name="no_diet">No diet</string>
     <string name="edit">Edit</string>
     <string name="view">View</string>
@@ -595,4 +594,15 @@
     <string name="add_caregiver_title">Add a Caregiver</string>
     <string name="edit_caregiver_title">Edit Caregiver</string>
     <string name="username_fixed">Used to log in. It can\'t be changed.</string>
+    <string name="children">Children</string>
+    <string name="caregivers">Caregivers</string>
+    <string name="profiles_child_hint">Tap a child to track them on Home.</string>
+    <string name="no_children">Your children will show here.</string>
+    <string name="no_caregivers">Caregivers will show here.</string>
+    <string name="add_child_button">Add child</string>
+    <string name="add_caregiver_button">Add caregiver</string>
+    <string name="selected">Selected</string>
+    <string name="account_holder_you">You · account holder</string>
+    <string name="age_years">Age %1$d</string>
+    <string name="age_under_one">Under 1</string>
 </resources>
