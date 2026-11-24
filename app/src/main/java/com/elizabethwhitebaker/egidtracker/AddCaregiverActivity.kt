@@ -52,6 +52,7 @@ class AddCaregiverActivity : AppCompatActivity() {
      * Delete Account.
      */
     private var isAccountHolder = false
+    private var photoUrl: String? = null // the saved photo, deleted from this device on removal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +68,9 @@ class AddCaregiverActivity : AppCompatActivity() {
 
         imageView.setImageResource(R.drawable.default_profile_picture)
 
-        deleteAccountButton.setOnClickListener { deleteAccount() }
-        deleteAccountButton.visibility = View.GONE // shown once we know it's the account holder
+        // The account holder's profile deletes the whole account; other caregivers are just removed
+        deleteAccountButton.setOnClickListener { if (isAccountHolder) deleteAccount() else confirmRemoveCaregiver() }
+        deleteAccountButton.visibility = View.GONE // shown once the caregiver has loaded
         initLaunchers()
 
         caregiverId = intent.getStringExtra("caregiverId")
@@ -179,7 +181,9 @@ class AddCaregiverActivity : AppCompatActivity() {
                 lastNameEditText.setText(caregiverSnapshot.getString("lastName") ?: "")
 
                 isAccountHolder = caregiverSnapshot.getBoolean("isAccountHolder") == true
-                deleteAccountButton.visibility = if (isAccountHolder) View.VISIBLE else View.GONE
+                deleteAccountButton.setText(if (isAccountHolder) R.string.delete_account else R.string.remove_caregiver)
+                deleteAccountButton.visibility = View.VISIBLE
+                photoUrl = caregiverSnapshot.getString("imageUrl")
 
                 val parentUserId = caregiverSnapshot.getString("parentUserId") ?: ""
                 fetchUsernameFromUsers(parentUserId)
@@ -356,6 +360,29 @@ class AddCaregiverActivity : AppCompatActivity() {
                 // The login still exists, so trying again picks up where this stopped
                 Toast.makeText(this, "Couldn't delete the account: ${e.message}. Please try again.", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun confirmRemoveCaregiver() {
+        val id = caregiverId ?: return
+        val name = firstNameEditText.text.toString().trim()
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.remove_caregiver_title, name))
+            .setMessage(getString(R.string.remove_caregiver_message, name))
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.remove_caregiver) { _, _ ->
+                deleteAccountButton.isEnabled = false
+                awaitSave(Firebase.firestore.collection("Caregivers").document(id).delete(),
+                    onSaved = { queued ->
+                        Photos.deleteIfOwned(this, photoUrl)
+                        toastSaved(getString(R.string.caregiver_removed, name), queued)
+                        goToNextActivity()
+                    },
+                    onFailed = { e ->
+                        deleteAccountButton.isEnabled = true
+                        Toast.makeText(this, "Failed to remove caregiver: ${e.message}", Toast.LENGTH_SHORT).show()
+                    })
+            }
+            .show()
     }
 
     private fun goToNextActivity() {

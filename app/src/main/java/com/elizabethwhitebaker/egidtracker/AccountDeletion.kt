@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -37,11 +38,8 @@ object AccountDeletion {
                 val children = childrenTask.result.documents
 
                 // 1. Each child's health records, and the account's custom resources
-                val recordQueries = children.flatMap { child ->
-                    CHILD_SUBCOLLECTIONS.map { child.reference.collection(it).get() } +
-                        db.collection("FoodEntries").document(child.id).collection("Entries").get() +
-                        CHILD_RECORD_COLLECTIONS.map { db.collection(it).whereEqualTo("childId", child.id).get() }
-                } + db.collection("CustomResources").whereEqualTo("userId", uid).get()
+                val recordQueries = children.flatMap { childRecordQueries(it) } +
+                    db.collection("CustomResources").whereEqualTo("userId", uid).get()
 
                 Tasks.whenAllSuccess<QuerySnapshot>(recordQueries)
                     .continueWithTask { records ->
@@ -54,15 +52,51 @@ object AccountDeletion {
                     }
                     // 3. Files kept on this device: saved documents and photos
                     .onSuccessTask {
-                        val dbHelper = DBHelper(appContext)
-                        children.forEach { child ->
-                            dbHelper.deleteDocumentsForChild(appContext, child.id)
-                            Photos.deleteIfOwned(appContext, child.getString("imageUrl"))
-                        }
-                        dbHelper.close()
+                        deleteLocalChildData(appContext, children)
                         Tasks.forResult<Void>(null)
                     }
             }
+    }
+
+    /**
+     * Deletes one child: their records first (the rules only allow that while the child
+     * exists), then the child, then their documents and photo on this device.
+     */
+    fun deleteChild(context: Context, child: DocumentSnapshot): Task<Void> {
+        val appContext = context.applicationContext
+        return Tasks.whenAllSuccess<QuerySnapshot>(childRecordQueries(child))
+            .continueWithTask { records ->
+                deleteInBatches(records.result.flatMap { snap -> snap.documents.map { it.reference } })
+            }
+            // Separately, after: batches run in parallel, and records left in a batch that
+            // landed after the child's would be refused
+            .onSuccessTask { child.reference.delete() }
+            .onSuccessTask {
+                deleteLocalChildData(appContext, listOf(child))
+                Tasks.forResult<Void>(null)
+            }
+    }
+
+    /**
+     * Queries for everything recorded about [child]: scores, food log, medications, etc. From the
+     * server only: the phone's copy may be missing records, which would be left behind
+     * unreachable once the child is gone. Offline, this fails instead.
+     */
+    private fun childRecordQueries(child: DocumentSnapshot): List<Task<QuerySnapshot>> {
+        val db = Firebase.firestore
+        return CHILD_SUBCOLLECTIONS.map { child.reference.collection(it).get(Source.SERVER) } +
+            db.collection("FoodEntries").document(child.id).collection("Entries").get(Source.SERVER) +
+            CHILD_RECORD_COLLECTIONS.map { db.collection(it).whereEqualTo("childId", child.id).get(Source.SERVER) }
+    }
+
+    /** Saved documents and photos kept on this device for [children]. */
+    private fun deleteLocalChildData(context: Context, children: List<DocumentSnapshot>) {
+        val dbHelper = DBHelper(context)
+        children.forEach { child ->
+            dbHelper.deleteDocumentsForChild(context, child.id)
+            Photos.deleteIfOwned(context, child.getString("imageUrl"))
+        }
+        dbHelper.close()
     }
 
     private fun deleteOwnerDocuments(

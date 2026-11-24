@@ -64,7 +64,8 @@
         <activity android:name=".PlanActivity"
             android:theme="@style/Theme.EGIDTracker.Light" />
         <activity android:name=".SymptomCheckerActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:theme="@style/Theme.EGIDTracker.Page"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".DiagnosedActivity" />
         <activity android:name=".EoECausesActivity" />
         <activity android:name=".MoreInfoActivity" />

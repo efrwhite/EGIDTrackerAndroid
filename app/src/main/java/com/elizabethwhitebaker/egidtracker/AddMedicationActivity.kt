@@ -16,7 +16,7 @@ import java.util.Calendar
 
 /**
  * Adds a medication, or edits one (extra: medicationId). A discontinued medication opens
- * read-only except for its notes.
+ * read-only except for its notes; switching Discontinue off resumes it (unlocks it for editing).
  */
 class AddMedicationActivity : AppCompatActivity() {
 
@@ -30,6 +30,7 @@ class AddMedicationActivity : AppCompatActivity() {
     private lateinit var saveButton: Button
 
     private val childId by lazy { CurrentChild.getId(this) }
+    private var wasDiscontinued = false // opened from Past medications
 
     private fun today() = Calendar.getInstance().apply {
         set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
@@ -57,6 +58,7 @@ class AddMedicationActivity : AppCompatActivity() {
             // Discontinuing needs an end date; today is the usual answer
             findViewById<TextView>(R.id.endDateLabel).setText(if (checked) R.string.end_date else R.string.end_date_optional)
             if (checked && endDate.date == null) endDate.date = today()
+            if (!checked && wasDiscontinued) resume()
         }
 
         medicationId?.let { loadMedication(it) }
@@ -77,20 +79,35 @@ class AddMedicationActivity : AppCompatActivity() {
                 endDate.stored = doc.getString("endDate").orEmpty()
                 discontinue.isChecked = doc.getBoolean("discontinue") ?: false
 
-                // A discontinued medication is history: only its notes can still change
+                // A discontinued medication is history: only its notes can still change, unless
+                // Discontinue is switched off to resume it
                 if (discontinue.isChecked) {
+                    wasDiscontinued = true
                     setupPageHeader(R.string.view_medication)
-                    medNameLayout.isEnabled = false
-                    findViewById<TextInputLayout>(R.id.dosageLayout).isEnabled = false
-                    startDate.isEnabled = false
-                    endDate.isEnabled = false
-                    discontinue.isEnabled = false
+                    setDetailsEnabled(false)
                     saveButton.setText(R.string.save_notes)
                 }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to load medication: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun setDetailsEnabled(enabled: Boolean) {
+        medNameLayout.isEnabled = enabled
+        findViewById<TextInputLayout>(R.id.dosageLayout).isEnabled = enabled
+        startDate.isEnabled = enabled
+        endDate.isEnabled = enabled
+    }
+
+    /** Taking it again: back to Current on save. Its old end date is over, so it's cleared. */
+    private fun resume() {
+        wasDiscontinued = false
+        setupPageHeader(R.string.edit_medication)
+        setDetailsEnabled(true)
+        endDate.date = null
+        saveButton.setText(R.string.save)
+        Toast.makeText(this, R.string.medication_resumed_hint, Toast.LENGTH_SHORT).show()
     }
 
     private fun saveMedication() {

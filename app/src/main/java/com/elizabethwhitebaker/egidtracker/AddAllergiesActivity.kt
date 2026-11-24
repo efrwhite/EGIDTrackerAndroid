@@ -18,7 +18,8 @@ import com.google.firebase.ktx.Firebase
 
 /**
  * Adds an allergen, or edits one (extra: allergenId). Cleared allergens open view-only
- * (isViewOnly): everything is locked except the notes.
+ * (isViewOnly): everything is locked except the notes, until Allergen Cleared is switched off
+ * to make it current again.
  */
 class AddAllergiesActivity : AppCompatActivity() {
 
@@ -40,11 +41,12 @@ class AddAllergiesActivity : AppCompatActivity() {
 
     private val childId by lazy { CurrentChild.getId(this) }
     private val allergenId by lazy { intent.getStringExtra("allergenId") }
-    private val isViewOnly by lazy { intent.getBooleanExtra("isViewOnly", false) }
+    private var isViewOnly = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_allergies)
+        isViewOnly = intent.getBooleanExtra("isViewOnly", false)
         setupPageHeader(when {
             isViewOnly -> R.string.view_allergen
             allergenId != null -> R.string.edit_allergen
@@ -69,6 +71,7 @@ class AddAllergiesActivity : AppCompatActivity() {
         allergenName.doAfterTextChanged { nameLayout.error = null }
         cleared.setOnCheckedChangeListener { _, checked ->
             findViewById<View>(R.id.clearedDateGroup).visibility = if (checked) View.VISIBLE else View.GONE
+            if (!checked && isViewOnly) makeCurrent()
         }
 
         if (isViewOnly) {
@@ -102,13 +105,25 @@ class AddAllergiesActivity : AppCompatActivity() {
             }
     }
 
-    private fun lockAllButNotes() {
-        nameLayout.isEnabled = false
-        igE.isEnabled = false
-        cleared.isEnabled = false
-        severityLayout.isEnabled = false
-        diagnosisDate.isEnabled = false
-        clearedDate.isEnabled = false
+    /** The Allergen Cleared switch stays usable, to undo clearing. */
+    private fun lockAllButNotes() = setDetailsEnabled(false)
+
+    private fun setDetailsEnabled(enabled: Boolean) {
+        nameLayout.isEnabled = enabled
+        igE.isEnabled = enabled
+        severityLayout.isEnabled = enabled
+        diagnosisDate.isEnabled = enabled
+        clearedDate.isEnabled = enabled
+    }
+
+    /** Cleared by mistake, or the allergy came back: editable again, current on save. */
+    private fun makeCurrent() {
+        isViewOnly = false
+        setupPageHeader(R.string.edit_allergen)
+        setDetailsEnabled(true)
+        clearedDate.date = null
+        saveButton.setText(R.string.save)
+        Toast.makeText(this, R.string.allergen_resumed_hint, Toast.LENGTH_SHORT).show()
     }
 
     private fun saveAllergen() {

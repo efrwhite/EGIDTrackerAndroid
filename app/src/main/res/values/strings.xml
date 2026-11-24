@@ -569,4 +569,19 @@
     <string name="add_a_child">Add a child</string>
     <string name="saved_offline">Saved. It will sync when you\'re back online.</string>
     <string name="sync_failed">Some changes couldn\'t be saved to your account. Please check and try again.</string>
+    <string name="this_child">this child</string>
+    <string name="delete_child">Delete child</string>
+    <string name="delete_child_title">Delete %1$s?</string>
+    <string name="delete_child_message">This permanently deletes %1$s and everything recorded for them: scores, food log, medications, allergens, exposures, endoscopy results and documents. It can\'t be undone.</string>
+    <string name="child_deleted">%1$s was deleted</string>
+    <string name="error_delete_child">Couldn\'t delete. Check your internet connection and try again.</string>
+    <string name="remove_caregiver">Remove caregiver</string>
+    <string name="remove_caregiver_title">Remove %1$s?</string>
+    <string name="remove_caregiver_message">%1$s will be removed from your caregivers. Your children\'s records aren\'t affected.</string>
+    <string name="caregiver_removed">%1$s was removed</string>
+    <string name="medication_resumed_hint">Save to move it back to current medications</string>
+    <string name="allergen_resumed_hint">Save to move it back to current allergens</string>
+    <string name="symptom_key">"0: none    1: mild    2: moderate\n3: severe    4: worst"</string>
+    <string name="symptoms_rated">How often, and how bad</string>
+    <string name="symptoms_yes_no">Does your child have any of these?</string>
 </resources>

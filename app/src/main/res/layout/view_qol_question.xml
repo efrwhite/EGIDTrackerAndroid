@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- One questionnaire item: the question, then five 0-4 answer buttons (QoLActivity) -->
+<!-- One questionnaire item: the question, then five 0-4 answer buttons (QoLActivity, SymptomCheckerActivity) -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         android:textSize="15sp"
         tools:text="I have chest pain, ache, or hurt" />
 
-    <!-- Five separate answer squares; QoLActivity keeps only one checked -->
+    <!-- Five separate answer squares; the Activity keeps only one checked -->
     <LinearLayout
         android:id="@+id/answerGroup"
         android:layout_width="match_parent"

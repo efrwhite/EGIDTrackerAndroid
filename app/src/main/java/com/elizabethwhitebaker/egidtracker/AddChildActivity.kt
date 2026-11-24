@@ -25,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -93,6 +94,10 @@ class AddChildActivity : AppCompatActivity() {
             childId != null -> {
                 title.setText(R.string.edit_child)
                 fetchAndPopulateChildData(childId!!)
+                findViewById<View>(R.id.deleteChildLink).apply {
+                    visibility = View.VISIBLE
+                    setOnClickListener { confirmDeleteChild(childId!!) }
+                }
             }
             isFirstTimeUser -> {
                 // Sign-up: explain the step, offer Skip, and make Back skip too (Register is done)
@@ -229,6 +234,32 @@ class AddChildActivity : AppCompatActivity() {
     private fun onSaveFailed() {
         saveButton.isEnabled = true
         Toast.makeText(this, R.string.error_save_child, Toast.LENGTH_LONG).show()
+    }
+
+    private fun confirmDeleteChild(id: String) {
+        val name = firstNameEditText.text.toString().trim().ifEmpty { getString(R.string.this_child) }
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.delete_child_title, name))
+            .setMessage(getString(R.string.delete_child_message, name))
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.delete) { _, _ -> deleteChild(id, name) }
+            .show()
+    }
+
+    /** Needs a connection: see AccountDeletion.childRecordQueries. */
+    private fun deleteChild(id: String, name: String) {
+        saveButton.isEnabled = false
+        Firebase.firestore.collection("Children").document(id).get(Source.SERVER)
+            .onSuccessTask { child -> AccountDeletion.deleteChild(this, child) }
+            .addOnSuccessListener {
+                if (CurrentChild.getId(this) == id) CurrentChild.clear(this) // Home picks another
+                Toast.makeText(this, getString(R.string.child_deleted, name), Toast.LENGTH_SHORT).show()
+                goToNextScreen()
+            }
+            .addOnFailureListener {
+                saveButton.isEnabled = true
+                Toast.makeText(this, R.string.error_delete_child, Toast.LENGTH_LONG).show()
+            }
     }
 
     /** Sign-up continues to Home; adding or editing from Profiles returns to Profiles. */
