@@ -14,6 +14,8 @@
     <!-- Permission to use camera -->
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- Every screen is portrait-only: they don't save their state across rotation,
+         and the layouts are designed for portrait -->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -37,6 +39,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.EGIDTracker.Landing">
             <intent-filter>
@@ -46,73 +49,109 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignInActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".SignUpActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".HomeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Light" />
-        <activity android:name=".ProfilesActivity" />
+        <activity android:name=".ProfilesActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".FoodTrackerActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page" />
         <activity android:name=".EducationActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Light" />
         <activity android:name=".QoLActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".PlanActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Light" />
         <activity android:name=".SymptomCheckerActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".DiagnosedActivity" />
-        <activity android:name=".EoECausesActivity" />
-        <activity android:name=".MoreInfoActivity" />
-        <activity android:name=".SymptomsActivity" />
-        <activity android:name=".TreatmentActivity" />
-        <activity android:name=".WhatIsEoEActivity" />
-        <activity android:name=".WhoIsAffectedActivity" />
+        <activity android:name=".DiagnosedActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".EoECausesActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".MoreInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".SymptomsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".TreatmentActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".WhatIsEoEActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".WhoIsAffectedActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".AddCaregiverActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".AddChildActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".AddAllergiesActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".DocumentsActivity" />
+        <activity android:name=".DocumentsActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".MedicationsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page" />
         <activity android:name=".AddMedicationActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".AllergiesActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"/>
-        <activity android:name=".Diet1Activity"/>
-        <activity android:name=".Diet2Activity"/>
-        <activity android:name=".Diet4Activity"/>
-        <activity android:name=".Diet6Activity"/>
-        <activity android:name=".DietNoneActivity"/>
+        <activity android:name=".Diet1Activity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Diet2Activity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Diet4Activity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Diet6Activity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DietNoneActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ResultsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"/>
         <activity android:name=".ReportActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page" />
         <activity android:name=".DBHelper"
             tools:ignore="Instantiatable" />
         <activity android:name=".AddFoodActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".EndoscopyActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".EndoscopyButtonsActivity"/>
+        <activity android:name=".EndoscopyButtonsActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".AccidentalExposureActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name="CustomResourcesActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name="AddCustomResourceActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
 
 
