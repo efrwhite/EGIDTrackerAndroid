@@ -111,6 +111,9 @@ data class ListRow(
     val title: String,
     val subtitle: String? = null,
     val action: String? = null,
+    /** When set, tapping [action] does this instead of [onClick] (e.g. open vs. Edit). */
+    val onAction: (() -> Unit)? = null,
+    // Last, so callers' trailing lambda `ListRow(...) { ... }` stays the row's onClick
     val onClick: (() -> Unit)? = null
 )
 
@@ -130,6 +133,10 @@ fun fillList(rowsContainer: ViewGroup, emptyView: View, rows: List<ListRow>) {
         view.findViewById<TextView>(R.id.rowAction).apply {
             text = row.action
             visibility = if (row.action.isNullOrBlank()) View.GONE else View.VISIBLE
+            row.onAction?.let { onAction ->
+                setOnClickListener { onAction() }
+                contentDescription = "${row.action} ${row.title}"
+            }
         }
         row.onClick?.let { onClick -> view.setOnClickListener { onClick() } }
         rowsContainer.addView(view)

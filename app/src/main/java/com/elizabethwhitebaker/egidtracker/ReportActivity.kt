@@ -97,6 +97,9 @@ class ReportActivity : AppCompatActivity() {
         axisLeft.apply {
             setDrawGridLines(false)
             axisMinimum = 0f
+            // Whole-number steps; otherwise small scores get 0.5 steps, labelled 0, 0, 1, 1…
+            granularity = 1f
+            isGranularityEnabled = true
             textColor = color(R.color.mutedPurple)
             valueFormatter = WholeNumbers
         }

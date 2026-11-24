@@ -106,7 +106,8 @@
             android:theme="@style/Theme.EGIDTracker.Page"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".DocumentsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EGIDTracker.Page" />
         <activity android:name=".MedicationsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page" />
@@ -144,7 +145,8 @@
             android:theme="@style/Theme.EGIDTracker.Page"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".EndoscopyButtonsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EGIDTracker.Page" />
         <activity android:name=".AccidentalExposureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.EGIDTracker.Page"

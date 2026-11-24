@@ -2,51 +2,43 @@ package com.elizabethwhitebaker.egidtracker
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
+/**
+ * Chooses which part of the endoscopy results to chart, then opens ReportActivity for it,
+ * passing on the date range chosen in Results (startDateMillis / endDateMillis).
+ */
 class EndoscopyButtonsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_endoscopy_buttons)
-        if (requireSelectedChild() == null) return // needs a child; offers to add one
+        setupPageHeader(R.string.endoscopy_report_title)
+        val childId = requireSelectedChild() ?: return // needs a child; offers to add one
 
-        val childId = intent.getStringExtra("childId") ?: return
-
-        val startDateMillis = intent.getLongExtra("startDateMillis", -1L).takeIf { it != -1L }
-        val endDateMillis = intent.getLongExtra("endDateMillis", -1L).takeIf { it != -1L }
-
-        findViewById<Button>(R.id.eoe).setOnClickListener {
-            navigateToReport("eoe", childId, startDateMillis, endDateMillis)
+        // Section (as ReportActivity expects it), its name, and what it charts
+        val sections = listOf(
+            Triple("eoe", R.string.eoe, R.string.section_eoe_detail),
+            Triple("colon", R.string.colon, R.string.section_colon_detail),
+            Triple("stomach", R.string.stomach, null),
+            Triple("duodenum", R.string.duodenum, null),
+        )
+        val rows = sections.map { (section, name, detail) ->
+            ListRow(getString(name), detail?.let(::getString), getString(R.string.view)) {
+                openReport(section, childId)
+            }
         }
-
-        findViewById<Button>(R.id.colon).setOnClickListener {
-            navigateToReport("colon", childId, startDateMillis, endDateMillis)
-        }
-
-        findViewById<Button>(R.id.stomach).setOnClickListener {
-            navigateToReport("stomach", childId, startDateMillis, endDateMillis)
-        }
-
-        findViewById<Button>(R.id.duodenum).setOnClickListener {
-            navigateToReport("duodenum", childId, startDateMillis, endDateMillis)
-        }
+        fillList(findViewById<LinearLayout>(R.id.sectionRows), findViewById(R.id.sectionsEmpty), rows)
     }
 
-    private fun navigateToReport(
-        section: String,
-        childId: String,
-        startDateMillis: Long?,
-        endDateMillis: Long?
-    ) {
-        val intent = Intent(this, ReportActivity::class.java).apply {
+    private fun openReport(section: String, childId: String) {
+        startActivity(Intent(this, ReportActivity::class.java).apply {
             putExtra("sourceActivity", "EndoscopyActivity")
             putExtra("section", section)
             putExtra("childId", childId)
-            startDateMillis?.let { putExtra("startDateMillis", it) }
-            endDateMillis?.let { putExtra("endDateMillis", it) }
-        }
-        startActivity(intent)
+            intent.getLongExtra("startDateMillis", -1L).takeIf { it != -1L }?.let { putExtra("startDateMillis", it) }
+            intent.getLongExtra("endDateMillis", -1L).takeIf { it != -1L }?.let { putExtra("endDateMillis", it) }
+        })
     }
 }

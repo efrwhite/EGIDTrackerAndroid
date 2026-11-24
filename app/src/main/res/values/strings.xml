@@ -605,4 +605,21 @@
     <string name="account_holder_you">You · account holder</string>
     <string name="age_years">Age %1$d</string>
     <string name="age_under_one">Under 1</string>
+    <string name="childs_documents">%1$s\'s documents</string>
+    <string name="documents_hint">Lab results, reports and photos, kept on this phone. Tap one to open it.</string>
+    <string name="no_documents">Documents you add will show here.</string>
+    <string name="add_document">Add document</string>
+    <string name="take_photo">Take photo</string>
+    <string name="choose_file">Choose a file</string>
+    <string name="rename">Rename</string>
+    <string name="rename_document">Rename document</string>
+    <string name="document_name">Name</string>
+    <string name="delete_document_title">Delete %1$s?</string>
+    <string name="delete_document_message">It\'s removed from this phone and can\'t be recovered.</string>
+    <string name="document_added_on">Added %1$s</string>
+    <string name="photo_on">Photo %1$s</string>
+    <string name="endoscopy_report_title">Endoscopy report</string>
+    <string name="choose_section">Choose what to chart</string>
+    <string name="section_eoe_detail">Esophagus: upper, middle and lower</string>
+    <string name="section_colon_detail">Right, middle and left colon</string>
 </resources>
