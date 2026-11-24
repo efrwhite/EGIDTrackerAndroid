@@ -162,19 +162,28 @@ class SignUpActivity : AppCompatActivity() {
                     "phone" to phone
                 )
 
-                // Profile and username claim together: if the username was taken in the
-                // meantime, the rules reject the claim and neither is written
+                // The account holder is also the first caregiver, so their caregiver profile is
+                // created from the same names instead of asking for them again
+                val caregiverMap = hashMapOf(
+                    "firstName" to firstName,
+                    "lastName" to lastName,
+                    "parentUserId" to user.uid,
+                    "imageUrl" to ""
+                )
+
+                // Profile, username claim and caregiver together: if the username was taken in
+                // the meantime, the rules reject the claim and nothing is written
                 val db = Firebase.firestore
                 db.batch()
                     .set(db.collection("Users").document(user.uid), userMap)
                     .set(Usernames.ref(username), Usernames.entry(user.uid, authEmail))
+                    .set(db.collection("Caregivers").document(), caregiverMap)
                     .commit()
                     .addOnSuccessListener {
-                        val intent = Intent(this, AddCaregiverActivity::class.java).apply {
-                            putExtra("username", username)
-                            putExtra("isFirstTimeUser", true)
-                        }
-                        startActivity(intent)
+                        // Last sign-up step: add their first child (can be skipped)
+                        startActivity(Intent(this, AddChildActivity::class.java).apply {
+                            putExtra(AddChildActivity.EXTRA_FIRST_TIME_USER, true)
+                        })
                         finish()
                     }
                     .addOnFailureListener { e ->

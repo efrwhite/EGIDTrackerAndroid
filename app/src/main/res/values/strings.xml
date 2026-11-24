@@ -291,15 +291,11 @@
 
     <!-- Strings for Child and Caregiver Profiles -->
     <string name="CaregiverTitle">Caregiver Profile</string>
-    <string name="ChildTitle">Child Profile</string>
     <string name="ChangePicture">Select Image</string>
     <string name="Username">Username</string>
     <string name="FirstName">First Name</string>
     <string name="LastName">Last Name</string>
     <string name="SaveContinue">Save and Continue</string>
-    <string name="Birthdate">Birthdate</string>
-    <string name="Gender">Gender</string>
-    <string name="Diet">Diet</string>
 
     <!-- Strings for Symptom Score Checker -->
     <string name="symptomScoreChecker">Symptom Score</string>
@@ -468,4 +464,22 @@
     <string name="error_username_taken">That username is taken. Try another one.</string>
     <string name="error_network">Couldn\'t reach the server. Check your internet connection and try again.</string>
     <string name="error_sign_up_failed">Couldn\'t create your account. Please try again.</string>
+    <string name="add_your_child">Add Your Child</string>
+    <string name="edit_child">Edit Child</string>
+    <string name="add_child_subtitle">Tell us about your child to start tracking their care. You can add more children later in Profiles.</string>
+    <string name="add_photo">Add photo</string>
+    <string name="change_photo">Change photo</string>
+    <string name="birth_date">Birth Date</string>
+    <string name="birth_date_hint">MM/DD/YYYY</string>
+    <string name="choose_birth_date">Choose birth date</string>
+    <string name="select_option">Select</string>
+    <string name="gender_optional">Gender (optional)</string>
+    <string name="continue_label">Continue</string>
+    <string name="save">Save</string>
+    <string name="skip_for_now">Skip for now</string>
+    <string name="child_saved">Child added</string>
+    <string name="child_updated">Child updated</string>
+    <string name="error_save_child">Couldn\'t save. Please try again.</string>
+    <string name="diet_change_reminder">You should have indicated which cleared allergen facilitated this diet change in the allergen notes field.</string>
+    <string name="reminder">Reminder</string>
 </resources>

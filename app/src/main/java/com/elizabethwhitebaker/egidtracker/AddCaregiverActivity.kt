@@ -338,19 +338,9 @@ class AddCaregiverActivity : AppCompatActivity() {
     }
 
     private fun goToNextActivity() {
-        val nextActivityIntent = when {
-            intent.getBooleanExtra("isFirstTimeUser", false) && mode == "add" -> {
-                Intent(this, AddChildActivity::class.java).apply {
-                    putExtra("isFirstTimeUser", true)
-                }
-            }
-            else -> {
-                Intent(this, ProfilesActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                }
-            }
-        }
-        startActivity(nextActivityIntent)
+        startActivity(Intent(this, ProfilesActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        })
         finish()
     }
 }

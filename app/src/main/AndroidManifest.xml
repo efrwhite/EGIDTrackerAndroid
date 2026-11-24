@@ -73,6 +73,7 @@
         <activity android:name=".AddCaregiverActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".AddChildActivity"
+            android:theme="@style/Theme.EGIDTracker.Auth"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".AddAllergiesActivity"
             android:windowSoftInputMode="adjustResize"/>

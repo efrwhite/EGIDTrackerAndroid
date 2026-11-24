@@ -1,319 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Add or edit a child. Also the last step of sign-up (see AddChildActivity.EXTRA_FIRST_TIME_USER). -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context="SignUpActivity"
     android:fillViewport="true"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".AddChildActivity">
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/primaryBackground"
-    tools:context="AddChildActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="40dp"
+            android:paddingTop="32dp"
+            android:paddingEnd="40dp"
+            android:paddingBottom="40dp">
 
-    <!-- Navigation Bar -->
+            <TextView
+                android:id="@+id/childTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/add_your_child"
+                android:textColor="@color/onPrimary"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Buttons -->
+            <!-- Shown only during sign-up -->
+            <TextView
+                android:id="@+id/childSubtitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center"
+                android:text="@string/add_child_subtitle"
+                android:textColor="@color/lavender"
+                android:textSize="15sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/childTitle"
+                tools:visibility="visible" />
 
-    <TextView
-        android:id="@+id/Diet"
-        android:layout_width="100dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        android:text="@string/Diet"
-        android:textColor="@color/primary"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/Gender"
-        tools:visibility="visible" />
+            <!-- Photo: same rounded salmon square as the Home card; tap to add or change -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/childPhoto"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/lightSalmon"
+                android:contentDescription="@string/add_photo"
+                android:padding="0.5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/childSubtitle"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.EGIDTracker.HomeAvatar"
+                app:strokeColor="@color/onPrimary"
+                app:strokeWidth="1dp" />
 
+            <TextView
+                android:id="@+id/childPhotoLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:fontFamily="@font/lato_bold"
+                android:padding="8dp"
+                android:text="@string/add_photo"
+                android:textColor="@color/lavender"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/childPhoto" />
 
-    <TextView
-        android:id="@+id/LastName"
-        android:layout_width="100dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        android:text="@string/LastName"
-        android:textColor="@color/primary"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/FirstName"
-        tools:visibility="visible" />
+            <!-- Splits the First / Last Name row in half -->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/nameGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="150dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_edittext_bg"
-        app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
-        app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/editText2"
-        android:textColor="#808080"
-        android:textColorHint="#808080"/>
+            <TextView
+                android:id="@+id/firstNameLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="12dp"
+                android:text="@string/first_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/childPhotoLink" />
 
-    <TextView
-        android:id="@+id/FirstName"
-        android:layout_width="100dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="18dp"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        android:text="@string/FirstName"
-        android:textColor="@color/primary"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-        app:layout_constraintHorizontal_bias="0.29"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        tools:visibility="visible" />
+            <TextView
+                android:id="@+id/lastNameLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginStart="6.5dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/last_name"
+                app:layout_constraintStart_toStartOf="@+id/nameGuide"
+                app:layout_constraintTop_toBottomOf="@+id/childPhotoLink" />
 
-    <RelativeLayout
-        android:id="@+id/navBar"
-        android:layout_width="411dp"
-        android:layout_height="48dp"
-        android:background="@color/primaryBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="6.5dp"
+                app:layout_constraintEnd_toStartOf="@+id/nameGuide"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstNameLabel">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/childFirstName"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName|textCapWords"
+                    android:maxLength="50"
+                    android:nextFocusDown="@+id/childLastName"
+                    android:nextFocusForward="@+id/childLastName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lastNameLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6.5dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/nameGuide"
+                app:layout_constraintTop_toBottomOf="@+id/lastNameLabel">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/childLastName"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName|textCapWords"
+                    android:maxLength="50" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Birth date: picked from a calendar, never typed -->
+            <TextView
+                android:id="@+id/birthDateLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="14dp"
+                android:text="@string/birth_date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstNameLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/birthDateLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:endIconContentDescription="@string/choose_birth_date"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/birthDateLabel">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/childBirthDate"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:hint="@string/birth_date_hint"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/genderLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="14dp"
+                android:text="@string/gender_optional"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/birthDateLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/genderLayout"
+                style="@style/Widget.EGIDTracker.AuthField.Dropdown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/genderLabel">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/childGender"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/select_option"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/dietLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="14dp"
+                android:text="@string/diet"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/genderLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dietLayout"
+                style="@style/Widget.EGIDTracker.AuthField.Dropdown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dietLabel">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/childDiet"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Same salmon pill as the Register and Login buttons -->
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/filled_roundedbg_accent"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0"
+                android:stateListAnimator="@null"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/onPrimary"
+                android:textSize="15sp"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dietLayout" />
+
+            <!-- Shown only during sign-up -->
+            <TextView
+                android:id="@+id/skipLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:fontFamily="@font/lato_bold"
+                android:padding="8dp"
+                android:text="@string/skip_for_now"
+                android:textColor="@color/lavender"
+                android:textSize="15sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/saveButton"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.elizabethwhitebaker.egidtracker.BackButton
+            android:id="@+id/backButton"
             style="@style/Widget.EGIDTracker.BackButton"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="4dp" />
-
-        <!-- Back Button -->
-        <!-- Page Title -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/ChildTitle"
-            android:textColor="@color/primary"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="120dp"
-        android:layout_height="108dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/navBar"
-        tools:src="@tools:sample/avatars" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="157dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:text="@string/ChangePicture"
-        app:backgroundTint="#BFB8A8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <!-- Guideline for Equal Division -->
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="220dp"
-        android:layout_height="48dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
-        android:text="@string/SaveContinue"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Diet"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/Birthdate"
-        android:layout_width="100dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        android:text="@string/Birthdate"
-        android:textColor="@color/primary"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/LastName"
-        tools:visibility="visible" />
-
-    <TextView
-        android:id="@+id/Gender"
-        android:layout_width="100dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        android:text="@string/Gender"
-        android:textColor="@color/primary"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@id/Birthdate"
-        tools:visibility="visible" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="150dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/rounded_edittext_bg"
-        app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
-        app:layout_constraintHorizontal_bias="0.51"
-        app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        android:textColor="#808080"
-        android:textColorHint="#808080"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/middleGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rowGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.08" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rowSpaceGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.03" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/pfpGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.09" />
-
-
-
-    <EditText
-        android:id="@+id/editTextDate"
-        android:layout_width="150dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:focusable="false"
-        android:clickable="true"
-        app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
-        app:layout_constraintStart_toEndOf="@id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
-        tools:background="@drawable/rounded_edittext_bg"
-        android:textColor="#808080"
-        android:textColorHint="#808080"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/GenderInput"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="150dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_edittext_bg"
-        app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
-        app:layout_constraintStart_toEndOf="@id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@id/editTextDate" >
-
-        <AutoCompleteTextView
-            android:id="@+id/GenderInputFields"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"
-            android:inputType="none"
-            android:textColor="#808080"
-            android:textColorHint="#808080"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/DietInput"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="150dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_edittext_bg"
-        app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
-        app:layout_constraintStart_toEndOf="@id/middleGuideline"
-        app:layout_constraintTop_toBottomOf="@id/GenderInput"
-        android:textColor="#808080"
-        android:textColorHint="#808080">
-
-        <AutoCompleteTextView
-            android:id="@+id/DietInputFields"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"
-            android:inputType="none"
-            android:textColor="#808080"
-            android:textColorHint="#808080"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_gravity="top|start"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp" />
+    </FrameLayout>
 </ScrollView>

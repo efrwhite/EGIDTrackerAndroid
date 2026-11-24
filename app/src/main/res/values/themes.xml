@@ -80,6 +80,24 @@
         <item name="android:letterSpacing">0</item>
     </style>
 
+    <!-- Same white field as AuthField, as a pick-from-a-list dropdown (gender, diet) -->
+    <style name="Widget.EGIDTracker.AuthField.Dropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxBackgroundColor">@color/onPrimary</item>
+        <item name="boxStrokeColor">@color/auth_field_stroke</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="endIconTint">@color/fieldHint</item>
+        <item name="errorTextColor">@color/lightSalmon</item>
+        <item name="boxStrokeErrorColor">@color/lightSalmon</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="errorTextAppearance">@style/TextAppearance.EGIDTracker.FieldNote</item>
+    </style>
+
     <style name="Widget.EGIDTracker.AuthField.EditText" parent="">
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:textSize">15sp</item>
