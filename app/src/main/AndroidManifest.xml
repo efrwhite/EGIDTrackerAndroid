@@ -96,7 +96,8 @@
         <activity android:name=".DietNoneActivity"/>
         <activity android:name=".ResultsActivity"
             android:theme="@style/Theme.EGIDTracker.Page"/>
-        <activity android:name=".ReportActivity"/>
+        <activity android:name=".ReportActivity"
+            android:theme="@style/Theme.EGIDTracker.Page" />
         <activity android:name=".DBHelper"
             tools:ignore="Instantiatable" />
         <activity android:name=".AddFoodActivity"

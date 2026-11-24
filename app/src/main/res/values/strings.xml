@@ -584,4 +584,12 @@
     <string name="symptom_key">"0: none    1: mild    2: moderate\n3: severe    4: worst"</string>
     <string name="symptoms_rated">How often, and how bad</string>
     <string name="symptoms_yes_no">Does your child have any of these?</string>
+    <string name="report_symptoms">Symptom score report</string>
+    <string name="report_qol">Quality of life report</string>
+    <string name="report_endoscopy">Endoscopy: %1$s</string>
+    <string name="send_report">Send report</string>
+    <string name="report_no_scores">No scores in this date range yet.</string>
+    <string name="report_latest_symptoms">Symptoms on %1$s: %2$s</string>
+    <string name="report_no_symptoms">No yes/no symptoms reported in these scores.</string>
+    <string name="report_score_label">Total score</string>
 </resources>
