@@ -5,7 +5,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
+import android.text.InputType
+import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseUser
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -14,15 +22,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class AddCaregiverActivity : AppCompatActivity() {
 
@@ -34,7 +37,6 @@ class AddCaregiverActivity : AppCompatActivity() {
     private lateinit var pictureButton: Button
     private lateinit var deleteAccountButton: Button
     private var imageUri: Uri? = null
-    private var currentPhotoPath: String = ""
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private lateinit var pickImageFromGalleryLauncher: ActivityResultLauncher<String>
 
@@ -93,11 +95,15 @@ class AddCaregiverActivity : AppCompatActivity() {
         }
 
         pickImageFromGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                imageUri = it
-                imageView.setImageURI(it)
-                saveImageInfoToDatabase()
+            uri ?: return@registerForActivityResult
+            val saved = Photos.copyToAppStorage(this, uri)
+            if (saved == null) {
+                Toast.makeText(this, "Couldn't use that photo", Toast.LENGTH_SHORT).show()
+                return@registerForActivityResult
             }
+            imageUri = saved
+            imageView.setImageURI(saved)
+            saveImageInfoToDatabase()
         }
     }
 
@@ -134,22 +140,13 @@ class AddCaregiverActivity : AppCompatActivity() {
     }
 
     private fun dispatchTakePictureIntent() {
-        val photoFile = createImageFile()
-        val uri = FileProvider.getUriForFile(this, "com.elizabethwhitebaker.egidtracker.fileprovider", photoFile)
+        val uri = Photos.newPhotoUri(this)
         imageUri = uri
         takePictureLauncher.launch(uri)
     }
 
     private fun pickImageFromGallery() {
         pickImageFromGalleryLauncher.launch("image/*")
-    }
-
-    private fun createImageFile(): File {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
-            currentPhotoPath = absolutePath
-        }
     }
 
     private fun saveImageInfoToDatabase() {
@@ -263,78 +260,107 @@ class AddCaregiverActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Deletes the account after the user re-enters their password. Firebase only deletes a login
+     * that signed in recently, so re-authenticating first means the final step can't fail after
+     * the data is already gone (which used to leave a login with no profile or username).
+     */
     private fun deleteAccount() {
-        val builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle("Delete Account")
-        builder.setMessage("Are you sure you want to delete your account? If you are the only caregiver, this will delete all your child profiles as well.")
-        builder.setPositiveButton("Delete") { dialog, _ ->
-            dialog.dismiss()
+        val user = firebaseAuth.currentUser ?: return
+        val email = user.email ?: return
 
-            val currentUser = firebaseAuth.currentUser
-            val uid = currentUser?.uid ?: return@setPositiveButton
-            val db = Firebase.firestore
-            val batch = db.batch()
-
-            // Step 1: Delete Children
-            db.collection("Children")
-                .whereEqualTo("parentUserId", uid)
-                .get()
-                .addOnSuccessListener { childrenSnapshot ->
-                    for (child in childrenSnapshot.documents) {
-                        batch.delete(child.reference)
-                    }
-
-                    // Step 2: Delete Caregivers
-                    db.collection("Caregivers")
-                        .whereEqualTo("parentUserId", uid)
-                        .get()
-                        .addOnSuccessListener { caregiverSnapshot ->
-                            for (caregiver in caregiverSnapshot.documents) {
-                                batch.delete(caregiver.reference)
-                            }
-
-                            // Step 3: Delete from Users collection (doc ID == UID), and free
-                            // the username for someone else
-                            db.collection("Users").document(uid).get()
-                                .addOnSuccessListener { userDoc ->
-                                    if (userDoc.exists()) {
-                                        batch.delete(userDoc.reference)
-                                        userDoc.getString("username")
-                                            ?.takeIf { Usernames.isValid(it) }
-                                            ?.let { batch.delete(Usernames.ref(it)) }
-                                    }
-
-                                    // Step 4: Commit batch
-                                    batch.commit()
-                                        .addOnSuccessListener {
-                                            // Step 5: Delete Authentication user
-                                            currentUser.delete()
-                                                .addOnSuccessListener {
-                                                    Toast.makeText(this, "Account deleted successfully.", Toast.LENGTH_LONG).show()
-                                                    startActivity(Intent(this, MainActivity::class.java).apply {
-                                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                                    })
-                                                }
-                                                .addOnFailureListener {
-                                                    Toast.makeText(this, "Failed to delete auth: ${it.message}", Toast.LENGTH_LONG).show()
-                                                }
-                                        }
-                                        .addOnFailureListener {
-                                            Toast.makeText(this, "Batch delete failed: ${it.message}", Toast.LENGTH_LONG).show()
-                                        }
-                                }
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, "Failed to delete caregiver: ${it.message}", Toast.LENGTH_LONG).show()
-                        }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Failed to delete children: ${it.message}", Toast.LENGTH_LONG).show()
-                }
+        val passwordLayout = TextInputLayout(this, null,
+            com.google.android.material.R.attr.textInputOutlinedStyle).apply {
+            endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
+            hint = getString(R.string.password)
+        }
+        val passwordInput = TextInputEditText(passwordLayout.context).apply {
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        passwordLayout.addView(passwordInput)
+        val padding = (20 * resources.displayMetrics.density).toInt()
+        val container = FrameLayout(this).apply {
+            setPadding(padding, padding / 2, padding, 0)
+            addView(passwordLayout)
         }
 
-        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-        builder.create().show()
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.delete_account_title)
+            .setMessage(R.string.delete_account_message)
+            .setView(container)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.delete, null) // set below, so a wrong password keeps it open
+            .show()
+
+        val deleteButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        deleteButton.setOnClickListener {
+            val password = passwordInput.text.toString()
+            if (password.isEmpty()) {
+                passwordLayout.error = getString(R.string.error_required)
+                return@setOnClickListener
+            }
+            deleteButton.isEnabled = false
+            user.reauthenticate(EmailAuthProvider.getCredential(email, password))
+                .addOnSuccessListener {
+                    dialog.dismiss()
+                    deleteAccountData(user)
+                }
+                .addOnFailureListener { e ->
+                    deleteButton.isEnabled = true
+                    passwordLayout.error = getString(
+                        if (e is FirebaseAuthInvalidCredentialsException) R.string.error_wrong_password
+                        else R.string.error_network
+                    )
+                }
+        }
+    }
+
+    /** Deletes the user's children, caregivers, profile and username, then the login itself. */
+    private fun deleteAccountData(user: FirebaseUser) {
+        val uid = user.uid
+        val db = Firebase.firestore
+        val batch = db.batch()
+        val onFailure = { e: Exception ->
+            Toast.makeText(this, "Couldn't delete the account: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+
+        db.collection("Children").whereEqualTo("parentUserId", uid).get()
+            .addOnSuccessListener { children ->
+                children.documents.forEach { batch.delete(it.reference) }
+
+                db.collection("Caregivers").whereEqualTo("parentUserId", uid).get()
+                    .addOnSuccessListener { caregivers ->
+                        caregivers.documents.forEach { batch.delete(it.reference) }
+
+                        // The profile (doc ID == UID), and the username so someone else can use it
+                        db.collection("Users").document(uid).get()
+                            .addOnSuccessListener { userDoc ->
+                                if (userDoc.exists()) {
+                                    batch.delete(userDoc.reference)
+                                    userDoc.getString("username")
+                                        ?.takeIf { Usernames.isValid(it) }
+                                        ?.let { batch.delete(Usernames.ref(it)) }
+                                }
+
+                                batch.commit()
+                                    .addOnSuccessListener {
+                                        CurrentChild.clear(this) // needs the uid, so before delete()
+                                        user.delete()
+                                            .addOnSuccessListener {
+                                                Toast.makeText(this, "Account deleted.", Toast.LENGTH_LONG).show()
+                                                startActivity(Intent(this, MainActivity::class.java).apply {
+                                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                                })
+                                            }
+                                            .addOnFailureListener(onFailure)
+                                    }
+                                    .addOnFailureListener(onFailure)
+                            }
+                            .addOnFailureListener(onFailure)
+                    }
+                    .addOnFailureListener(onFailure)
+            }
+            .addOnFailureListener(onFailure)
     }
 
     private fun goToNextActivity() {

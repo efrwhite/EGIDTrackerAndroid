@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -20,7 +19,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.widget.doAfterTextChanged
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,10 +27,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 /**
@@ -156,9 +152,13 @@ class AddChildActivity : AppCompatActivity() {
         }
         // The system picker needs no storage permission
         pickImageFromGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            uri?.let {
-                imageUri = it
-                showPhoto(it)
+            uri ?: return@registerForActivityResult
+            val saved = Photos.copyToAppStorage(this, uri)
+            if (saved == null) {
+                Toast.makeText(this, "Couldn't use that photo", Toast.LENGTH_SHORT).show()
+            } else {
+                imageUri = saved
+                showPhoto(saved)
             }
         }
         requestCameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -219,14 +219,14 @@ class AddChildActivity : AppCompatActivity() {
                 .addOnSuccessListener { doc ->
                     CurrentChild.set(this, doc.id, firstName)
                     Toast.makeText(this, R.string.child_saved, Toast.LENGTH_SHORT).show()
-                    goHome()
+                    goToNextScreen()
                 }
                 .addOnFailureListener { onSaveFailed() }
         } else {
             children.document(id).set(childMap, SetOptions.merge())
                 .addOnSuccessListener {
                     Toast.makeText(this, R.string.child_updated, Toast.LENGTH_SHORT).show()
-                    goHome()
+                    goToNextScreen()
                 }
                 .addOnFailureListener { onSaveFailed() }
         }
@@ -235,6 +235,19 @@ class AddChildActivity : AppCompatActivity() {
     private fun onSaveFailed() {
         saveButton.isEnabled = true
         Toast.makeText(this, R.string.error_save_child, Toast.LENGTH_LONG).show()
+    }
+
+    /** Sign-up continues to Home; adding or editing from Profiles returns to Profiles. */
+    private fun goToNextScreen() {
+        if (isFirstTimeUser) {
+            goHome()
+        } else {
+            // CLEAR_TOP recreates Profiles, so it reloads its lists (same as AddCaregiverActivity)
+            startActivity(Intent(this, ProfilesActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            })
+            finish()
+        }
     }
 
     private fun goHome() {
@@ -274,10 +287,7 @@ class AddChildActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val photoFile = File.createTempFile("JPEG_${timeStamp}_", ".jpg",
-            getExternalFilesDir(Environment.DIRECTORY_PICTURES))
-        val uri = FileProvider.getUriForFile(this, "com.elizabethwhitebaker.egidtracker.fileprovider", photoFile)
+        val uri = Photos.newPhotoUri(this)
         imageUri = uri
         takePictureLauncher.launch(uri)
     }

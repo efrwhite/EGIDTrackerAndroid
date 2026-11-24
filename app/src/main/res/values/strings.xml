@@ -482,4 +482,7 @@
     <string name="error_save_child">Couldn\'t save. Please try again.</string>
     <string name="diet_change_reminder">You should have indicated which cleared allergen facilitated this diet change in the allergen notes field.</string>
     <string name="reminder">Reminder</string>
+    <string name="delete_account_title">Delete account?</string>
+    <string name="delete_account_message">This permanently deletes your account and all your child and caregiver profiles. Enter your password to confirm.</string>
+    <string name="error_wrong_password">Incorrect password.</string>
 </resources>
