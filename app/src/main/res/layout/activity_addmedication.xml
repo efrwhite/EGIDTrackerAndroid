@@ -114,19 +114,18 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/discontinue_medication" />
 
-            <!-- Shown only when discontinuing -->
+            <!-- Optional while active (a planned end); required when discontinuing -->
             <LinearLayout
                 android:id="@+id/endDateGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/endDateLabel"
                     style="@style/Widget.EGIDTracker.PageLabel"
                     android:layout_marginTop="12dp"
-                    android:text="@string/end_date" />
+                    android:text="@string/end_date_optional" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/endDateLayout"
