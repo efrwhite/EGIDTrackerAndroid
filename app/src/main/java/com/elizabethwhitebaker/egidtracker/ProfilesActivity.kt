@@ -14,7 +14,7 @@ import com.google.firebase.ktx.Firebase
 
 class ProfilesActivity : AppCompatActivity() {
 
-    private lateinit var activePatientBadge: TextView
+    private lateinit var activeChildBadge: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,9 +25,9 @@ class ProfilesActivity : AppCompatActivity() {
         val childrenTableLayout: TableLayout = findViewById(R.id.childTableLayout)
         val caregiversTableLayout: TableLayout = findViewById(R.id.caregiverTableLayout)
 
-        activePatientBadge = findViewById(R.id.activePatientBadge)
+        activeChildBadge = findViewById(R.id.activeChildBadge)
 
-        updateActivePatientBadge(getCurrentChildName())
+        updateActiveChildBadge(getCurrentChildName())
 
         addChildLink.setOnClickListener {
             startActivity(Intent(this, AddChildActivity::class.java))
@@ -56,7 +56,7 @@ class ProfilesActivity : AppCompatActivity() {
                     // If this document is the active child, sync badge text (and saved name)
                     if (currentChildId != null && childId == currentChildId) {
                         saveCurrentChildName(childName)
-                        updateActivePatientBadge(childName)
+                        updateActiveChildBadge(childName)
                     }
 
                     addRowToTable(table, childId, childName, true)
@@ -107,7 +107,7 @@ class ProfilesActivity : AppCompatActivity() {
             if (childId != currentChildId) {
                 saveCurrentChildId(childId)
                 saveCurrentChildName(childName)
-                updateActivePatientBadge(childName)
+                updateActiveChildBadge(childName)
                 navigateToHome()
             } else {
                 Toast.makeText(this, "Currently selected", Toast.LENGTH_SHORT).show()
@@ -138,12 +138,12 @@ class ProfilesActivity : AppCompatActivity() {
 
     private fun saveCurrentChildName(childName: String) = CurrentChild.setName(this, childName)
 
-    private fun updateActivePatientBadge(childName: String?) {
+    private fun updateActiveChildBadge(childName: String?) {
         if (childName.isNullOrBlank()) {
-            activePatientBadge.visibility = View.GONE
+            activeChildBadge.visibility = View.GONE
         } else {
-            activePatientBadge.text = "Active: $childName"
-            activePatientBadge.visibility = View.VISIBLE
+            activeChildBadge.text = getString(R.string.active_child, childName)
+            activeChildBadge.visibility = View.VISIBLE
         }
     }
 

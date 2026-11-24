@@ -130,7 +130,9 @@ class HomeActivity : AppCompatActivity() {
         val name = listOfNotNull(firstName, lastName).joinToString(" ").trim()
         childNameTextView.text = name.ifEmpty { getString(R.string.no_child_selected) }
 
-        childDietTextView.text = diet
+        // Children without a diet are stored as "None"; show that as "No diet"
+        val noDiet = diet.equals("None", ignoreCase = true) || diet.equals("No Diet", ignoreCase = true)
+        childDietTextView.text = if (noDiet) getString(R.string.no_diet) else diet
         childDietTextView.visibility = if (diet.isNullOrBlank()) View.GONE else View.VISIBLE
 
         // No photo: the card shows the plain salmon avatar from the design

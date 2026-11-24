@@ -52,14 +52,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato_medium"
-        android:text="@string/patient"
+        android:text="@string/child_label"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@id/childSectionHeader"
         app:layout_constraintTop_toTopOf="@id/childSectionHeader"
         android:textColor="#808080"/>
 
     <TextView
-        android:id="@+id/activePatientBadge"
+        android:id="@+id/activeChildBadge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"

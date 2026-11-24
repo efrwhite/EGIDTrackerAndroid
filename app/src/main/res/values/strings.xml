@@ -400,7 +400,7 @@
     <string name="itemExposed">Exposed Item</string>
     <string name="itemName">Item Name</string>
     <string name="logOut">Log Out</string>
-    <string name="patient">Patient</string>
+    <string name="child_label">Child</string>
     <string name="clearedAllergens">Cleared Allergens</string>
     <string name="clearedAllergen">Allergen Cleared</string>
     <string name="igEAllergen">IgE Allergen</string>
@@ -485,4 +485,6 @@
     <string name="delete_account_title">Delete account?</string>
     <string name="delete_account_message">This permanently deletes your account and all your child and caregiver profiles. Enter your password to confirm.</string>
     <string name="error_wrong_password">Incorrect password.</string>
+    <string name="active_child">Active: %1$s</string>
+    <string name="no_diet">No diet</string>
 </resources>

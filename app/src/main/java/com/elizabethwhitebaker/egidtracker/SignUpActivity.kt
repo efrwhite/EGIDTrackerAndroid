@@ -168,7 +168,9 @@ class SignUpActivity : AppCompatActivity() {
                     "firstName" to firstName,
                     "lastName" to lastName,
                     "parentUserId" to user.uid,
-                    "imageUrl" to ""
+                    "imageUrl" to "",
+                    // Marks the account holder's own caregiver profile (see AddCaregiverActivity)
+                    "isAccountHolder" to true
                 )
 
                 // Profile, username claim and caregiver together: if the username was taken in

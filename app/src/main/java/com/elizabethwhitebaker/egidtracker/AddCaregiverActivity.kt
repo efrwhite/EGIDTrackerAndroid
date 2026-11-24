@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.text.InputType
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
@@ -24,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -44,6 +46,13 @@ class AddCaregiverActivity : AppCompatActivity() {
     private var caregiverId: String? = null
     private var mode: String = "add" // 'add' or 'edit'
 
+    /**
+     * True when editing the account holder's own caregiver profile (created at sign-up). Their
+     * name is also stored on Users/{uid}, so it's kept in sync, and only this profile shows
+     * Delete Account.
+     */
+    private var isAccountHolder = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_caregiver_profile)
@@ -59,6 +68,7 @@ class AddCaregiverActivity : AppCompatActivity() {
         imageView.setImageResource(R.drawable.default_profile_picture)
 
         deleteAccountButton.setOnClickListener { deleteAccount() }
+        deleteAccountButton.visibility = View.GONE // shown once we know it's the account holder
         initLaunchers()
 
         caregiverId = intent.getStringExtra("caregiverId")
@@ -168,6 +178,9 @@ class AddCaregiverActivity : AppCompatActivity() {
                 firstNameEditText.setText(caregiverSnapshot.getString("firstName") ?: "")
                 lastNameEditText.setText(caregiverSnapshot.getString("lastName") ?: "")
 
+                isAccountHolder = caregiverSnapshot.getBoolean("isAccountHolder") == true
+                deleteAccountButton.visibility = if (isAccountHolder) View.VISIBLE else View.GONE
+
                 val parentUserId = caregiverSnapshot.getString("parentUserId") ?: ""
                 fetchUsernameFromUsers(parentUserId)
 
@@ -213,22 +226,32 @@ class AddCaregiverActivity : AppCompatActivity() {
     private fun updateCaregiverInfo() {
         val firstName = firstNameEditText.text.toString().trim()
         val lastName = lastNameEditText.text.toString().trim()
-        val imageUrl = imageUri?.toString() ?: ""
 
         if (firstName.isEmpty() || lastName.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show()
             return
         }
 
+        val uid = firebaseAuth.currentUser?.uid ?: return
         caregiverId?.let { id ->
-            val userMap = hashMapOf(
+            val userMap = hashMapOf<String, Any>(
                 "firstName" to firstName,
                 "lastName" to lastName,
-                "parentUserId" to firebaseAuth.currentUser?.uid,
-                "imageUrl" to imageUrl
+                "parentUserId" to uid
             )
+            // Photo changes are saved as soon as they're picked or removed, so only write it here
+            // when one was picked; otherwise saving the name would erase the existing photo
+            imageUri?.let { userMap["imageUrl"] = it.toString() }
 
-            Firebase.firestore.collection("Caregivers").document(id).set(userMap)
+            val db = Firebase.firestore
+            val batch = db.batch()
+                .set(db.collection("Caregivers").document(id), userMap, SetOptions.merge())
+            if (isAccountHolder) {
+                // Same person as the account: keep the profile's name in step
+                batch.update(db.collection("Users").document(uid),
+                    mapOf("firstName" to firstName, "lastName" to lastName))
+            }
+            batch.commit()
                 .addOnSuccessListener {
                     Toast.makeText(this, "Caregiver updated successfully", Toast.LENGTH_SHORT).show()
                     goToNextActivity()
