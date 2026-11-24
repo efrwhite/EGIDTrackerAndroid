@@ -26,6 +26,7 @@ class SymptomCheckerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_symptom_score_checker)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         val saveButton: Button = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {

@@ -10,6 +10,7 @@ class EndoscopyButtonsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_endoscopy_buttons)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         val childId = intent.getStringExtra("childId") ?: return
 

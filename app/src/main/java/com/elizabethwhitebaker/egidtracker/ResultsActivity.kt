@@ -35,6 +35,7 @@ class ResultsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
         setupPageHeader(R.string.results)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         val childId = CurrentChild.getId(this) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_LONG).show()

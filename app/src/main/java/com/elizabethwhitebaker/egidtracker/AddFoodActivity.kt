@@ -31,6 +31,7 @@ class AddFoodActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_food)
         setupPageHeader(if (entryId == null) R.string.add_food_short else R.string.edit_food)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         foodNameLayout = findViewById(R.id.foodNameLayout)
         foodNameField = findViewById(R.id.foodNameField)
@@ -76,15 +77,15 @@ class AddFoodActivity : AppCompatActivity() {
             "notes" to notesField.text.toString().trim()
         )
         saveButton.isEnabled = false
-        ref.set(foodData, SetOptions.merge())
-            .addOnSuccessListener {
-                Toast.makeText(this, if (entryId == null) "Food added" else "Food updated", Toast.LENGTH_SHORT).show()
+        awaitSave(ref.set(foodData, SetOptions.merge()),
+            onSaved = { queued ->
+                toastSaved(if (entryId == null) "Food added" else "Food updated", queued)
                 finish()
-            }
-            .addOnFailureListener { e ->
+            },
+            onFailed = { e ->
                 saveButton.isEnabled = true
                 Toast.makeText(this, "Failed to save food: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            })
     }
 
     private fun confirmDelete() {
@@ -92,14 +93,15 @@ class AddFoodActivity : AppCompatActivity() {
             .setMessage(R.string.delete_food_confirm)
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.delete) { _, _ ->
-                entryRef()?.delete()
-                    ?.addOnSuccessListener {
-                        Toast.makeText(this, "Food entry deleted", Toast.LENGTH_SHORT).show()
+                val ref = entryRef() ?: return@setPositiveButton
+                awaitSave(ref.delete(),
+                    onSaved = { queued ->
+                        toastSaved("Food entry deleted", queued)
                         finish()
-                    }
-                    ?.addOnFailureListener { e ->
+                    },
+                    onFailed = { e ->
                         Toast.makeText(this, "Failed to delete food: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
+                    })
             }
             .show()
     }

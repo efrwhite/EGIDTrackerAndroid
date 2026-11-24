@@ -211,25 +211,19 @@ class AddChildActivity : AppCompatActivity() {
         imageUri?.let { childMap["imageUrl"] = it.toString() }
 
         saveButton.isEnabled = false
-        val children = Firebase.firestore.collection("Children")
-        val id = childId
-        if (id == null) {
-            childMap.putIfAbsent("imageUrl", "")
-            children.add(childMap)
-                .addOnSuccessListener { doc ->
-                    CurrentChild.set(this, doc.id, firstName)
-                    Toast.makeText(this, R.string.child_saved, Toast.LENGTH_SHORT).show()
-                    goToNextScreen()
-                }
-                .addOnFailureListener { onSaveFailed() }
-        } else {
-            children.document(id).set(childMap, SetOptions.merge())
-                .addOnSuccessListener {
-                    Toast.makeText(this, R.string.child_updated, Toast.LENGTH_SHORT).show()
-                    goToNextScreen()
-                }
-                .addOnFailureListener { onSaveFailed() }
+        val isNew = childId == null
+        if (isNew) childMap.putIfAbsent("imageUrl", "")
+        // A new document reference (rather than add()) gives the id right away, also offline
+        val ref = Firebase.firestore.collection("Children").let { children ->
+            childId?.let { children.document(it) } ?: children.document()
         }
+        awaitSave(ref.set(childMap, SetOptions.merge()),
+            onSaved = { queued ->
+                if (isNew) CurrentChild.set(this, ref.id, firstName)
+                toastSaved(getString(if (isNew) R.string.child_saved else R.string.child_updated), queued)
+                goToNextScreen()
+            },
+            onFailed = { onSaveFailed() })
     }
 
     private fun onSaveFailed() {

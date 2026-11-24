@@ -41,6 +41,7 @@ class EndoscopyActivity : AppCompatActivity() {
                 putExtra("childId", id)
             })
         }
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         dateField = DateField(this, findViewById(R.id.dateLayout))
         notes = findViewById(R.id.notesField)
@@ -70,15 +71,15 @@ class EndoscopyActivity : AppCompatActivity() {
         val results = Firebase.firestore.collection("Children").document(child).collection("EndoscopyResults")
         val ref = reportId?.let { results.document(it) } ?: results.document()
         saveButton.isEnabled = false
-        ref.set(data, SetOptions.merge())
-            .addOnSuccessListener {
-                Toast.makeText(this, "Endoscopy results saved", Toast.LENGTH_SHORT).show()
+        awaitSave(ref.set(data, SetOptions.merge()),
+            onSaved = { queued ->
+                toastSaved("Endoscopy results saved", queued)
                 finish()
-            }
-            .addOnFailureListener { e ->
+            },
+            onFailed = { e ->
                 saveButton.isEnabled = true
                 Toast.makeText(this, "Failed to save: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            })
     }
 
     private fun loadReport(id: String) {

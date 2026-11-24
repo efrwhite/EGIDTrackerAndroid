@@ -41,6 +41,7 @@ class MedicationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_medications)
         setupPageHeader(R.string.medications)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         findViewById<View>(R.id.addButton).setOnClickListener {
             startActivity(Intent(this, AddMedicationActivity::class.java))

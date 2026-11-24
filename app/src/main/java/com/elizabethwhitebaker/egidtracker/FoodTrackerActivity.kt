@@ -32,6 +32,7 @@ class FoodTrackerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_tracker)
         setupPageHeader(R.string.foodTracker)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         listLabel = findViewById(R.id.foodListLabel)
         rows = findViewById(R.id.foodRows)
@@ -50,6 +51,7 @@ class FoodTrackerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (CurrentChild.getId(this) == null) return // closing: onCreate stopped early
         loadFoodEntries() // also picks up changes made in AddFoodActivity
     }
 

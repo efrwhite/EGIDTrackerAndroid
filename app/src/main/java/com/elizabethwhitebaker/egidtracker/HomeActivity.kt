@@ -66,15 +66,19 @@ class HomeActivity : AppCompatActivity() {
         dayStreakStat = findViewById(R.id.dayStreakStat)
         symptomScoreStat = findViewById(R.id.symptomScoreStat)
 
-        fun opens(id: Int, screen: Class<*>) =
-            findViewById<View>(id).setOnClickListener { startActivity(Intent(this, screen)) }
+        fun opens(id: Int, screen: Class<*>, needsChild: Boolean = true) =
+            findViewById<View>(id).setOnClickListener {
+                // No child yet (e.g. skipped at sign-up): offer to add one instead
+                if (needsChild && CurrentChild.getId(this) == null) showAddChildFirst()
+                else startActivity(Intent(this, screen))
+            }
 
-        opens(R.id.childCard, ProfilesActivity::class.java)
+        opens(R.id.childCard, ProfilesActivity::class.java, needsChild = false)
         opens(R.id.planButton, PlanActivity::class.java)
         opens(R.id.foodTrackerButton, FoodTrackerActivity::class.java)
         opens(R.id.symptomCheckerButton, SymptomCheckerActivity::class.java)
         opens(R.id.QoLButton, QoLActivity::class.java)
-        opens(R.id.EOEedButton, EducationActivity::class.java)
+        opens(R.id.EOEedButton, EducationActivity::class.java, needsChild = false)
 
         findViewById<View>(R.id.logoutButton).setOnClickListener { confirmLogout() }
     }

@@ -48,6 +48,7 @@ class QoLActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qol_score_checker)
         setupPageHeader(R.string.qol_title, R.string.results) { openResults() }
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         dateField = DateField(this, findViewById(R.id.dateLayout))
         saveButton = findViewById(R.id.saveButton)
@@ -108,17 +109,19 @@ class QoLActivity : AppCompatActivity() {
             "date" to Timestamp(dateField.date!!)
         )
         saveButton.isEnabled = false
-        Firebase.firestore.collection("Children").document(childId)
-            .collection("Quality of Life Scores").add(data)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Answers saved", Toast.LENGTH_SHORT).show()
+        // A new document reference (rather than add()) so the write is applied locally right away
+        val write = Firebase.firestore.collection("Children").document(childId)
+            .collection("Quality of Life Scores").document().set(data)
+        awaitSave(write,
+            onSaved = { queued ->
+                toastSaved("Answers saved", queued)
                 openResults()
                 finish()
-            }
-            .addOnFailureListener { e ->
+            },
+            onFailed = { e ->
                 saveButton.isEnabled = true
                 Toast.makeText(this, "Failed to save answers: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            })
     }
 
     private fun openResults() {

@@ -17,6 +17,7 @@ class AllergiesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_allergies)
         setupPageHeader(R.string.allergens)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         findViewById<View>(R.id.addAllergenButton).setOnClickListener {
             startActivity(Intent(this, AddAllergiesActivity::class.java))

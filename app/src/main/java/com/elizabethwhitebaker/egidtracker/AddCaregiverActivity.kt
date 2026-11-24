@@ -213,14 +213,15 @@ class AddCaregiverActivity : AppCompatActivity() {
             "imageUrl" to imageUrl
         )
 
-        Firebase.firestore.collection("Caregivers").add(userMap)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Caregiver added successfully", Toast.LENGTH_SHORT).show()
+        // A new document reference (rather than add()) so the write is applied locally right away
+        awaitSave(Firebase.firestore.collection("Caregivers").document().set(userMap),
+            onSaved = { queued ->
+                toastSaved("Caregiver added", queued)
                 goToNextActivity()
-            }
-            .addOnFailureListener { e ->
+            },
+            onFailed = { e ->
                 Toast.makeText(this, "Failed to add caregiver: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            })
     }
 
     private fun updateCaregiverInfo() {
@@ -251,14 +252,14 @@ class AddCaregiverActivity : AppCompatActivity() {
                 batch.update(db.collection("Users").document(uid),
                     mapOf("firstName" to firstName, "lastName" to lastName))
             }
-            batch.commit()
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Caregiver updated successfully", Toast.LENGTH_SHORT).show()
+            awaitSave(batch.commit(),
+                onSaved = { queued ->
+                    toastSaved("Caregiver updated", queued)
                     goToNextActivity()
-                }
-                .addOnFailureListener { e ->
+                },
+                onFailed = { e ->
                     Toast.makeText(this, "Failed to update caregiver: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+                })
         } ?: Toast.makeText(this, "Error: Caregiver ID is missing.", Toast.LENGTH_SHORT).show()
     }
 

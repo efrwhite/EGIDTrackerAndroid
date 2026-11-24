@@ -2,11 +2,13 @@ package com.elizabethwhitebaker.egidtracker
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.StringRes
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -134,4 +136,29 @@ fun fillList(rowsContainer: ViewGroup, emptyView: View, rows: List<ListRow>) {
     }
     rowsContainer.visibility = if (rows.isEmpty()) View.GONE else View.VISIBLE
     emptyView.visibility = if (rows.isEmpty()) View.VISIBLE else View.GONE
+}
+
+/**
+ * The selected child's id. If none is selected (e.g. Add Child was skipped at sign-up), explains
+ * that this screen needs a child, offers to add one, closes the screen and returns null:
+ * `val childId = requireSelectedChild() ?: return`.
+ */
+fun Activity.requireSelectedChild(): String? {
+    CurrentChild.getId(this)?.let { return it }
+    showAddChildFirst { finish() }
+    return null
+}
+
+/** "Add your child first" dialog; [onNotAdded] runs when the user cancels instead. */
+fun Activity.showAddChildFirst(onNotAdded: () -> Unit = {}) {
+    MaterialAlertDialogBuilder(this)
+        .setTitle(R.string.no_child_title)
+        .setMessage(R.string.no_child_message)
+        .setPositiveButton(R.string.add_a_child) { _, _ ->
+            startActivity(Intent(this, AddChildActivity::class.java))
+            if (this !is HomeActivity) finish()
+        }
+        .setNegativeButton(R.string.cancel) { _, _ -> onNotAdded() }
+        .setOnCancelListener { onNotAdded() }
+        .show()
 }

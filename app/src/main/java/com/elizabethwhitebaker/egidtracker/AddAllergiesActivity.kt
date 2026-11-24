@@ -50,6 +50,7 @@ class AddAllergiesActivity : AppCompatActivity() {
             allergenId != null -> R.string.edit_allergen
             else -> R.string.add_allergen_short
         })
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         nameLayout = findViewById(R.id.allergenNameLayout)
         allergenName = findViewById(R.id.allergiesNameField)
@@ -143,14 +144,14 @@ class AddAllergiesActivity : AppCompatActivity() {
 
     private fun save(write: () -> Task<Void>) {
         saveButton.isEnabled = false
-        write()
-            .addOnSuccessListener {
-                Toast.makeText(this, "Allergen saved", Toast.LENGTH_SHORT).show()
+        awaitSave(write(),
+            onSaved = { queued ->
+                toastSaved("Allergen saved", queued)
                 finish()
-            }
-            .addOnFailureListener { e ->
+            },
+            onFailed = { e ->
                 saveButton.isEnabled = true
                 Toast.makeText(this, "Failed to save allergen: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            })
     }
 }

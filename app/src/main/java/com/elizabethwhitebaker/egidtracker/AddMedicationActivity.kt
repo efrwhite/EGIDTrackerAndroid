@@ -40,6 +40,7 @@ class AddMedicationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_addmedication)
         setupPageHeader(if (medicationId == null) R.string.add_medications else R.string.edit_medication)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         medNameLayout = findViewById(R.id.medNameLayout)
         medName = findViewById(R.id.medNameField)
@@ -124,14 +125,14 @@ class AddMedicationActivity : AppCompatActivity() {
         val medications = Firebase.firestore.collection("Medications")
         val ref = medicationId?.let { medications.document(it) } ?: medications.document()
         saveButton.isEnabled = false
-        ref.set(medicationMap, SetOptions.merge())
-            .addOnSuccessListener {
-                Toast.makeText(this, if (medicationId == null) "Medication added" else "Medication updated", Toast.LENGTH_SHORT).show()
+        awaitSave(ref.set(medicationMap, SetOptions.merge()),
+            onSaved = { queued ->
+                toastSaved(if (medicationId == null) "Medication added" else "Medication updated", queued)
                 finish()
-            }
-            .addOnFailureListener { e ->
+            },
+            onFailed = { e ->
                 saveButton.isEnabled = true
                 Toast.makeText(this, "Failed to save medication: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            })
     }
 }

@@ -564,4 +564,9 @@
         <item>Moderate</item>
         <item>Severe</item>
     </string-array>
+    <string name="no_child_title">No child selected</string>
+    <string name="no_child_message">Add your child first. This is where you\'ll track their care.</string>
+    <string name="add_a_child">Add a child</string>
+    <string name="saved_offline">Saved. It will sync when you\'re back online.</string>
+    <string name="sync_failed">Some changes couldn\'t be saved to your account. Please check and try again.</string>
 </resources>

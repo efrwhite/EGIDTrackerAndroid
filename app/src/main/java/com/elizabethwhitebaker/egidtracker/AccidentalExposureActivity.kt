@@ -35,6 +35,7 @@ class AccidentalExposureActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_accidental_exposure)
         setupPageHeader(R.string.accidental_exposure_title)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         dateField = DateField(this, findViewById(R.id.dateLayout), EXPOSURE_DATE_PATTERN)
         itemLayout = findViewById(R.id.itemLayout)
@@ -61,20 +62,22 @@ class AccidentalExposureActivity : AppCompatActivity() {
             "childId" to childId
         )
         addButton.isEnabled = false
-        Firebase.firestore.collection("AccidentalExposure").add(exposure)
-            .addOnSuccessListener {
+        // A new document reference (rather than add()) so the write is applied locally right away
+        val write = Firebase.firestore.collection("AccidentalExposure").document().set(exposure)
+        awaitSave(write,
+            onSaved = { queued ->
                 addButton.isEnabled = true
-                Toast.makeText(this, "Exposure added", Toast.LENGTH_SHORT).show()
+                toastSaved("Exposure added", queued)
                 dateField.date = null
                 itemName.text = null
                 notesField.text = null
                 itemLayout.error = null
                 loadHistory()
-            }
-            .addOnFailureListener { e ->
+            },
+            onFailed = { e ->
                 addButton.isEnabled = true
                 Toast.makeText(this, "Failed to add exposure: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            })
     }
 
     private fun loadHistory() {

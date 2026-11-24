@@ -41,6 +41,7 @@ class ReportActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         lineChart = findViewById(R.id.lineChart)
         descriptionText = findViewById(R.id.descriptionText)
