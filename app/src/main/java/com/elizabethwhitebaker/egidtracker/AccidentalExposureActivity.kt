@@ -1,154 +1,102 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TableLayout
-import android.widget.TextView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
+import androidx.core.widget.doAfterTextChanged
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
+/** Report an accidental exposure for the selected child, and see past ones (newest first). */
 class AccidentalExposureActivity : AppCompatActivity() {
-    private lateinit var datePickerButton: Button
-    private lateinit var calender: Calendar
-    private lateinit var saveButton: Button
 
-    private lateinit var itemTableLayout: TableLayout
+    companion object {
+        /** Exposures store their date in this format. */
+        private const val EXPOSURE_DATE_PATTERN = "MM-dd-yyyy"
+    }
 
+    private lateinit var dateField: DateField
+    private lateinit var itemLayout: TextInputLayout
     private lateinit var itemName: EditText
-    private lateinit var descriptionField: EditText
-    private lateinit var date: String
-    private var childId: String? = null
-    private var itemId: String? = null
+    private lateinit var notesField: EditText
+    private lateinit var addButton: Button
 
-    private val firestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+    private val childId by lazy { CurrentChild.getId(this) }
+    private val storedFormat = SimpleDateFormat(EXPOSURE_DATE_PATTERN, Locale.US)
+    private val displayFormat = SimpleDateFormat(DateField.DISPLAY_PATTERN, Locale.US)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_accidental_exposure)
+        setupPageHeader(R.string.accidental_exposure_title)
 
-        datePickerButton = findViewById(R.id.datePickerButton)
-        saveButton = findViewById(R.id.addAEButton)
-
+        dateField = DateField(this, findViewById(R.id.dateLayout), EXPOSURE_DATE_PATTERN)
+        itemLayout = findViewById(R.id.itemLayout)
         itemName = findViewById(R.id.exposedItemTextField)
-        descriptionField = findViewById(R.id.descriptionTextField)
+        notesField = findViewById(R.id.descriptionTextField)
+        addButton = findViewById(R.id.addAEButton)
 
-        date = datePickerButton.text.toString()
-        childId = getCurrentChildId()
-
-        calender = Calendar.getInstance()
-
-        itemTableLayout = findViewById(R.id.AEItemTableLayout)
-
-        datePickerButton.setOnClickListener {
-            showDatePickerDialog(datePickerButton, calender)
-        }
-
-        saveButton.setOnClickListener {
-            saveItem()
-        }
-
-        fetchAndDisplayItems(itemTableLayout)
+        itemName.doAfterTextChanged { itemLayout.error = null }
+        addButton.setOnClickListener { saveExposure() }
+        loadHistory()
     }
 
-    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
+    private fun saveExposure() {
+        val item = itemName.text.toString().trim()
+        var valid = dateField.requireDate()
+        if (item.isEmpty()) { itemLayout.error = getString(R.string.error_required); valid = false }
+        if (!valid) return
 
-    private fun saveItem() {
-        val itemNameText = itemName.text.toString().trim()
-        val descriptionText = descriptionField.text.toString().trim()
-        val selectedDate = datePickerButton.text.toString().trim()
-
-        if (itemNameText.isEmpty() || selectedDate == getString(R.string.datePicker)) {
-            Toast.makeText(this, "Please fill out both the date and item name.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val itemMap = hashMapOf(
-            "itemName" to itemNameText,
-            "description" to descriptionText,
-            "date" to selectedDate,
+        // Field names kept from earlier versions: itemName = what it was, description = notes
+        val exposure = hashMapOf(
+            "itemName" to item,
+            "description" to notesField.text.toString().trim(),
+            "date" to dateField.stored,
             "childId" to childId
         )
-
-        firestore.collection("AccidentalExposure").add(itemMap)
+        addButton.isEnabled = false
+        Firebase.firestore.collection("AccidentalExposure").add(exposure)
             .addOnSuccessListener {
-                Toast.makeText(this, "Exposure added successfully", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, AccidentalExposureActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                startActivity(intent)
-                finish()
+                addButton.isEnabled = true
+                Toast.makeText(this, "Exposure added", Toast.LENGTH_SHORT).show()
+                dateField.date = null
+                itemName.text = null
+                notesField.text = null
+                itemLayout.error = null
+                loadHistory()
             }
             .addOnFailureListener { e ->
+                addButton.isEnabled = true
                 Toast.makeText(this, "Failed to add exposure: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun fetchAndDisplayItems(itemTableLayout: TableLayout) {
-        val childId = getCurrentChildId()
+    private fun loadHistory() {
+        val id = childId ?: return
         Firebase.firestore.collection("AccidentalExposure")
-            .whereEqualTo("childId", childId)
+            .whereEqualTo("childId", id)
             .get()
             .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val itemName = document.getString("itemName") ?: "No Name"
-                    val description = document.getString("description") ?: ""
-                    val date = document.getString("date") ?: "None"
-                    addRowToTable(itemTableLayout, itemName, description, date)
-                }
+                val rows = documents
+                    .map { doc -> doc to runCatching { storedFormat.parse(doc.getString("date").orEmpty()) }.getOrNull() }
+                    .sortedByDescending { (_, date) -> date?.time ?: 0L }
+                    .map { (doc, date) ->
+                        val subtitle = listOfNotNull(
+                            date?.let(displayFormat::format),
+                            doc.getString("description")?.takeIf { it.isNotBlank() }
+                        ).joinToString(" · ")
+                        ListRow(doc.getString("itemName").orEmpty().ifBlank { "No name" }, subtitle)
+                    }
+                fillList(findViewById<LinearLayout>(R.id.historyRows), findViewById(R.id.historyEmpty), rows)
             }
             .addOnFailureListener { e ->
-                Toast.makeText(
-                    this,
-                    "Failed to load past items: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, "Failed to load exposures: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-    }
-
-    @SuppressLint("InflateParams")
-    private fun addRowToTable(itemTableLayout: TableLayout, itemName: String, description: String, date: String) {
-        val row = layoutInflater.inflate(R.layout.accidental_exposure_table_item, null)
-        val nameTextView = row.findViewById<TextView>(R.id.nameTextView)
-        val descriptionTextView = row.findViewById<TextView>(R.id.descriptionTextView)
-        val dateTextView = row.findViewById<TextView>(R.id.dateTextView)
-
-        nameTextView.text = "$itemName"
-        descriptionTextView.text = description
-        dateTextView.text = "$date"
-
-        itemTableLayout.addView(row)
-    }
-
-    private fun showDatePickerDialog(button: Button, calendar: Calendar) {
-        val datePicker = DatePickerDialog(
-            this,
-            { _, year, monthOfYear, dayOfMonth ->
-                val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, monthOfYear, dayOfMonth)
-                val formattedDate = formatDate(selectedDate.time)
-                button.text = formattedDate
-                date = formattedDate
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.show()
-    }
-
-    private fun formatDate(date: Date): String {
-        val sdf = SimpleDateFormat("MM-dd-yyyy", Locale.getDefault())
-        return sdf.format(date)
     }
 }

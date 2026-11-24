@@ -1,324 +1,156 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Switch
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import androidx.core.widget.doAfterTextChanged
+import com.google.android.gms.tasks.Task
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
+/**
+ * Adds an allergen, or edits one (extra: allergenId). Cleared allergens open view-only
+ * (isViewOnly): everything is locked except the notes.
+ */
 class AddAllergiesActivity : AppCompatActivity() {
 
-    private lateinit var clearedDatePickerButton: Button
-    private lateinit var diagnosisDatePickerButton: Button
-    private lateinit var calendar: Calendar
+    companion object {
+        /** Allergens store their dates in this format. */
+        private const val ALLERGEN_DATE_PATTERN = "MM-dd-yyyy"
+    }
 
-    private lateinit var title: TextView
-    private lateinit var saveButton: Button
+    private lateinit var nameLayout: TextInputLayout
     private lateinit var allergenName: EditText
-    private lateinit var diagnosisDate: String
-    private lateinit var igE: Switch
-    private lateinit var cleared: Switch
-    private lateinit var clearedDate: String
+    private lateinit var igE: SwitchMaterial
+    private lateinit var cleared: SwitchMaterial
+    private lateinit var severityLayout: TextInputLayout
+    private lateinit var severity: AutoCompleteTextView
     private lateinit var notes: EditText
-    private var childId: String? = null
-    private var allergenId: String? = null
+    private lateinit var diagnosisDate: DateField
+    private lateinit var clearedDate: DateField
+    private lateinit var saveButton: Button
 
-    private lateinit var severitySpinner: Spinner
-    private lateinit var severity: String
-
-    private val firestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
-
-    private var isViewOnly = false // flag for view-only mode
+    private val childId by lazy { CurrentChild.getId(this) }
+    private val allergenId by lazy { intent.getStringExtra("allergenId") }
+    private val isViewOnly by lazy { intent.getBooleanExtra("isViewOnly", false) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_allergies)
-
-        title = findViewById(R.id.title)
-        clearedDatePickerButton = findViewById(R.id.clearedDatePickerButton)
-        diagnosisDatePickerButton = findViewById(R.id.diagnosisDate)
-        allergenName = findViewById(R.id.allergiesNameField)
-        saveButton = findViewById(R.id.saveButton)
-        cleared = findViewById(R.id.clearSwitch)
-        igE = findViewById(R.id.igESwitch)
-        notes = findViewById(R.id.allergyNotesField)
-
-        severitySpinner = findViewById(R.id.severitySpinner)
-
-        calendar = Calendar.getInstance()
-
-        val severityOptions = listOf("Select Severity", "Mild", "Moderate", "Severe")
-
-        val severityAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            severityOptions
-        ).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-
-        severitySpinner.adapter = severityAdapter
-
-        severitySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val textView = view as? TextView
-                if (position == 0) {
-                    // Gray like EditText hint
-                    textView?.setTextColor(android.graphics.Color.parseColor("#808080"))
-                } else {
-                    textView?.setTextColor(getColor(R.color.secondary))
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-
-        // Get the view mode flag from intent
-        isViewOnly = intent.getBooleanExtra("isViewOnly", false)
-
-        if (isViewOnly) {
-            enableViewMode() // If in view mode, disable all fields and change title
-        } else {
-            // Set up save functionality only if not in view-only mode
-            saveButton.setOnClickListener {
-                if (allergenId == null) {
-                    saveAllergen()
-                } else {
-                    updateAllergen()
-                }
-            }
-        }
-
-        // Make notes field always editable
-        notes.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (isViewOnly) {
-                    // Change "Back" button to "Save" button if notes are modified
-                    saveButton.text = "Save"
-                    saveButton.setOnClickListener {
-                        // Only save notes if we are in view-only mode
-                        if (allergenId != null) {
-                            updateAllergenNotes()
-                        }
-                    }
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        setupPageHeader(when {
+            isViewOnly -> R.string.view_allergen
+            allergenId != null -> R.string.edit_allergen
+            else -> R.string.add_allergen_short
         })
 
-        clearedDatePickerButton.setOnClickListener {
-            if (!isViewOnly) {
-                showDatePickerDialog(clearedDatePickerButton)
-            }
+        nameLayout = findViewById(R.id.allergenNameLayout)
+        allergenName = findViewById(R.id.allergiesNameField)
+        igE = findViewById(R.id.igESwitch)
+        cleared = findViewById(R.id.clearSwitch)
+        severityLayout = findViewById(R.id.severityLayout)
+        severity = findViewById(R.id.severityInput)
+        notes = findViewById(R.id.allergyNotesField)
+        saveButton = findViewById(R.id.saveButton)
+        diagnosisDate = DateField(this, findViewById(R.id.diagnosisDateLayout), ALLERGEN_DATE_PATTERN)
+        clearedDate = DateField(this, findViewById(R.id.clearedDateLayout), ALLERGEN_DATE_PATTERN)
+
+        severity.setAdapter(ArrayAdapter(this, android.R.layout.simple_list_item_1,
+            resources.getStringArray(R.array.severity_options)))
+        severity.setOnItemClickListener { _, _, _, _ -> severityLayout.error = null }
+        allergenName.doAfterTextChanged { nameLayout.error = null }
+        cleared.setOnCheckedChangeListener { _, checked ->
+            findViewById<View>(R.id.clearedDateGroup).visibility = if (checked) View.VISIBLE else View.GONE
         }
 
-        diagnosisDatePickerButton.setOnClickListener {
-            if (!isViewOnly) {
-                showDatePickerDialog(diagnosisDatePickerButton)
-            }
+        if (isViewOnly) {
+            lockAllButNotes()
+            saveButton.setText(R.string.save_notes)
         }
-
-        childId = getCurrentChildId()
-
-        // Check if in edit mode
-        allergenId = intent.getStringExtra("allergenId")
-        if (allergenId != null) {
-            fetchAndPopulateAllergenData(allergenId!!)
-        }
+        allergenId?.let { loadAllergen(it) }
+        saveButton.setOnClickListener { if (isViewOnly) saveNotes() else saveAllergen() }
     }
 
-    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
+    private fun loadAllergen(id: String) {
+        Firebase.firestore.collection("Allergens").document(id).get()
+            .addOnSuccessListener { doc ->
+                if (!doc.exists()) {
+                    Toast.makeText(this, "Allergen not found.", Toast.LENGTH_SHORT).show()
+                    return@addOnSuccessListener
+                }
+                allergenName.setText(doc.getString("allergenName"))
+                igE.isChecked = doc.getBoolean("igE") ?: false
+                cleared.isChecked = doc.getBoolean("cleared") ?: false
+                diagnosisDate.stored = doc.getString("diagnosisDate").orEmpty()
+                clearedDate.stored = doc.getString("clearedDate").orEmpty()
+                notes.setText(doc.getString("notes"))
+                // Older records saved "Select Severity" when none was chosen
+                doc.getString("severity")
+                    ?.takeIf { it in resources.getStringArray(R.array.severity_options) }
+                    ?.let { severity.setText(it, false) }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to load allergen: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun lockAllButNotes() {
+        nameLayout.isEnabled = false
+        igE.isEnabled = false
+        cleared.isEnabled = false
+        severityLayout.isEnabled = false
+        diagnosisDate.isEnabled = false
+        clearedDate.isEnabled = false
+    }
 
     private fun saveAllergen() {
-        if (!validateClearedFields()) return
+        val name = allergenName.text.toString().trim()
+        var valid = true
+        if (name.isEmpty()) { nameLayout.error = getString(R.string.error_required); valid = false }
+        if (severity.text.isNullOrBlank()) { severityLayout.error = getString(R.string.error_required); valid = false }
+        if (cleared.isChecked && !clearedDate.requireDate()) valid = false
+        if (!valid) return
 
         val allergenMap = hashMapOf(
-            "allergenName" to allergenName.text.toString().trim(),
-            "diagnosisDate" to diagnosisDatePickerButton.text.toString().trim(),
-            "severity" to severitySpinner.selectedItem.toString(),
+            "allergenName" to name,
+            "diagnosisDate" to diagnosisDate.stored,
+            "severity" to severity.text.toString(),
             "igE" to igE.isChecked,
             "cleared" to cleared.isChecked,
-            "clearedDate" to clearedDatePickerButton.text.toString().trim(),
+            "clearedDate" to if (cleared.isChecked) clearedDate.stored else "",
             "notes" to notes.text.toString().trim(),
             "childId" to childId
         )
+        val allergens = Firebase.firestore.collection("Allergens")
+        val ref = allergenId?.let { allergens.document(it) } ?: allergens.document()
+        save { ref.set(allergenMap, SetOptions.merge()) }
+    }
 
-        firestore.collection("Allergens").add(allergenMap)
-            .addOnSuccessListener { _ ->
-                Toast.makeText(this, "Allergen added successfully", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, AllergiesActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                startActivity(intent)
+    private fun saveNotes() {
+        val id = allergenId ?: return
+        save {
+            Firebase.firestore.collection("Allergens").document(id)
+                .update("notes", notes.text.toString().trim())
+        }
+    }
+
+    private fun save(write: () -> Task<Void>) {
+        saveButton.isEnabled = false
+        write()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Allergen saved", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to add allergen: ${e.message}", Toast.LENGTH_SHORT).show()
+                saveButton.isEnabled = true
+                Toast.makeText(this, "Failed to save allergen: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-    }
-
-    private fun updateAllergen() {
-        if (!validateClearedFields()) return
-
-        val allergenMap = hashMapOf(
-            "allergenName" to allergenName.text.toString().trim(),
-            "diagnosisDate" to diagnosisDatePickerButton.text.toString().trim(),
-            "severity" to severitySpinner.selectedItem.toString(),
-            "igE" to igE.isChecked,
-            "cleared" to cleared.isChecked,
-            "clearedDate" to clearedDatePickerButton.text.toString().trim(),
-            "notes" to notes.text.toString().trim(),
-            "childId" to childId
-        )
-
-        allergenId?.let {
-            firestore.collection("Allergens").document(it).set(allergenMap)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Allergen updated successfully", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, AllergiesActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    }
-                    startActivity(intent)
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to update allergen: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        }
-    }
-
-    private fun fetchAndPopulateAllergenData(allergenId: String) {
-        title.text = if (isViewOnly) "View Past Allergen" else "Edit Allergen"
-        firestore.collection("Allergens").document(allergenId).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    allergenName.setText(document.getString("allergenName"))
-                    diagnosisDate = document.getString("diagnosisDate") ?: ""
-                    igE.isChecked = document.getBoolean("igE") ?: false
-                    cleared.isChecked = document.getBoolean("cleared") ?: false
-                    clearedDate = document.getString("clearedDate") ?: ""
-                    notes.setText(document.getString("notes"))
-
-                    diagnosisDatePickerButton.text = diagnosisDate
-                    clearedDatePickerButton.text = clearedDate
-
-                    val savedSeverity = document.getString("severity") ?: "Select Severity"
-                    val options = listOf("Select Severity", "Mild", "Moderate", "Severe")
-                    val index = options.indexOf(savedSeverity).takeIf { it >= 0 } ?: 0
-                    severitySpinner.setSelection(index)
-
-                    if (isViewOnly) {
-                        disableInteraction() // Disable all interactions except notes
-                    }
-                } else {
-                    Toast.makeText(this, "Allergen not found.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to load allergen data: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun showDatePickerDialog(button: Button) {
-        val datePicker = DatePickerDialog(
-            this,
-            { _, year, monthOfYear, dayOfMonth ->
-                val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, monthOfYear, dayOfMonth)
-                val formattedDate = formatDate(selectedDate.time)
-                button.text = formattedDate
-                if (button == diagnosisDatePickerButton) {
-                    diagnosisDate = formattedDate
-                } else {
-                    clearedDate = formattedDate
-                }
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.show()
-    }
-
-    private fun formatDate(date: Date): String {
-        val sdf = SimpleDateFormat("MM-dd-yyyy", Locale.getDefault())
-        return sdf.format(date)
-    }
-
-    private fun validateClearedFields(): Boolean {
-        if (severitySpinner.selectedItem.toString() == "Select Severity") {
-            Toast.makeText(this, "Please select a severity", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        if (cleared.isChecked && clearedDatePickerButton.text.toString() == "Enter Date") {
-            Toast.makeText(this, "Please enter a cleared date when clearing an allergen", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        return true
-    }
-
-    private fun updateAllergenNotes() {
-        val notesMap = hashMapOf(
-            "notes" to notes.text.toString().trim()
-        )
-
-        allergenId?.let {
-            firestore.collection("Allergens").document(it).update(notesMap as Map<String, Any>)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Notes updated successfully", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, AllergiesActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    }
-                    startActivity(intent)
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to update notes: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        }
-    }
-
-    private fun enableViewMode() {
-        title.text = "View Cleared Allergen"
-
-        saveButton.text = "Back"
-        saveButton.isEnabled = true
-        saveButton.setOnClickListener {
-            val intent = Intent(this, AllergiesActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            startActivity(intent)
-            finish()
-        }
-
-        disableInteraction()
-    }
-
-    private fun disableInteraction() {
-        allergenName.isEnabled = false
-        diagnosisDatePickerButton.isEnabled = false
-        clearedDatePickerButton.isEnabled = false
-        igE.isEnabled = false
-        cleared.isEnabled = false
-        severitySpinner.isEnabled = false
-        // Notes remain editable
     }
 }

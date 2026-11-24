@@ -1,155 +1,66 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TableLayout
-import android.widget.TextView
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+
+/** The selected child's current and cleared allergens, IgE allergens first. */
 class AllergiesActivity : AppCompatActivity() {
-
-    private lateinit var addAllergenButton: Button
-    private lateinit var childId: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_allergies)
+        setupPageHeader(R.string.allergens)
 
-        val allergenTableLayout: TableLayout = findViewById(R.id.allergenTableLayout)
-        val pastAllergenTableLayout: TableLayout = findViewById(R.id.pastAllergenTableLayout)
-
-        //Initialize button
-        addAllergenButton = findViewById(R.id.addAllergenButton)
-
-        //Set onlick
-        addAllergenButton.setOnClickListener {
-            intent = Intent(this, AddAllergiesActivity::class.java)
-            startActivity(intent)
+        findViewById<View>(R.id.addAllergenButton).setOnClickListener {
+            startActivity(Intent(this, AddAllergiesActivity::class.java))
         }
-
-        fetchAndDisplayAllergies(allergenTableLayout, pastAllergenTableLayout)
-
     }
 
-    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
+    override fun onResume() {
+        super.onResume()
+        loadAllergens() // also picks up changes made in AddAllergiesActivity
+    }
 
-    private fun fetchAndDisplayAllergies(allergyTableLayout: TableLayout, pastAllergyTableLayout: TableLayout) {
-        val childId = getCurrentChildId()
-
+    private fun loadAllergens() {
+        val childId = CurrentChild.getId(this) ?: return
         Firebase.firestore.collection("Allergens")
             .whereEqualTo("childId", childId)
             .get()
             .addOnSuccessListener { documents ->
-                val igEAllergies = mutableListOf<Map<String, Any>>()
-                val nonIgEAllergies = mutableListOf<Map<String, Any>>()
-
-                // Separate allergies into IgE and Non-IgE groups
-                for (document in documents) {
-                    val allergenName = document.getString("allergenName") ?: "No Name"
-                    val allergenId = document.id
-                    val igE = document.getBoolean("igE") ?: false
-                    val isCleared = document.getBoolean("cleared") ?: false
-
-                    val allergyData = mapOf(
-                        "allergenName" to allergenName,
-                        "allergenId" to allergenId,
-                        "isCleared" to isCleared,
-                        "igE" to igE
-                    )
-
-                    if (igE) {
-                        igEAllergies.add(allergyData)
+                val sorted = documents.sortedWith(
+                    compareByDescending<QueryDocumentSnapshot> { it.getBoolean("igE") ?: false }
+                        .thenBy { it.getString("allergenName")?.lowercase() }
+                )
+                val current = mutableListOf<ListRow>()
+                val cleared = mutableListOf<ListRow>()
+                for (doc in sorted) {
+                    val name = doc.getString("allergenName").orEmpty().ifBlank { "No name" }
+                    val type = getString(if (doc.getBoolean("igE") == true) R.string.ige_allergen else R.string.non_ige_allergen)
+                    if (doc.getBoolean("cleared") == true) {
+                        cleared += ListRow(name, type, getString(R.string.view)) { open(doc.id, viewOnly = true) }
                     } else {
-                        nonIgEAllergies.add(allergyData)
+                        current += ListRow(name, type, getString(R.string.edit)) { open(doc.id, viewOnly = false) }
                     }
                 }
-
-                // Sort each group alphabetically by allergenName
-                igEAllergies.sortBy { it["allergenName"].toString() }
-                nonIgEAllergies.sortBy { it["allergenName"].toString() }
-
-                // Add rows for IgE allergies
-                for (allergy in igEAllergies) {
-                    addRowToTable(
-                        allergyTableLayout,
-                        pastAllergyTableLayout,
-                        allergy["allergenName"] as String,
-                        allergy["allergenId"] as String,
-                        allergy["isCleared"] as Boolean,
-                        true
-                    )
-                }
-
-                // Add rows for Non-IgE allergies
-                for (allergy in nonIgEAllergies) {
-                    addRowToTable(
-                        allergyTableLayout,
-                        pastAllergyTableLayout,
-                        allergy["allergenName"] as String,
-                        allergy["allergenId"] as String,
-                        allergy["isCleared"] as Boolean,
-                        false
-                    )
-                }
+                fillList(findViewById<LinearLayout>(R.id.currentRows), findViewById(R.id.currentEmpty), current)
+                fillList(findViewById<LinearLayout>(R.id.pastRows), findViewById(R.id.pastEmpty), cleared)
             }
             .addOnFailureListener { e ->
-                Toast.makeText(
-                    this,
-                    "Failed to load current allergies: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, "Failed to load allergens: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-
-    @SuppressLint("InflateParams")
-    private fun addRowToTable(allergyTableLayout: TableLayout, pastAllergyTableLayout: TableLayout, name: String, allergenId: String, isCleared: Boolean, igE: Boolean) {
-        val row = layoutInflater.inflate(R.layout.table_row_item, null)
-        val text = row.findViewById<TextView>(R.id.nameTextView)
-        val editButton = row.findViewById<Button>(R.id.editButton)
-        var igEText: String = if (igE) "IgE Allergen" else "Non-IgE Allergen"
-
-        text.text = "$name, $igEText"
-
-        if (isCleared) {
-            editButton.text = "View"
-            editButton.setOnClickListener {
-                navigateToViewOnlyActivity(allergenId)
-            }
-            pastAllergyTableLayout.addView(row)
-        } else {
-            editButton.text = "Edit"
-            editButton.setOnClickListener {
-                navigateToEditActivity(allergenId)
-            }
-            allergyTableLayout.addView(row)
-        }
-    }
-
-
-    private fun navigateToViewOnlyActivity(allergenId: String) {
-        val intent = Intent(this, AddAllergiesActivity::class.java).apply {
+    private fun open(allergenId: String, viewOnly: Boolean) {
+        startActivity(Intent(this, AddAllergiesActivity::class.java).apply {
             putExtra("allergenId", allergenId)
-            putExtra("isViewOnly", true)
-        }
-        startActivity(intent)
+            putExtra("isViewOnly", viewOnly)
+        })
     }
-
-
-    private fun navigateToEditActivity(allergenId: String) {
-        val intent = Intent(this, AddAllergiesActivity::class.java).apply {
-            putExtra("allergenId", allergenId)
-            putExtra("isViewOnly", false)
-        }
-        startActivity(intent)
-    }
-
-
 }
-
-

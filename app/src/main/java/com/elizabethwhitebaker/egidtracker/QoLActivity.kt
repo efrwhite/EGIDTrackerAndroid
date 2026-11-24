@@ -1,180 +1,131 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
-import android.widget.DatePicker
-import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
+/**
+ * Quality-of-life questionnaire: 31 questions in 7 sections, each answered 0 (never a
+ * problem) to 4 (almost always). Saves the answers and their total, then opens Results.
+ */
 class QoLActivity : AppCompatActivity() {
 
-    private lateinit var resultsButton: Button
-    private lateinit var visitDateInput: EditText
+    /** Section heading and its questions, in the order they're asked (and saved). */
+    private val sections: List<Pair<Int, List<Int>>> = listOf(
+        R.string.SymptomsI to listOf(R.string.symptoms1, R.string.symptoms2, R.string.symptoms3,
+            R.string.symptoms4, R.string.symptoms5, R.string.symptoms6),
+        R.string.SymptomsII to listOf(R.string.symptoms7, R.string.symptoms8, R.string.symptoms9, R.string.symptoms10),
+        R.string.Treatment to listOf(R.string.treatment1, R.string.treatment2, R.string.treatment3,
+            R.string.treatment4, R.string.treatment5),
+        R.string.Worry to listOf(R.string.worry1, R.string.worry2, R.string.worry3, R.string.worry4),
+        R.string.Communication to listOf(R.string.comm1, R.string.comm2, R.string.comm3, R.string.comm4, R.string.comm5),
+        R.string.FoodandEating to listOf(R.string.FandE1, R.string.FandE2, R.string.FandE3, R.string.FandE4),
+        R.string.FoodFeelings to listOf(R.string.feelings1, R.string.feelings2, R.string.feelings3),
+    )
+
+    private val answerIds = listOf(R.id.answer0, R.id.answer1, R.id.answer2, R.id.answer3, R.id.answer4)
+
+    /** One entry per question: its row, and the chosen answer (null until answered). */
+    private class Question(val row: View, val text: TextView, var answer: Int? = null)
+
+    private val questions = mutableListOf<Question>()
+    private lateinit var dateField: DateField
+    private lateinit var saveButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qol_score_checker)
+        setupPageHeader(R.string.qol_title, R.string.results) { openResults() }
 
-        visitDateInput = findViewById(R.id.visitDateInput)
-        visitDateInput.setOnClickListener {
-            showDatePickerDialog()
-        }
+        dateField = DateField(this, findViewById(R.id.dateLayout))
+        saveButton = findViewById(R.id.saveButton)
+        buildQuestions(findViewById(R.id.questions))
+        saveButton.setOnClickListener { saveScores() }
+    }
 
-        val saveButton: Button = findViewById(R.id.saveButton)
-        saveButton.setOnClickListener {
-            saveScores()
-        }
-        resultsButton = findViewById(R.id.resultsButton)
-
-        resultsButton.setOnClickListener {
-            val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-            val intent = Intent(this, ResultsActivity::class.java).apply {
-                putExtra("sourceActivity", "QoLActivity")
-            }
-            startActivity(intent)
-            finish()
+    private fun buildQuestions(container: LinearLayout) {
+        sections.forEach { (heading, items) ->
+            container.addView(TextView(this, null, 0, R.style.Widget_EGIDTracker_PageLabel).apply {
+                setText(heading)
+                textSize = 17f
+                setPadding(0, dp(22), 0, dp(2))
+            })
+            items.forEach { addQuestion(container, it) }
         }
     }
 
-    private fun areAllFieldsFilled(): Boolean {
-        val numberOfQuestions = 31
-        for (i in 1..numberOfQuestions) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            if (answer.text.toString().trim().isEmpty()) {
-                return false // Found an empty field, return false
+    private fun addQuestion(container: LinearLayout, @StringRes text: Int) {
+        val row = layoutInflater.inflate(R.layout.view_qol_question, container, false)
+        val question = Question(row, row.findViewById<TextView>(R.id.questionText).apply { setText(text) })
+        val buttons = answerIds.map { row.findViewById<MaterialButton>(it) }
+        buttons.forEachIndexed { value, button ->
+            button.setOnClickListener {
+                // One answer per question
+                buttons.forEach { it.isChecked = it === button }
+                question.answer = value
+                question.text.setTextColor(ContextCompat.getColor(this, R.color.nearBlack))
             }
         }
-        return true // All fields are filled
+        questions += question
+        container.addView(row)
     }
+
     private fun saveScores() {
-        if (!areAllFieldsFilled()) {
-            Toast.makeText(this, "Please fill out all fields before saving.", Toast.LENGTH_SHORT).show()
+        if (!dateField.requireDate()) {
+            findViewById<ScrollView>(R.id.qolScroll).smoothScrollTo(0, 0)
             return
         }
-
-        if (!validateInputs()) {
-            return // Stop further execution if validation fails
-        }
-
-        val totalScore = calculateTotalScore()
-        val responses = collectResponses()
-        val dateInput: EditText = findViewById(R.id.visitDateInput)
-        val dateString = dateInput.text.toString().trim()
-
-        if (dateString.isBlank()) {
-            Toast.makeText(this, "Please enter a valid date.", Toast.LENGTH_SHORT).show()
+        val unanswered = questions.filter { it.answer == null }
+        if (unanswered.isNotEmpty()) {
+            // Mark the unanswered questions and scroll to the first one
+            unanswered.forEach { it.text.setTextColor(ContextCompat.getColor(this, R.color.darkSalmon)) }
+            val first = unanswered.first().row
+            findViewById<ScrollView>(R.id.qolScroll).smoothScrollTo(0, (first.parent as View).top + first.top)
+            Toast.makeText(this, R.string.error_answer_all, Toast.LENGTH_SHORT).show()
             return
         }
-
-        saveResultsToFirestore(totalScore, responses, dateString)
-
-        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-        val intent = Intent(this, ResultsActivity::class.java).apply {
-            putExtra("sourceActivity", "QoLActivity")
-        }
-        startActivity(intent)
-        finish()
-    }
-
-    private fun validateInputs(): Boolean {
-        val numberOfQuestions = 31  // Adjust according to your questions
-
-        for (i in 1..numberOfQuestions) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            val input = answer.text.toString().trim() // Trim input
-
-            // Check if input is a valid number between 0 and 4
-            val number = input.toIntOrNull()
-            if (number == null || number !in 0..4) {
-                answer.error = "Enter a number between 0 and 4"
-                Toast.makeText(this, "Question $i: Enter a number between 0 and 4", Toast.LENGTH_SHORT).show()
-                return false
-            }
-        }
-        return true // All inputs are valid
-    }
-
-
-    private fun calculateTotalScore(): Int {
-        var score = 0
-        val numberOfQuestions = 31  // Assuming you have 31 questions indexed from 1 to 31
-        for (i in 1..numberOfQuestions) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            score += answer.text.toString().toIntOrNull() ?: 0
-        }
-        return score
-    }
-
-    private fun collectResponses(): List<Int> {
-        val responses = mutableListOf<Int>()
-        val numberOfQuestions = 31  // Adjust this based on your actual number of questions
-        for (i in 1..numberOfQuestions) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            responses.add(answer.text.toString().toIntOrNull() ?: 0)
-        }
-        return responses
-    }
-
-    private fun saveResultsToFirestore(totalScore: Int, responses: List<Int>, date: String) {
         val childId = CurrentChild.getId(this) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        val dateObject = dateFormat.parse(date) // Parse the date string into a Date object
-        val timestamp = dateObject?.let { Timestamp(it) } ?: run {  // Convert to Timestamp
-            Toast.makeText(this, "Invalid date format.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
+        val responses = questions.map { it.answer!! }
         val data = hashMapOf(
-            "totalScore" to totalScore,
+            "totalScore" to responses.sum(),
             "responses" to responses,
-            "date" to timestamp
+            "date" to Timestamp(dateField.date!!)
         )
-
+        saveButton.isEnabled = false
         Firebase.firestore.collection("Children").document(childId)
             .collection("Quality of Life Scores").add(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "Score saved successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Answers saved", Toast.LENGTH_SHORT).show()
+                openResults()
+                finish()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_SHORT).show()
+                saveButton.isEnabled = true
+                Toast.makeText(this, "Failed to save answers: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val datePickerDialog = DatePickerDialog(
-            this,
-            { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-                // Format the date and set it to the EditText
-                val formattedDate = "${selectedMonth + 1}/$selectedDay/$selectedYear"
-                visitDateInput.setText(formattedDate)
-            },
-            year, month, day
-        )
-
-        datePickerDialog.show()
+    private fun openResults() {
+        startActivity(Intent(this, ResultsActivity::class.java).apply {
+            putExtra("sourceActivity", "QoLActivity")
+        })
     }
 
+    private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 }

@@ -115,7 +115,6 @@
     <string name="frequencyField">How Often?</string>
     <string name="notesField">Enter special instructions for the medication\nhere</string>
     <string name="saveButton">Save</string>
-    <string name="datePicker">Enter Date</string>
     <string name="endDate">End Date</string>
 
     <!-- Strings for Allergies -->
@@ -345,13 +344,7 @@
     <string name="question34">Diarrhea</string>
 
     <!-- Strings for Quality of Life Checker -->
-    <string name="qualityOfLifeChecker">Quality of Life</string>
     <string name="QsymptomKey">Symptom Key:</string>
-    <string name="Qkey0">0 - never a problem</string>
-    <string name="Qkey1">1 - almost never a problem</string>
-    <string name="Qkey2">2 - sometimes a problem</string>
-    <string name="Qkey3">3 - often a problem</string>
-    <string name="Qkey4">4 - almost always a problem</string>
     <string name="SymptomsI">Symptoms I </string>
     <string name="symptoms1">I have chest pain, ache, or hurt</string>
     <string name="symptoms2">I have burning in my chest, mouth, or throat  (heartburn)</string>
@@ -487,4 +480,86 @@
     <string name="error_wrong_password">Incorrect password.</string>
     <string name="active_child">Active: %1$s</string>
     <string name="no_diet">No diet</string>
+    <string name="edit">Edit</string>
+    <string name="view">View</string>
+    <string name="date_hint">MM/DD/YYYY</string>
+    <string name="choose_date">Choose date</string>
+    <string name="notes_label">Notes</string>
+    <string name="showing">Showing</string>
+    <string name="todays_food">Today\'s Food</string>
+    <string name="food_on_date">Food on %1$s</string>
+    <string name="no_foods_logged">No foods logged for this day.</string>
+    <string name="add_food_short">Add food</string>
+    <string name="edit_food">Edit food</string>
+    <string name="food_name">Food Name</string>
+    <string name="food_name_hint">e.g. Eggs, fried rice</string>
+    <string name="food_notes_hint">Brand, portion, how you felt after</string>
+    <string name="save_food">Save food</string>
+    <string name="delete_entry">Delete entry</string>
+    <string name="delete_food_confirm">Delete this food entry?</string>
+    <string name="current_medications">Current Medications</string>
+    <string name="past_medications">Past Medications</string>
+    <string name="no_current_medications">No current medications</string>
+    <string name="past_medications_empty">Stopped medications will show here.</string>
+    <string name="add_medications">Add medications</string>
+    <string name="edit_medication">Edit medication</string>
+    <string name="view_medication">Past medication</string>
+    <string name="medication_name">Medication name</string>
+    <string name="medication_name_hint">e.g. budesonide</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="dosage_hint">Amount</string>
+    <string name="discontinue_medication">Discontinue this medication</string>
+    <string name="save_medication">Save medication</string>
+    <string name="started_on">Started %1$s</string>
+    <string name="ended_on">Ended %1$s</string>
+    <string name="error_end_before_start">Must be after the start date</string>
+    <string name="allergens">Allergens</string>
+    <string name="current_allergens">Current allergens</string>
+    <string name="cleared_allergens">Cleared allergens</string>
+    <string name="no_current_allergens">No current allergens</string>
+    <string name="cleared_allergens_empty">Cleared allergens will show here.</string>
+    <string name="add_allergen_short">Add allergen</string>
+    <string name="edit_allergen">Edit allergen</string>
+    <string name="view_allergen">Cleared allergen</string>
+    <string name="allergen_name_hint">e.g. Milk, wheat</string>
+    <string name="ige_allergen">IgE Allergen</string>
+    <string name="non_ige_allergen">Non-IgE Allergen</string>
+    <string name="date_of_diagnosis">Date of diagnosis</string>
+    <string name="severity">Severity</string>
+    <string name="select_severity">Select severity</string>
+    <string name="allergen_cleared">Allergen Cleared</string>
+    <string name="save_allergen">Save allergen</string>
+    <string name="save_notes">Save notes</string>
+    <string name="accidental_exposure_title">Accidental exposure</string>
+    <string name="report_exposure">Report an exposure</string>
+    <string name="description_label">Description</string>
+    <string name="exposure_item_hint">Item name</string>
+    <string name="add_exposure">Add exposure</string>
+    <string name="no_exposures">No exposures reported</string>
+    <string name="endoscopy_results">Endoscopy results</string>
+    <string name="eoe">EoE</string>
+    <string name="upper">Upper:</string>
+    <string name="middle">Middle:</string>
+    <string name="lower">Lower:</string>
+    <string name="right">Right:</string>
+    <string name="left">Left:</string>
+    <string name="eos_count_hint">Eos count</string>
+    <string name="qol_title">Quality of life</string>
+    <string name="qol_key">"0: never    1: almost never    2: sometimes    3: often\n4: almost always"</string>
+    <string name="save_answers">Save answers</string>
+    <string name="error_answer_all">Please answer every question.</string>
+    <string name="start_date_label">Start Date</string>
+    <string name="end_date_label">End Date</string>
+    <string name="score">Score</string>
+    <string name="no_scores">No scores in this date range.</string>
+    <string name="generate_report">Generate report</string>
+    <string name="couldnt_load_scores">Couldn\'t load scores</string>
+    <string name="scores_permission_error">You don\'t have permission to view this data. Sign in again, or ask your care team to check your access.</string>
+    <string name="scores_network_error">Check your internet connection and try again.</string>
+    <string-array name="severity_options">
+        <item>Mild</item>
+        <item>Moderate</item>
+        <item>Severe</item>
+    </string-array>
 </resources>

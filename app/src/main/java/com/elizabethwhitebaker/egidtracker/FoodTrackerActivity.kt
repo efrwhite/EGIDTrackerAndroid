@@ -1,162 +1,89 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TableLayout
-import android.widget.TableRow
+import android.text.format.DateUtils
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 
+/** The selected child's food log for one day; tap an entry to edit it. */
 class FoodTrackerActivity : AppCompatActivity() {
 
-    private lateinit var addButton: Button
-    private lateinit var dateButton: Button
-    private lateinit var foodTableLayout: TableLayout
+    companion object {
+        /** Food entries store their day in this format (also read by HomeActivity's stats). */
+        const val FOOD_DATE_PATTERN = "yyyy-MM-dd"
+    }
 
-    private var selectedDate: String = ""
-    private var childId: String? = null
+    private lateinit var dateField: DateField
+    private lateinit var listLabel: TextView
+    private lateinit var rows: LinearLayout
+    private lateinit var emptyView: View
 
-    private val db = Firebase.firestore
+    private val childId by lazy { CurrentChild.getId(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_tracker)
+        setupPageHeader(R.string.foodTracker)
 
-        // Initialize UI components
-        foodTableLayout = findViewById(R.id.pastAllergenTableLayout)
-        addButton = findViewById(R.id.addButton)
-        dateButton = findViewById(R.id.date)
+        listLabel = findViewById(R.id.foodListLabel)
+        rows = findViewById(R.id.foodRows)
+        emptyView = findViewById(R.id.foodEmpty)
 
-        // Get childId from SharedPreferences
-        childId = getCurrentChildId()
+        dateField = DateField(this, findViewById<TextInputLayout>(R.id.dateLayout), FOOD_DATE_PATTERN)
+        dateField.date = Date()
+        dateField.onPicked = { loadFoodEntries() }
 
-        if (savedInstanceState == null) {
-            selectedDate = getCurrentDate() // Set initial date on first launch
-        }
-
-        dateButton.text = selectedDate
-
-        // Load food entries for the selected date
-        loadFoodEntries()
-
-        dateButton.setOnClickListener { openDatePicker() }
-
-        // Navigate to AddFoodActivity with the selected date
-        addButton.setOnClickListener {
-            val intent = Intent(this, AddFoodActivity::class.java).apply {
-                putExtra("selectedDate", selectedDate)
-            }
-            startActivity(intent)
+        findViewById<View>(R.id.addButton).setOnClickListener {
+            startActivity(Intent(this, AddFoodActivity::class.java).apply {
+                putExtra("selectedDate", dateField.stored)
+            })
         }
     }
 
     override fun onResume() {
         super.onResume()
-        loadFoodEntries() // Reload entries when returning to this activity
-    }
-
-    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
-
-    private fun openDatePicker() {
-        val calendar = Calendar.getInstance()
-        val dateParts = selectedDate.split("-")
-        calendar.set(dateParts[0].toInt(), dateParts[1].toInt() - 1, dateParts[2].toInt())
-
-        val datePicker = DatePickerDialog(
-            this,
-            { _, year, month, day ->
-                selectedDate = formatDate(year, month, day)
-                dateButton.text = selectedDate
-                loadFoodEntries() // Reload entries for the new date
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.show()
-    }
-
-    private fun getCurrentDate(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return dateFormat.format(Date())
-    }
-
-    private fun formatDate(year: Int, month: Int, day: Int): String {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return dateFormat.format(calendar.time)
+        loadFoodEntries() // also picks up changes made in AddFoodActivity
     }
 
     private fun loadFoodEntries() {
-        foodTableLayout.removeAllViews()
+        val date = dateField.date ?: return
+        listLabel.text = if (DateUtils.isToday(date.time)) getString(R.string.todays_food)
+            else getString(R.string.food_on_date, findViewById<TextInputLayout>(R.id.dateLayout).editText?.text)
 
-        if (childId == null) {
-            Toast.makeText(this, "Child ID not found.", Toast.LENGTH_SHORT).show()
+        val id = childId ?: run {
+            Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
             return
         }
-
-        // Get all entries for the child
-        db.collection("FoodEntries")
-            .document(childId!!)
-            .collection("Entries")
+        val day = dateField.stored
+        Firebase.firestore.collection("FoodEntries").document(id).collection("Entries")
+            .whereEqualTo("date", day)
             .get()
-            .addOnSuccessListener { querySnapshot ->
-                val filteredFoods = querySnapshot.documents.mapNotNull { document ->
-                    val date = document.getString("date")
-                    val foodName = document.getString("foodName")
-                    val notes = document.getString("notes")
-                    if (date == selectedDate) {
-                        Triple(document.id, foodName ?: "Unknown Food", notes ?: "")
-                    } else {
-                        null
+            .addOnSuccessListener { snapshot ->
+                if (dateField.stored != day) return@addOnSuccessListener // the day changed meanwhile
+                val entries = snapshot.documents.map { doc ->
+                    val foodName = doc.getString("foodName").orEmpty().ifBlank { "Unknown food" }
+                    val notes = doc.getString("notes").orEmpty()
+                    ListRow(foodName, notes.takeIf { it.isNotBlank() }, getString(R.string.edit)) {
+                        startActivity(Intent(this, AddFoodActivity::class.java).apply {
+                            putExtra("entryId", doc.id)
+                            putExtra("foodName", foodName)
+                            putExtra("notes", notes)
+                            putExtra("selectedDate", day)
+                        })
                     }
                 }
-                populateFoodTable(filteredFoods)
+                fillList(rows, emptyView, entries)
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to load foods: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
-    private fun populateFoodTable(foods: List<Triple<String, String, String>>) {
-        foodTableLayout.removeAllViews() // Clear previous entries
-
-        foods.forEach { (entryId, foodName, notes) ->
-            val row = layoutInflater.inflate(R.layout.table_row_item, null) as TableRow
-            val foodNameTextView = row.findViewById<TextView>(R.id.nameTextView)
-            val editButton = row.findViewById<Button>(R.id.editButton)
-
-            foodNameTextView.text = foodName
-
-            // Set up the edit button
-            editButton.text = "Edit"
-            editButton.setOnClickListener {
-                navigateToEditActivity(entryId, foodName, notes)  // Pass notes to the edit screen
-            }
-
-            foodTableLayout.addView(row)
-        }
-    }
-
-
-    private fun navigateToEditActivity(entryId: String, foodName: String, notes: String) {
-        val intent = Intent(this, AddFoodActivity::class.java).apply {
-            putExtra("entryId", entryId)
-            putExtra("foodName", foodName)
-            putExtra("notes", notes)  // Pass the notes along with the intent
-            putExtra("selectedDate", selectedDate)
-        }
-        startActivity(intent)
-    }
-
 }

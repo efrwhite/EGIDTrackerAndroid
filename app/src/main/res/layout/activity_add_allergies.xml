@@ -1,321 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackground"
-    tools:context="SignUpActivity"
-    android:fillViewport="true"
-    android:fitsSystemWindows="true">
+    android:background="@color/lightBackground"
+    android:orientation="vertical"
+    tools:context=".AddAllergiesActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/HomeLayout"
+    <include layout="@layout/view_page_header" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primaryBackground"
-        tools:context="AddAllergiesActivity"
-        tools:ignore="ExtraText">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <!-- Navigation Bar -->
-
-        <RelativeLayout
-            android:id="@+id/navBar"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:background="@color/primaryBackground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.elizabethwhitebaker.egidtracker.BackButton
-                style="@style/Widget.EGIDTracker.BackButton"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="4dp" />
-
-            <!-- Back Button -->
-
-            <!-- Page Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="22dp">
 
             <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/lato_medium"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
-                android:text="Add Allergen"
-                android:textColor="@color/primary"
-                android:textSize="20sp" />
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:text="@string/allergen" />
 
-        </RelativeLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/allergenNameLayout"
+                style="@style/Widget.EGIDTracker.PageField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp">
 
-        <TextView
-            android:id="@+id/addAllergiesName"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/allergen"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/navBar" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/allergiesNameField"
+                    style="@style/Widget.EGIDTracker.PageField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/allergen_name_hint"
+                    android:inputType="textCapSentences"
+                    android:maxLength="100" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/allergiesNameField"
-            android:layout_width="225dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:hint="@string/name"
-            android:textColorHint="#808080"
-            android:inputType="text"
-            android:paddingStart="16dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="0dp"
-            android:textColor="@color/secondary"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintStart_toEndOf="@+id/addAllergiesName"
-            app:layout_constraintTop_toBottomOf="@+id/navBar" />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/igESwitch"
+                style="@style/Widget.EGIDTracker.Switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/ige_allergen" />
 
-        <TextView
-            android:id="@+id/igEAllergen"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/igEAllergen"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/addAllergiesName" />
+            <TextView
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:layout_marginTop="10dp"
+                android:text="@string/date_of_diagnosis" />
 
-        <TextView
-            android:id="@+id/diagnosedDate"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/diagnosedDate"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/igEAllergen" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/diagnosisDateLayout"
+                style="@style/Widget.EGIDTracker.PageField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:endIconContentDescription="@string/choose_date"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom">
 
-        <Button
-            android:id="@+id/diagnosisDate"
-            android:layout_width="175dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="00dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:gravity="start|center_vertical"
-            android:paddingStart="16dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="0dp"
-            android:text="@string/datePicker"
-            android:textColorHint="#808080"
-            android:textColor="@color/secondary"
-            android:textSize="14sp"
-            app:backgroundTint="#ffffff"
-            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/igEAllergen" />
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/Widget.EGIDTracker.PageField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/date_hint"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- NEW: Severity -->
-        <TextView
-            android:id="@+id/severityLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="Severity"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/diagnosisDate" />
+            <TextView
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/severity" />
 
-        <Spinner
-            android:id="@+id/severitySpinner"
-            android:layout_width="175dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="50dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textSize="14sp"
-            android:fontFamily="@font/lato_medium"
-            android:spinnerMode="dropdown"
-            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintTop_toBottomOf="@id/diagnosisDate" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/severityLayout"
+                style="@style/Widget.EGIDTracker.PageField.Dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp">
 
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/severityInput"
+                    style="@style/Widget.EGIDTracker.PageField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/select_severity"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <Switch
-            android:id="@+id/igESwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="20dp"
-            android:paddingEnd="16dp"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintHorizontal_bias="0.676"
-            app:layout_constraintTop_toBottomOf="@+id/addAllergiesName"
-            tools:ignore="MissingConstraints" />
+            <TextView
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/notes_label" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.EGIDTracker.PageField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp">
 
-        <TextView
-            android:id="@+id/clearAllergen"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="40dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/clearedAllergen"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/allergyNotesField" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/allergyNotesField"
+                    style="@style/Widget.EGIDTracker.PageField.Notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="1000" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/addAllergenNotes"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="40dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/note"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/severityLabel" />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/clearSwitch"
+                style="@style/Widget.EGIDTracker.Switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/allergen_cleared" />
 
-        <TextView
-            android:id="@+id/clearedDate"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/endDate"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/clearAllergen" />
+            <!-- Shown only when the allergen is cleared -->
+            <LinearLayout
+                android:id="@+id/clearedDateGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-        <Button
-            android:id="@+id/clearedDatePickerButton"
-            android:layout_width="175dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="00dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:gravity="start|center_vertical"
-            android:paddingStart="16dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="0dp"
-            android:text="@string/datePicker"
-            android:textColorHint="#808080"
-            android:textColor="@color/secondary"
-            android:textSize="14sp"
-            app:backgroundTint="#ffffff"
-            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/clearAllergen" />
+                <TextView
+                    style="@style/Widget.EGIDTracker.PageLabel"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/end_date" />
 
-        <EditText
-            android:id="@+id/allergyNotesField"
-            android:layout_width="325dp"
-            android:layout_height="150dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:inputType="text"
-            android:paddingStart="16dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="90dp"
-            android:textColor="@color/secondary"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintHorizontal_bias="0.491"
-            app:layout_constraintTop_toBottomOf="@+id/addAllergenNotes"
-            tools:ignore="SpeakableTextPresentCheck" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/clearedDateLayout"
+                    style="@style/Widget.EGIDTracker.PageField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:endIconContentDescription="@string/choose_date"
+                    app:endIconDrawable="@drawable/ic_calendar"
+                    app:endIconMode="custom">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        style="@style/Widget.EGIDTracker.PageField.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/date_hint"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
-        <Switch
-            android:id="@+id/clearSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="35dp"
-            android:paddingEnd="16dp"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintHorizontal_bias="0.676"
-            app:layout_constraintTop_toBottomOf="@+id/allergyNotesField"
-            tools:ignore="MissingConstraints" />
-
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="250dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:gravity="center"
-            android:paddingStart="16dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="0dp"
-            android:text="@string/saveButton"
-            android:textColor="#ffffff"
-            android:textSize="17sp"
-            app:backgroundTint="@color/primary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clearedDate" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/enterFieldsGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.35" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/leftGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/rightGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    <Button
+        android:id="@+id/saveButton"
+        style="@style/Widget.EGIDTracker.PrimaryButton"
+        android:layout_width="match_parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/save_allergen" />
+</LinearLayout>

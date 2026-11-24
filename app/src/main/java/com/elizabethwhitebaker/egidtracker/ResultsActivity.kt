@@ -1,14 +1,14 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TableLayout
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -18,36 +18,23 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Past scores for the selected child, optionally within a date range, updating live. Shared by
+ * the Symptom Checker, Quality of Life and Endoscopy screens (extra: sourceActivity).
+ */
 class ResultsActivity : AppCompatActivity() {
 
-    private lateinit var tableLayout: TableLayout
-    private lateinit var reportButton: Button
-
-    // NEW: date range UI
-    private lateinit var startDateButton: Button
-    private lateinit var endDateButton: Button
-
-    // NEW: store selected date range
-    private var startDateMillis: Long? = null
-    private var endDateMillis: Long? = null
-
-    // NEW: realtime listener
+    private lateinit var startDate: DateField
+    private lateinit var endDate: DateField
     private var resultsListener: ListenerRegistration? = null
 
-    private val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+    private val displayFormat = SimpleDateFormat(DateField.DISPLAY_PATTERN, Locale.US)
+    private val sourceActivity by lazy { intent.getStringExtra("sourceActivity") ?: "SymptomChecker" }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
-
-        reportButton = findViewById(R.id.genButton)
-        tableLayout = findViewById(R.id.reportTableLayout)
-
-        // NEW: hook up date buttons (from your updated XML)
-        startDateButton = findViewById(R.id.startDateButton)
-        endDateButton = findViewById(R.id.endDateButton)
-
-        val sourceActivity = intent.getStringExtra("sourceActivity") ?: "SymptomChecker"
+        setupPageHeader(R.string.results)
 
         val childId = CurrentChild.getId(this) ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_LONG).show()
@@ -55,166 +42,84 @@ class ResultsActivity : AppCompatActivity() {
             return
         }
 
-        // NEW: Date pickers update the list immediately
-        startDateButton.setOnClickListener {
-            showDatePicker { millis ->
-                startDateMillis = millis
-                startDateButton.text = dateFormat.format(Date(millis))
-                attachResultsListener(sourceActivity, childId)
-            }
+        startDate = DateField(this, findViewById(R.id.startDateLayout))
+        endDate = DateField(this, findViewById(R.id.endDateLayout))
+        startDate.onPicked = { attachResultsListener(childId) }
+        endDate.onPicked = { attachResultsListener(childId) }
+
+        findViewById<View>(R.id.genButton).setOnClickListener {
+            val target = if (sourceActivity == "EndoscopyActivity") EndoscopyButtonsActivity::class.java
+                else ReportActivity::class.java
+            startActivity(Intent(this, target).apply {
+                putExtra("sourceActivity", sourceActivity)
+                putExtra("childId", childId)
+                startDate.date?.let { putExtra("startDateMillis", it.time) }
+                endDate.date?.let { putExtra("endDateMillis", it.time) }
+            })
         }
 
-        endDateButton.setOnClickListener {
-            showDatePicker { millis ->
-                endDateMillis = millis
-                endDateButton.text = dateFormat.format(Date(millis))
-                attachResultsListener(sourceActivity, childId)
-            }
-        }
-
-        reportButton.setOnClickListener {
-            if (sourceActivity == "EndoscopyActivity") {
-                val intent = Intent(this, EndoscopyButtonsActivity::class.java).apply {
-                    putExtra("childId", childId)
-                    startDateMillis?.let { putExtra("startDateMillis", it) }
-                    endDateMillis?.let { putExtra("endDateMillis", it) }
-                }
-                startActivity(intent)
-            } else {
-                val intent = Intent(this, ReportActivity::class.java).apply {
-                    putExtra("sourceActivity", sourceActivity)
-                    startDateMillis?.let { putExtra("startDateMillis", it) }
-                    endDateMillis?.let { putExtra("endDateMillis", it) }
-                }
-                startActivity(intent)
-            }
-        }
-
-        // Initial load (realtime)
-        attachResultsListener(sourceActivity, childId)
+        attachResultsListener(childId)
     }
 
-    // NEW: realtime listener that rebuilds the query each time dates change
-    private fun attachResultsListener(sourceActivity: String, childId: String) {
+    /** Listens to the scores in the chosen range; re-run whenever a date changes. */
+    private fun attachResultsListener(childId: String) {
         resultsListener?.remove()
-        resultsListener = null
 
         val subCollection = when (sourceActivity) {
-            "SymptomChecker" -> "Symptom Scores"
             "QoLActivity" -> "Quality of Life Scores"
             "EndoscopyActivity" -> "EndoscopyResults"
             else -> "Symptom Scores"
         }
-
-        var query: Query = Firebase.firestore.collection("Children")
-            .document(childId)
+        var query: Query = Firebase.firestore.collection("Children").document(childId)
             .collection(subCollection)
             .orderBy("date", Query.Direction.ASCENDING)
-
-        val start = startDateMillis
-        val end = endDateMillis
-
-        if (start != null) {
-            query = query.whereGreaterThanOrEqualTo("date", Timestamp(Date(start)))
-        }
-
-        if (end != null) {
-            // inclusive through end-of-day
-            val endInclusiveMillis = Calendar.getInstance().apply {
-                timeInMillis = end
-                set(Calendar.HOUR_OF_DAY, 23)
-                set(Calendar.MINUTE, 59)
-                set(Calendar.SECOND, 59)
-                set(Calendar.MILLISECOND, 999)
-            }.timeInMillis
-
-            query = query.whereLessThanOrEqualTo("date", Timestamp(Date(endInclusiveMillis)))
+        startDate.date?.let { query = query.whereGreaterThanOrEqualTo("date", Timestamp(it)) }
+        endDate.date?.let { end ->
+            // Inclusive through the end of that day
+            val endOfDay = Calendar.getInstance().apply {
+                time = end
+                set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59)
+                set(Calendar.SECOND, 59); set(Calendar.MILLISECOND, 999)
+            }.time
+            query = query.whereLessThanOrEqualTo("date", Timestamp(endOfDay))
         }
 
         resultsListener = query.addSnapshotListener { snapshot, error ->
-            if (error != null) {
-                Toast.makeText(this, "Failed to load data: ${error.message}", Toast.LENGTH_LONG).show()
-                return@addSnapshotListener
-            }
-
-            tableLayout.removeAllViews()
-
-            val documents = snapshot?.documents ?: emptyList()
-            for (document in documents) {
-                val dateTimestamp = document.getTimestamp("date")?.toDate()
-                val score = document.getLong("totalScore")?.toString() ?: "N/A"
-
-                if (dateTimestamp != null) {
-                    if (sourceActivity == "EndoscopyActivity") {
-                        addEndoscopyRowToTable(document.id, dateTimestamp, score)
-                    } else {
-                        addRowToTable(dateTimestamp, score)
-                    }
+            showError(error)
+            if (error != null) return@addSnapshotListener
+            val rows = snapshot?.documents.orEmpty().mapNotNull { doc ->
+                val date = (doc.get("date") as? Timestamp)?.toDate() ?: return@mapNotNull null
+                val score = doc.getLong("totalScore")?.toString() ?: "N/A"
+                // Endoscopy results open for editing; questionnaire scores are display-only
+                if (sourceActivity == "EndoscopyActivity") {
+                    ListRow(displayFormat.format(date), action = score) { editEndoscopy(doc.id) }
+                } else {
+                    ListRow(displayFormat.format(date), action = score)
                 }
             }
+            fillList(findViewById<LinearLayout>(R.id.scoreRows), findViewById(R.id.scoresEmpty), rows)
         }
     }
 
-    private fun showDatePicker(onPicked: (Long) -> Unit) {
-        val cal = Calendar.getInstance()
-        DatePickerDialog(
-            this,
-            { _, year, month, day ->
-                val pickedMillis = Calendar.getInstance().apply {
-                    set(Calendar.YEAR, year)
-                    set(Calendar.MONTH, month)
-                    set(Calendar.DAY_OF_MONTH, day)
-                    // normalize start of day
-                    set(Calendar.HOUR_OF_DAY, 0)
-                    set(Calendar.MINUTE, 0)
-                    set(Calendar.SECOND, 0)
-                    set(Calendar.MILLISECOND, 0)
-                }.timeInMillis
-
-                onPicked(pickedMillis)
-            },
-            cal.get(Calendar.YEAR),
-            cal.get(Calendar.MONTH),
-            cal.get(Calendar.DAY_OF_MONTH)
-        ).show()
-    }
-
-    private fun addRowToTable(date: Date, score: String) {
-        val row = layoutInflater.inflate(R.layout.score_row_item, tableLayout, false)
-        val dateTextView = row.findViewById<TextView>(R.id.date)
-        val scoreTextView = row.findViewById<TextView>(R.id.score)
-
-        val formattedDate = dateFormat.format(date)
-
-        dateTextView.text = formattedDate
-        scoreTextView.text = score
-        tableLayout.addView(row)
-    }
-
-    private fun addEndoscopyRowToTable(documentId: String, date: Date, score: String) {
-        val row = layoutInflater.inflate(R.layout.endoscopy_score_row, tableLayout, false)
-        val dateTextView = row.findViewById<TextView>(R.id.date)
-        val scoreTextView = row.findViewById<TextView>(R.id.score)
-
-        val formattedDate = dateFormat.format(date)
-
-        dateTextView.text = formattedDate
-        scoreTextView.text = score
-
-        row.setOnClickListener {
-            val intent = Intent(this, EndoscopyActivity::class.java).apply {
-                putExtra("isEditing", true)
-                putExtra("reportId", documentId)
-            }
-            startActivity(intent)
+    private fun showError(error: FirebaseFirestoreException?) {
+        findViewById<View>(R.id.errorBanner).visibility = if (error == null) View.GONE else View.VISIBLE
+        if (error != null) {
+            findViewById<TextView>(R.id.errorMessage).setText(
+                if (error.code == FirebaseFirestoreException.Code.PERMISSION_DENIED) R.string.scores_permission_error
+                else R.string.scores_network_error
+            )
         }
+    }
 
-        tableLayout.addView(row)
+    private fun editEndoscopy(reportId: String) {
+        startActivity(Intent(this, EndoscopyActivity::class.java).apply {
+            putExtra("isEditing", true)
+            putExtra("reportId", reportId)
+        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         resultsListener?.remove()
-        resultsListener = null
     }
 }

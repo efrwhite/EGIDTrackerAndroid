@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Purple header for light pages: back arrow, title, optional action link on the right
+     (e.g. "Results"). Set up with setupPageHeader() in PageUi.kt. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pageHeader"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@color/primaryBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="4dp"
+    android:paddingEnd="20dp">
+
+    <com.elizabethwhitebaker.egidtracker.BackButton
+        style="@style/Widget.EGIDTracker.BackButton" />
+
+    <TextView
+        android:id="@+id/pageTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:fontFamily="@font/lato_bold"
+        android:maxLines="1"
+        android:textColor="@color/onPrimary"
+        android:textSize="22sp"
+        tools:text="Food Tracker" />
+
+    <TextView
+        android:id="@+id/pageAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:fontFamily="@font/lato_bold"
+        android:padding="6dp"
+        android:textColor="@color/lightSalmon"
+        android:textSize="16sp"
+        android:visibility="gone"
+        tools:text="Results"
+        tools:visibility="visible" />
+</LinearLayout>
