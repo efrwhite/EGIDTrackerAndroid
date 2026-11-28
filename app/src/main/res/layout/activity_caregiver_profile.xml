@@ -1,227 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Add or edit a caregiver (AddCaregiverActivity); same design as the child profile form -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    tools:context="SignUpActivity"
     android:fillViewport="true"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".AddCaregiverActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/HomeLayout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primaryBackground"
-        tools:context="AddCaregiverActivity">
+        android:layout_height="wrap_content">
 
-        <!-- Navigation Bar -->
-
-        <!-- Buttons -->
-
-        <EditText
-            android:id="@+id/editText3"
-            android:layout_width="150dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="48dp"
-            android:background="@drawable/rounded_edittext_bg"
-            app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-            app:layout_constraintStart_toEndOf="@id/middleGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/editText"
-            android:textColor="#808080"
-            android:textColorHint="#808080"/>
-
-        <TextView
-            android:id="@+id/LastName"
-            android:layout_width="100dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="48dp"
-            android:background="#00E0A2A2"
-            android:fontFamily="@font/lato_bold"
-            android:gravity="center"
-            android:text="@string/LastName"
-            android:textColor="@color/primary"
-            android:visibility="visible"
-            app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-            app:layout_constraintHorizontal_bias="0.29"
-            app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/FirstName"
-            tools:visibility="visible" />
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="150dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="48dp"
-            android:background="@drawable/rounded_edittext_bg"
-            app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-            app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/editText2"
-            android:textColor="#808080"
-            android:textColorHint="#808080"/>
-
-        <TextView
-            android:id="@+id/FirstName"
-            android:layout_width="100dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="48dp"
-            android:background="#00E0A2A2"
-            android:fontFamily="@font/lato_bold"
-            android:gravity="center"
-            android:text="@string/FirstName"
-            android:textColor="@color/primary"
-            android:visibility="visible"
-            app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-            app:layout_constraintHorizontal_bias="0.29"
-            app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/Birthdate"
-            tools:visibility="visible" />
-
-        <RelativeLayout
-            android:id="@+id/navBar"
-            android:layout_width="411dp"
-            android:layout_height="50dp"
-            android:background="@color/primaryBackground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.elizabethwhitebaker.egidtracker.BackButton
-                style="@style/Widget.EGIDTracker.BackButton"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="4dp" />
-
-            <!-- Page Title -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="40dp"
+            android:paddingTop="32dp"
+            android:paddingEnd="40dp"
+            android:paddingBottom="40dp">
 
             <TextView
+                android:id="@+id/caregiverTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/lato_medium"
-                android:text="@string/CaregiverTitle"
-                android:textColor="@color/primary"
-                android:textSize="20sp" />
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/add_caregiver_title"
+                android:textColor="@color/onPrimary"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Photo: same rounded salmon square as the child profile; tap to add or change -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/caregiverPhoto"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/lightSalmon"
+                android:contentDescription="@string/add_photo"
+                android:padding="0.5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/caregiverTitle"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.EGIDTracker.HomeAvatar"
+                app:strokeColor="@color/onPrimary"
+                app:strokeWidth="1dp" />
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/caregiverPhotoLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:fontFamily="@font/lato_bold"
+                android:padding="8dp"
+                android:text="@string/add_photo"
+                android:textColor="@color/lavender"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/caregiverPhoto" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="120dp"
-            android:layout_height="108dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/navBar"
-            tools:src="@tools:sample/avatars" />
+            <!-- Splits the First / Last Name row in half -->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/nameGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="157dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:text="@string/ChangePicture"
-            app:backgroundTint="#BFB8A8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            <TextView
+                android:id="@+id/firstNameLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginTop="12dp"
+                android:text="@string/first_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/caregiverPhotoLink" />
 
-        <!-- Guideline for Equal Division -->
+            <TextView
+                android:id="@+id/lastNameLabel"
+                style="@style/Widget.EGIDTracker.AuthLabel"
+                android:layout_marginStart="6.5dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/last_name"
+                app:layout_constraintStart_toStartOf="@+id/nameGuide"
+                app:layout_constraintTop_toBottomOf="@+id/caregiverPhotoLink" />
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:text="@string/SaveContinue"
-            app:backgroundTint="@color/primary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LastName" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="6.5dp"
+                app:layout_constraintEnd_toStartOf="@+id/nameGuide"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstNameLabel">
 
-        <Button
-            android:id="@+id/deleteAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:text="@string/delete_account"
-            app:backgroundTint="@color/primary"
-            android:textSize="14sp"
-            android:fontFamily="@font/lato_bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/saveButton" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/caregiverFirstName"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName|textCapWords"
+                    android:maxLength="50"
+                    android:nextFocusDown="@+id/caregiverLastName"
+                    android:nextFocusForward="@+id/caregiverLastName" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/Birthdate"
-            android:layout_width="100dp"
-            android:layout_height="48dp"
-            android:fontFamily="@font/lato_bold"
-            android:gravity="center"
-            app:layout_constraintEnd_toStartOf="@+id/leftGuideline"
-            app:layout_constraintHorizontal_bias="0.29"
-            app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/button"
-            android:layout_marginTop="48dp"
-            android:background="#00E0A2A2"
-            android:text="@string/Username"
-            android:textColor="@color/primary"
-            android:visibility="visible"
-            tools:visibility="visible" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lastNameLayout"
+                style="@style/Widget.EGIDTracker.AuthField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6.5dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/nameGuide"
+                app:layout_constraintTop_toBottomOf="@+id/lastNameLabel">
 
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="150dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="48dp"
-            android:background="@drawable/rounded_edittext_bg"
-            app:layout_constraintEnd_toEndOf="@+id/rightGuideline"
-            app:layout_constraintHorizontal_bias="0.51"
-            app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/button"
-            app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-            android:textColor="#808080"
-            android:textColorHint="#808080"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/caregiverLastName"
+                    style="@style/Widget.EGIDTracker.AuthField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName|textCapWords"
+                    android:maxLength="50" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/middleGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.50" />
+            <!-- The account's login username: shown, read-only, on the account holder's own profile -->
+            <LinearLayout
+                android:id="@+id/usernameGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstNameLayout"
+                tools:visibility="visible">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/leftGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25" />
+                <TextView
+                    style="@style/Widget.EGIDTracker.AuthLabel"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/username" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/rightGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.EGIDTracker.AuthField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:alpha="0.75"
+                    android:enabled="false"
+                    app:helperText="@string/username_fixed"
+                    app:helperTextTextColor="@color/lavender">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/caregiverUsername"
+                        style="@style/Widget.EGIDTracker.AuthField.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Same salmon pill as the child profile's Save -->
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/filled_roundedbg_accent"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0"
+                android:stateListAnimator="@null"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/onPrimary"
+                android:textSize="15sp"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/usernameGroup" />
+
+            <!-- Edit only: "Remove caregiver", or "Delete account" on the account holder's profile -->
+            <TextView
+                android:id="@+id/deleteAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:fontFamily="@font/lato_bold"
+                android:padding="8dp"
+                android:text="@string/remove_caregiver"
+                android:textColor="@color/lightSalmon"
+                android:textSize="15sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/saveButton"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.elizabethwhitebaker.egidtracker.BackButton
+            android:id="@+id/backButton"
+            style="@style/Widget.EGIDTracker.BackButton"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp" />
+    </FrameLayout>
 </ScrollView>

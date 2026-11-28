@@ -1,214 +1,101 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
-
+/**
+ * Records an endoscopy's eosinophil counts by site, or edits one (extras: isEditing, reportId).
+ * The header's Results link lists past endoscopies.
+ */
 class EndoscopyActivity : AppCompatActivity() {
 
-    private lateinit var resultsButton: Button
-    private lateinit var dateInput: EditText
+    /** Count fields and the Firestore field each is saved as. */
+    private val countFields = listOf(
+        R.id.upper to "proximate", R.id.middle to "middle", R.id.lower to "lower",
+        R.id.stomach to "stomach", R.id.duodenum to "duodenum",
+        R.id.rightColon to "rightColon", R.id.middleColon to "middleColon", R.id.leftColon to "leftColon"
+    )
+
+    private lateinit var dateField: DateField
     private lateinit var notes: EditText
+    private lateinit var saveButton: Button
+
+    private val childId by lazy { CurrentChild.getId(this) }
+    private val reportId by lazy { intent.getStringExtra("reportId").takeIf { intent.getBooleanExtra("isEditing", false) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_endoscopy)
+        setupPageHeader(R.string.endoscopy_results, R.string.results) {
+            val id = childId ?: return@setupPageHeader
+            startActivity(Intent(this, ResultsActivity::class.java).apply {
+                putExtra("sourceActivity", "EndoscopyActivity")
+                putExtra("childId", id)
+            })
+        }
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
+        dateField = DateField(this, findViewById(R.id.dateLayout))
         notes = findViewById(R.id.notesField)
+        saveButton = findViewById(R.id.saveButton)
 
-        dateInput = findViewById(R.id.endoscopyDate)
-        dateInput.setOnClickListener{
-            showDatePickerDialog()
-        }
-
-        val isEditing = intent.getBooleanExtra("isEditing", false)
-        val reportId = intent.getStringExtra("reportId")
-
-        if (isEditing && reportId != null) {
-            loadReportData(reportId)
-        }
-
-        val saveButton: Button = findViewById(R.id.saveButton)
-        saveButton.setOnClickListener {
-            saveEndoscopyData(isEditing, reportId)
-        }
-
-        resultsButton = findViewById(R.id.resultsButton)
-        resultsButton.setOnClickListener {
-            val childId = CurrentChild.getId(this) ?: return@setOnClickListener
-
-            val intent = Intent(this, ResultsActivity::class.java).apply {
-                putExtra("sourceActivity", "EndoscopyActivity") // Pass source info
-                putExtra("childId", childId) // Pass child ID
-            }
-            startActivity(intent)
-            finish()
-        }
-
-
-
+        reportId?.let { loadReport(it) }
+        saveButton.setOnClickListener { saveReport() }
     }
 
-    private fun saveEndoscopyData(isEditing: Boolean, reportId: String?) {
-        val totalScore = calculateTotalScore()
-        val dateString = dateInput.text.toString()
+    private fun countOf(id: Int): Int? = findViewById<EditText>(id).text.toString().toIntOrNull()
 
-        if (dateString.isBlank()) {
-            Toast.makeText(this, "Please enter a valid date.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        saveResultsToFirestore(totalScore, dateString, isEditing, reportId)
-
-        // Navigate back to the home screen without duplicating activities
-        val intent = Intent(this, PlanActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        }
-        startActivity(intent)
-        finish()
-    }
-
-
-    private fun calculateTotalScore(): Int {
-        var score = 0
-        val fieldIds = arrayOf(
-            R.id.upper, R.id.middle, R.id.lower,
-            R.id.stomach, R.id.duodenum, R.id.rightColon,
-            R.id.middleColon, R.id.leftColon
-        )
-        for (id in fieldIds) {
-            val editText = findViewById<EditText>(id)
-            score += editText.text.toString().toIntOrNull() ?: 0
-        }
-        return score
-    }
-
-
-    private fun saveResultsToFirestore(totalScore: Int, date: String, isEditing: Boolean, reportId: String?) {
-        val childId = CurrentChild.getId(this) ?: run {
+    private fun saveReport() {
+        val date = dateField.date
+        if (!dateField.requireDate() || date == null) return
+        val child = childId ?: run {
             Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        val dateObject = dateFormat.parse(date) ?: run {
-            Toast.makeText(this, "Invalid date format.", Toast.LENGTH_SHORT).show()
-            return
-        }
-        val timestamp = com.google.firebase.Timestamp(dateObject)
-
-        val data = hashMapOf(
-            "totalScore" to totalScore,
-            "proximate" to findViewById<EditText>(R.id.upper).text.toString().toIntOrNull(),
-            "middle" to findViewById<EditText>(R.id.middle).text.toString().toIntOrNull(),
-            "lower" to findViewById<EditText>(R.id.lower).text.toString().toIntOrNull(),
-            "stomach" to findViewById<EditText>(R.id.stomach).text.toString().toIntOrNull(),
-            "duodenum" to findViewById<EditText>(R.id.duodenum).text.toString().toIntOrNull(),
-            "rightColon" to findViewById<EditText>(R.id.rightColon).text.toString().toIntOrNull(),
-            "middleColon" to findViewById<EditText>(R.id.middleColon).text.toString().toIntOrNull(),
-            "leftColon" to findViewById<EditText>(R.id.leftColon).text.toString().toIntOrNull(),
-            "date" to timestamp,
+        val data = hashMapOf<String, Any?>(
+            "totalScore" to countFields.sumOf { (id, _) -> countOf(id) ?: 0 },
+            "date" to Timestamp(date),
             "notes" to notes.text.toString().trim()
         )
+        countFields.forEach { (id, field) -> data[field] = countOf(id) }
 
-        val resultsCollection = Firebase.firestore.collection("Children")
-            .document(childId)
-            .collection("EndoscopyResults")
-
-        if (isEditing && reportId != null) {
-            // ✅ If editing, update the existing report
-            resultsCollection.document(reportId)
-                .update(data as Map<String, Any>)  // Force correct type
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Report updated successfully!", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to update: ${e.message}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-        } else {
-            // ✅ If creating new, add a new document
-            resultsCollection.add(data)
-                .addOnSuccessListener {
-                    Toast.makeText(
-                        this,
-                        "Endoscopy results saved successfully!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-        }
-    }
-
-    private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val datePickerDialog = DatePickerDialog(
-            this,
-            { _, selectedYear, selectedMonth, selectedDay ->
-                val formattedDate = "${selectedMonth + 1}/$selectedDay/$selectedYear"
-                dateInput.setText(formattedDate)
+        val results = Firebase.firestore.collection("Children").document(child).collection("EndoscopyResults")
+        val ref = reportId?.let { results.document(it) } ?: results.document()
+        saveButton.isEnabled = false
+        awaitSave(ref.set(data, SetOptions.merge()),
+            onSaved = { queued ->
+                toastSaved("Endoscopy results saved", queued)
+                finish()
             },
-            year, month, day
-        )
-        datePickerDialog.show()
+            onFailed = { e ->
+                saveButton.isEnabled = true
+                Toast.makeText(this, "Failed to save: ${e.message}", Toast.LENGTH_SHORT).show()
+            })
     }
 
-    private fun loadReportData(reportId: String) {
-        val childId = CurrentChild.getId(this) ?: run {
-            Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-        Firebase.firestore.collection("Children")
-            .document(childId)
-            .collection("EndoscopyResults")
-            .document(reportId)
+    private fun loadReport(id: String) {
+        val child = childId ?: return
+        Firebase.firestore.collection("Children").document(child).collection("EndoscopyResults").document(id)
             .get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    // Populate all input fields with the Firestore data
-                    findViewById<EditText>(R.id.upper).setText(document.getLong("proximate")?.toString() ?: "")
-                    findViewById<EditText>(R.id.middle).setText(document.getLong("middle")?.toString() ?: "")
-                    findViewById<EditText>(R.id.lower).setText(document.getLong("lower")?.toString() ?: "")
-                    findViewById<EditText>(R.id.stomach).setText(document.getLong("stomach")?.toString() ?: "")
-                    findViewById<EditText>(R.id.duodenum).setText(document.getLong("duodenum")?.toString() ?: "")
-                    findViewById<EditText>(R.id.rightColon).setText(document.getLong("rightColon")?.toString() ?: "")
-                    findViewById<EditText>(R.id.middleColon).setText(document.getLong("middleColon")?.toString() ?: "")
-                    findViewById<EditText>(R.id.leftColon).setText(document.getLong("leftColon")?.toString() ?: "")
-
-                    // ✅ Populate Notes field if it exists
-                    val notesText = document.getString("notes") ?: ""
-                    findViewById<EditText>(R.id.notesField).setText(notesText)
-
-                    // ✅ Populate Date field properly
-                    val dateTimestamp = document.getTimestamp("date")?.toDate()
-                    if (dateTimestamp != null) {
-                        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-                        dateInput.setText(dateFormat.format(dateTimestamp))
-                    }
+            .addOnSuccessListener { doc ->
+                if (!doc.exists()) return@addOnSuccessListener
+                countFields.forEach { (viewId, field) ->
+                    findViewById<EditText>(viewId).setText(doc.getLong(field)?.toString() ?: "")
                 }
+                notes.setText(doc.getString("notes"))
+                (doc.get("date") as? Timestamp)?.let { dateField.date = it.toDate() }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error loading report: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
 }

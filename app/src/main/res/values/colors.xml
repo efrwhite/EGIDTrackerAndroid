@@ -7,6 +7,7 @@
     <color name="splashCenter">@color/deepPurple</color> <!-- Center of the launch glow -->
     <color name="lightBackground">#FBF8FF</color>      <!-- EGID palette off-white: Home background -->
     <color name="statBorder">@color/lavender</color>   <!-- Outline of the Home stats pill -->
+    <color name="errorBanner">#40FF8F70</color>        <!-- Palette salmon at 25%: behind error messages -->
     <color name="lightSalmon">#FF8F70</color>         <!-- Light salmon -->
     <color name="darkSalmon">#D96545</color>          <!-- EGID palette: deeper salmon -->
     <color name="nearBlack">#2D2438</color>           <!-- EGID palette: text on light backgrounds -->

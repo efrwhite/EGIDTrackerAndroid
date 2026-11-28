@@ -20,6 +20,7 @@ class PlanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_yourplan)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
         planName = findViewById(R.id.planName)
 

@@ -1,248 +1,150 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.DatePicker
-import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
+/**
+ * Symptom questionnaire: 20 questions rated 0 (none) to 4 (worst), then 12 yes/no symptoms.
+ * The total is the ratings plus one per "yes". Saves, then opens Results.
+ *
+ * Saved format, unchanged from earlier versions (ReportActivity reads it): `responses` holds
+ * the ratings as "0"-"4" followed by "y"/"n" for each symptom, and `symptomDescriptions`
+ * the text of each symptom answered yes.
+ */
 class SymptomCheckerActivity : AppCompatActivity() {
 
-    private lateinit var resultsButton: Button
-    private lateinit var visitDateInput: EditText
+    private val ratedQuestions = listOf(
+        R.string.question2, R.string.question3, R.string.question4, R.string.question5,
+        R.string.question6, R.string.question7, R.string.question8, R.string.question9,
+        R.string.question10, R.string.question11, R.string.question12, R.string.question13,
+        R.string.question14, R.string.question15, R.string.question16, R.string.question17,
+        R.string.question18, R.string.question19, R.string.question20, R.string.question21
+    )
+
+    private val yesNoQuestions = listOf(
+        R.string.question23, R.string.question24, R.string.question25, R.string.question26,
+        R.string.question27, R.string.question28, R.string.question29, R.string.question30,
+        R.string.question31, R.string.question32, R.string.question33, R.string.question34
+    )
+
+    private val answerIds = listOf(R.id.answer0, R.id.answer1, R.id.answer2, R.id.answer3, R.id.answer4)
+
+    /** A 0-4 question: its row, and the chosen rating (null until answered). */
+    private class RatedQuestion(val row: View, val text: TextView, var answer: Int? = null)
+
+    private val rated = mutableListOf<RatedQuestion>()
+    private val yesNo = mutableListOf<SwitchMaterial>()
+    private lateinit var dateField: DateField
+    private lateinit var saveButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_symptom_score_checker)
+        setupPageHeader(R.string.symptomScoreChecker, R.string.results) { openResults() }
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
-        val saveButton: Button = findViewById(R.id.saveButton)
-        saveButton.setOnClickListener {
-            saveScores()
-        }
+        dateField = DateField(this, findViewById(R.id.dateLayout))
+        saveButton = findViewById(R.id.saveButton)
+        buildQuestions(findViewById(R.id.questions))
+        saveButton.setOnClickListener { saveScores() }
+    }
 
-        visitDateInput = findViewById(R.id.visitDateInput)
-        visitDateInput.setOnClickListener {
-            showDatePickerDialog()
-        }
+    private fun buildQuestions(container: LinearLayout) {
+        addHeading(container, R.string.symptoms_rated)
+        ratedQuestions.forEach { addRatedQuestion(container, it) }
 
-        resultsButton = findViewById(R.id.resultsButton)
-        resultsButton.setOnClickListener {
-            val childId = CurrentChild.getId(this) ?: run {
-                Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val intent = Intent(this, ResultsActivity::class.java).apply {
-                putExtra("sourceActivity", "SymptomChecker")
-                putExtra("childId", childId)
-            }
-            startActivity(intent)
+        addHeading(container, R.string.symptoms_yes_no)
+        yesNoQuestions.forEach { text ->
+            val switch = layoutInflater.inflate(R.layout.view_symptom_switch, container, false) as SwitchMaterial
+            switch.setText(text)
+            yesNo += switch
+            container.addView(switch)
         }
     }
 
-    private fun areAllFieldsFilled(): Boolean {
-        val numberOfQuestions = 32
-        for (i in 1..numberOfQuestions) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val view = findViewById<View>(answerId)
-            if (view is EditText && view.text.toString().trim().isEmpty()) {
-                return false
+    private fun addHeading(container: LinearLayout, @StringRes heading: Int) {
+        container.addView(TextView(this, null, 0, R.style.Widget_EGIDTracker_PageLabel).apply {
+            setText(heading)
+            textSize = 17f
+            setPadding(0, dp(22), 0, dp(2))
+        })
+    }
+
+    private fun addRatedQuestion(container: LinearLayout, @StringRes text: Int) {
+        val row = layoutInflater.inflate(R.layout.view_qol_question, container, false)
+        val question = RatedQuestion(row, row.findViewById<TextView>(R.id.questionText).apply { setText(text) })
+        val buttons = answerIds.map { row.findViewById<MaterialButton>(it) }
+        buttons.forEachIndexed { value, button ->
+            button.setOnClickListener {
+                // One answer per question
+                buttons.forEach { it.isChecked = it === button }
+                question.answer = value
+                question.text.setTextColor(ContextCompat.getColor(this, R.color.nearBlack))
             }
         }
-        return true
+        rated += question
+        container.addView(row)
     }
 
     private fun saveScores() {
-        if (!areAllFieldsFilled()) {
-            Toast.makeText(this, "Please fill out all fields before saving.", Toast.LENGTH_SHORT).show()
+        val scroll = findViewById<ScrollView>(R.id.symptomScroll)
+        if (!dateField.requireDate()) {
+            scroll.smoothScrollTo(0, 0)
             return
         }
-
-        if (!validateInputs()) {
+        val unanswered = rated.filter { it.answer == null }
+        if (unanswered.isNotEmpty()) {
+            // Mark the unanswered questions and scroll to the first one
+            unanswered.forEach { it.text.setTextColor(ContextCompat.getColor(this, R.color.darkSalmon)) }
+            val first = unanswered.first().row
+            scroll.smoothScrollTo(0, (first.parent as View).top + first.top)
+            Toast.makeText(this, R.string.error_answer_all, Toast.LENGTH_SHORT).show()
             return
         }
+        val childId = CurrentChild.getId(this) ?: return
 
-        val dateString = visitDateInput.text.toString().trim()
-        if (dateString.isBlank()) {
-            Toast.makeText(this, "Please enter a valid date.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Validate date format
-        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        dateFormat.isLenient = false
-        val dateObject = try {
-            dateFormat.parse(dateString)
-        } catch (e: Exception) {
-            null
-        }
-
-        if (dateObject == null) {
-            Toast.makeText(this, "Please enter a valid date.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val totalScore = calculateTotalScore()
-        val responses = collectResponses()
-        val symptomDescriptions = collectSymptomDescriptions()
-
-        saveResultsToFirestore(totalScore, responses, symptomDescriptions, dateString)
-
-        val childId = CurrentChild.getId(this)
-
-        val intent = Intent(this, ResultsActivity::class.java).apply {
-            putExtra("sourceActivity", "SymptomChecker")
-            childId?.let { putExtra("childId", it) }
-        }
-        startActivity(intent)
-        finish()
-    }
-
-    private fun validateInputs(): Boolean {
-        for (i in 1..20) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            val input = answer.text.toString().trim()
-
-            val number = input.toIntOrNull()
-            if (number == null || number !in 0..4) {
-                answer.error = "Enter a number between 0 and 4"
-                Toast.makeText(this, "Question $i: Enter a number between 0 and 4", Toast.LENGTH_SHORT).show()
-                return false
-            }
-        }
-        return true
-    }
-
-    private fun calculateTotalScore(): Int {
-        var score = 0
-
-        for (i in 1..20) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val answer = findViewById<EditText>(answerId)
-            score += answer.text.toString().toIntOrNull() ?: 0
-        }
-
-        for (i in 21..32) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val view = findViewById<View>(answerId)
-            val answerStr = when (view) {
-                is EditText -> view.text.toString().trim()
-                is SwitchCompat -> if (view.isChecked) "y" else "n"
-                else -> ""
-            }
-            if (answerStr.equals("y", ignoreCase = true)) {
-                score += 1
-            }
-        }
-
-        return score
-    }
-
-    private fun collectResponses(): List<String> {
-        val responses = mutableListOf<String>()
-        for (i in 1..32) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val view = findViewById<View>(answerId)
-            val response = when (view) {
-                is EditText -> view.text.toString().trim()
-                is SwitchCompat -> if (view.isChecked) "y" else "n"
-                else -> ""
-            }
-            responses.add(response)
-        }
-        return responses
-    }
-
-    private fun collectSymptomDescriptions(): List<String> {
-        val descriptions = mutableListOf<String>()
-        for (i in 21..32) {
-            val answerId = resources.getIdentifier("answer$i", "id", packageName)
-            val view = findViewById<View>(answerId)
-            val answerStr = when (view) {
-                is EditText -> view.text.toString().trim()
-                is SwitchCompat -> if (view.isChecked) "y" else "n"
-                else -> ""
-            }
-            if (answerStr.equals("y", ignoreCase = true)) {
-                val questionId = resources.getIdentifier("question$i", "id", packageName)
-                val question = findViewById<TextView>(questionId)
-                descriptions.add(question.text.toString())
-            }
-        }
-        return descriptions
-    }
-
-    private fun saveResultsToFirestore(
-        totalScore: Int,
-        responses: List<String>,
-        symptoms: List<String>,
-        date: String
-    ) {
-        val childId = CurrentChild.getId(this) ?: run {
-            Toast.makeText(this, "No child selected", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        dateFormat.isLenient = false
-        val dateObject = try {
-            dateFormat.parse(date)
-        } catch (e: Exception) {
-            null
-        }
-
-        if (dateObject == null) {
-            Toast.makeText(this, "Invalid date format.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val timestamp = Timestamp(dateObject)
-
+        val ratings = rated.map { it.answer!! }
         val data = hashMapOf(
-            "totalScore" to totalScore,
-            "responses" to responses,
-            "symptomDescriptions" to symptoms,
-            "date" to timestamp
+            "totalScore" to ratings.sum() + yesNo.count { it.isChecked },
+            "responses" to ratings.map { it.toString() } + yesNo.map { if (it.isChecked) "y" else "n" },
+            "symptomDescriptions" to yesNo.filter { it.isChecked }.map { it.text.toString() },
+            "date" to Timestamp(dateField.date!!)
         )
-
-        Firebase.firestore.collection("Children").document(childId).collection("Symptom Scores")
-            .add(data)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Score saved successfully!", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to save data: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val datePickerDialog = DatePickerDialog(
-            this,
-            { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-                val formattedDate = "${selectedMonth + 1}/$selectedDay/$selectedYear"
-                visitDateInput.setText(formattedDate)
+        saveButton.isEnabled = false
+        // A new document reference (rather than add()) so the write is applied locally right away
+        val write = Firebase.firestore.collection("Children").document(childId)
+            .collection("Symptom Scores").document().set(data)
+        awaitSave(write,
+            onSaved = { queued ->
+                toastSaved("Answers saved", queued)
+                openResults()
+                finish()
             },
-            year, month, day
-        )
-
-        datePickerDialog.show()
+            onFailed = { e ->
+                saveButton.isEnabled = true
+                Toast.makeText(this, "Failed to save answers: ${e.message}", Toast.LENGTH_SHORT).show()
+            })
     }
+
+    private fun openResults() {
+        startActivity(Intent(this, ResultsActivity::class.java).apply {
+            putExtra("sourceActivity", "SymptomChecker")
+        })
+    }
+
+    private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 }

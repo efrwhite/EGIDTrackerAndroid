@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Purple outline of fields on light pages; the focused item makes it a stateful list so
+     TextInputLayout uses it for the unfocused border too -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/primaryBackground" android:state_focused="true" />
+    <item android:color="@color/softPurple" />
+</selector>

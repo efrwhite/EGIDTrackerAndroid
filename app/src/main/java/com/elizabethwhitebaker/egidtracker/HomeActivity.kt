@@ -66,15 +66,19 @@ class HomeActivity : AppCompatActivity() {
         dayStreakStat = findViewById(R.id.dayStreakStat)
         symptomScoreStat = findViewById(R.id.symptomScoreStat)
 
-        fun opens(id: Int, screen: Class<*>) =
-            findViewById<View>(id).setOnClickListener { startActivity(Intent(this, screen)) }
+        fun opens(id: Int, screen: Class<*>, needsChild: Boolean = true) =
+            findViewById<View>(id).setOnClickListener {
+                // No child yet (e.g. skipped at sign-up): offer to add one instead
+                if (needsChild && CurrentChild.getId(this) == null) showAddChildFirst()
+                else startActivity(Intent(this, screen))
+            }
 
-        opens(R.id.childCard, ProfilesActivity::class.java)
+        opens(R.id.childCard, ProfilesActivity::class.java, needsChild = false)
         opens(R.id.planButton, PlanActivity::class.java)
         opens(R.id.foodTrackerButton, FoodTrackerActivity::class.java)
         opens(R.id.symptomCheckerButton, SymptomCheckerActivity::class.java)
         opens(R.id.QoLButton, QoLActivity::class.java)
-        opens(R.id.EOEedButton, EducationActivity::class.java)
+        opens(R.id.EOEedButton, EducationActivity::class.java, needsChild = false)
 
         findViewById<View>(R.id.logoutButton).setOnClickListener { confirmLogout() }
     }
@@ -130,7 +134,9 @@ class HomeActivity : AppCompatActivity() {
         val name = listOfNotNull(firstName, lastName).joinToString(" ").trim()
         childNameTextView.text = name.ifEmpty { getString(R.string.no_child_selected) }
 
-        childDietTextView.text = diet
+        // Children without a diet are stored as "None"; show that as "No diet"
+        val noDiet = diet.equals("None", ignoreCase = true) || diet.equals("No Diet", ignoreCase = true)
+        childDietTextView.text = if (noDiet) getString(R.string.no_diet) else diet
         childDietTextView.visibility = if (diet.isNullOrBlank()) View.GONE else View.VISIBLE
 
         // No photo: the card shows the plain salmon avatar from the design
@@ -172,7 +178,8 @@ class HomeActivity : AppCompatActivity() {
 
                 val loggedDays = food.documents.mapNotNull { it.getString("date") }.toMutableSet()
                 symptoms.documents.mapNotNullTo(loggedDays) { doc ->
-                    doc.getTimestamp("date")?.let { dayFormat.format(it.toDate()) }
+                    // Skip records whose date isn't a timestamp rather than crash on them
+                    (doc.get("date") as? Timestamp)?.let { dayFormat.format(it.toDate()) }
                 }
                 val latestScore = symptoms.documents.firstOrNull()?.get("totalScore") as? Number
 
