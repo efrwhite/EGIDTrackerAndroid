@@ -1,292 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackground"
-    tools:context="SignUpActivity"
-    android:fillViewport="true"
-    android:fitsSystemWindows="true">
+    android:background="@color/lightBackground"
+    android:orientation="vertical"
+    tools:context=".AccidentalExposureActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/HomeLayout"
+    <include layout="@layout/view_page_header" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primaryBackground"
-        tools:context="AccidentalExposureActivity">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <!-- Navigation Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
 
-        <RelativeLayout
-            android:id="@+id/navBar"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:background="@color/primaryBackground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            <!-- Report form -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_box"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-            <com.elizabethwhitebaker.egidtracker.BackButton
-                style="@style/Widget.EGIDTracker.BackButton"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="4dp" />
+                <TextView
+                    style="@style/Widget.EGIDTracker.PageLabel"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/report_exposure"
+                    android:textSize="16sp" />
 
-            <!-- Page Title -->
+                <TextView
+                    style="@style/Widget.EGIDTracker.PageLabel"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/date" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateLayout"
+                    style="@style/Widget.EGIDTracker.PageField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:endIconContentDescription="@string/choose_date"
+                    app:endIconDrawable="@drawable/ic_calendar"
+                    app:endIconMode="custom">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        style="@style/Widget.EGIDTracker.PageField.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/date_hint"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    style="@style/Widget.EGIDTracker.PageLabel"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/description_label" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemLayout"
+                    style="@style/Widget.EGIDTracker.PageField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/exposedItemTextField"
+                        style="@style/Widget.EGIDTracker.PageField.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/exposure_item_hint"
+                        android:inputType="textCapSentences"
+                        android:maxLength="100" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    style="@style/Widget.EGIDTracker.PageLabel"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/notes_label" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.EGIDTracker.PageField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/descriptionTextField"
+                        style="@style/Widget.EGIDTracker.PageField.Notes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLength="1000" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/addAEButton"
+                    style="@style/Widget.EGIDTracker.PrimaryButton"
+                    android:layout_width="match_parent"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="@string/add_exposure" />
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/lato_medium"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
-                android:text="@string/accidentalExposure"
-                android:textColor="@color/primary"
-                android:textSize="20sp" />
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:layout_marginTop="18dp"
+                android:text="@string/history" />
 
-        </RelativeLayout>
-
-        <!-- Form Header -->
-
-        <View
-            android:id="@+id/formSectionHeader"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/navBar" />
-
-        <TextView
-            android:id="@+id/reportNewAccidentalExposure"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_marginStart="8dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/reportNewAccidentalExposure"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/formSectionHeader"
-            app:layout_constraintTop_toTopOf="@id/formSectionHeader" />
-
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/date"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/reportNewAccidentalExposure" />
-
-
-        <Button
-            android:id="@+id/datePickerButton"
-            android:layout_width="225dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="40dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:paddingStart="2dp"
-            android:paddingTop="2dp"
-            android:paddingEnd="120dp"
-            android:paddingBottom="2dp"
-            android:text="@string/datePicker"
-            android:textColorHint="#808080"
-            android:textColor="@color/secondary"
-            android:textSize="14sp"
-            app:backgroundTint="#ffffff"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-            app:layout_constraintTop_toBottomOf="@id/reportNewAccidentalExposure"/>
-
-
-        <TextView
-            android:id="@+id/itemExposedTo"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/itemExposed"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/date" />
-
-
-        <EditText
-            android:id="@+id/exposedItemTextField"
-            android:layout_width="225dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginStart="-20dp"
-            android:layout_marginEnd="0dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:paddingStart="10dp"
-            android:paddingTop="2dp"
-            android:paddingEnd="127dp"
-            android:paddingBottom="2dp"
-            android:hint="@string/itemName"
-            android:textColorHint="#808080"
-            android:textColor="@color/secondary"
-            android:textSize="14sp"
-            app:backgroundTint="#ffffff"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-            app:layout_constraintTop_toBottomOf="@id/date"/>
-
-        <!-- NEW: Description -->
-        <TextView
-            android:id="@+id/descriptionLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="Description"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/itemExposedTo" />
-
-        <EditText
-            android:id="@+id/descriptionTextField"
-            android:layout_width="225dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginStart="-20dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:paddingStart="10dp"
-            android:paddingTop="2dp"
-            android:paddingEnd="127dp"
-            android:paddingBottom="2dp"
-            android:hint="Enter description"
-            android:textColorHint="#808080"
-            android:textColor="@color/secondary"
-            android:textSize="11sp"
-            app:backgroundTint="#ffffff"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintStart_toStartOf="@id/enterFieldsGuideline"
-            app:layout_constraintTop_toBottomOf="@id/itemExposedTo" />
-
-        <Button
-            android:id="@+id/addAEButton"
-            android:layout_width="150dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="28dp"
-            android:background="@drawable/rounded_edittext_bg"
-            android:fontFamily="@font/lato_medium"
-            android:gravity="center"
-            android:paddingStart="16dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="0dp"
-            android:layout_marginBottom="30dp"
-            android:text="@string/add"
-            android:textColor="#ffffff"
-            android:textSize="17sp"
-            app:backgroundTint="@color/primary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/descriptionTextField" />
-
-        <!-- Guideline for Equal Division -->
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/middleGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="365dp" />
-
-        <!-- Past Medication List -->
-
-        <View
-            android:id="@+id/historySectionHeader"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginStart="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/middleGuideline" />
-
-        <TextView
-            android:id="@+id/history"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_marginStart="8dp"
-            android:fontFamily="@font/lato_medium"
-            android:text="@string/history"
-            android:textColor="@color/primary"
-            android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="@id/historySectionHeader"
-            app:layout_constraintTop_toTopOf="@id/historySectionHeader" />
-
-        <ScrollView
-            android:id="@+id/AEItemScrollView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/historySectionHeader"
-            app:layout_constraintVertical_bias="0.0">
-
-            <TableLayout
-                android:id="@+id/AEItemTableLayout"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <!-- Rows will be added programmatically -->
-            </TableLayout>
-        </ScrollView>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/dashed_box"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/enterFieldsGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="160dp" />
+                <LinearLayout
+                    android:id="@+id/historyRows"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/leftGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/rightGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/middleVerticalGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+                <TextView
+                    android:id="@+id/historyEmpty"
+                    style="@style/Widget.EGIDTracker.EmptyText"
+                    android:layout_width="match_parent"
+                    android:paddingTop="30dp"
+                    android:paddingBottom="30dp"
+                    android:text="@string/no_exposures" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

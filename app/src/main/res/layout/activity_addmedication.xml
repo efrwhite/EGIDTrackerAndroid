@@ -1,321 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackground"
-    tools:context="SignUpActivity"
-    android:fillViewport="true"
-    android:fitsSystemWindows="true">
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/primaryBackground"
+    android:background="@color/lightBackground"
+    android:orientation="vertical"
     tools:context=".AddMedicationActivity">
 
-    <!-- Navigation Bar -->
+    <include layout="@layout/view_page_header" />
 
-    <RelativeLayout
-        android:id="@+id/navBar"
-        android:layout_width="411dp"
-        android:layout_height="70dp"
-        android:background="@color/primaryBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <com.elizabethwhitebaker.egidtracker.BackButton
-            style="@style/Widget.EGIDTracker.BackButton"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="4dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="22dp">
 
-        <!-- Back Button -->
+            <TextView
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:text="@string/medication_name" />
 
-        <!-- Page Title -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/medNameLayout"
+                style="@style/Widget.EGIDTracker.PageField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/lato_medium"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="5dp"
-            android:text="@string/addMedication"
-            android:textColor="@color/primary"
-            android:textSize="20sp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/medNameField"
+                    style="@style/Widget.EGIDTracker.PageField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/medication_name_hint"
+                    android:inputType="textCapSentences"
+                    android:maxLength="100" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </RelativeLayout>
+            <TextView
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/start_date" />
 
-    <TextView
-        android:id="@+id/addMedName"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/name"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/startDateLayout"
+                style="@style/Widget.EGIDTracker.PageField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:endIconContentDescription="@string/choose_date"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom">
 
-    <EditText
-        android:id="@+id/medNameField"
-        android:layout_width="225dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:hint="@string/medNameField"
-        android:textColorHint="#808080"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/navBar" />
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/Widget.EGIDTracker.PageField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/date_hint"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/addMedDosage"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/dosage"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/addMedName" />
+            <TextView
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/dosage" />
 
-    <TextView
-        android:id="@+id/addMedDate"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/startDate"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/addMedFreq" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dosageLayout"
+                style="@style/Widget.EGIDTracker.PageField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp">
 
-    <TextView
-        android:id="@+id/endMedDate"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/endDate"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/addMedDate" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/medAmountField"
+                    style="@style/Widget.EGIDTracker.PageField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/dosage_hint"
+                    android:inputType="text"
+                    android:maxLength="60" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/addMedFreq"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/frequency"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/addMedDosage" />
+            <TextView
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:layout_marginTop="16dp"
+                android:text="@string/notes_label" />
 
-    <TextView
-        android:id="@+id/discontinueMed"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/discontinueMed"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/endMedDate" />
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.EGIDTracker.PageField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp">
 
-    <TextView
-        android:id="@+id/addMedNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/note"
-        android:textColor="@color/primary"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/discontinueMed" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/medNotesField"
+                    style="@style/Widget.EGIDTracker.PageField.Notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="1000" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/medNotesField"
-        android:layout_width="350dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:hint="@string/notesField"
-        android:textColorHint="#808080"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="90dp"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/addMedNotes" />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/discontinueSwitch"
+                style="@style/Widget.EGIDTracker.Switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/discontinue_medication" />
 
-    <Button
-        android:id="@+id/datePickerButton"
-        android:layout_width="225dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="0dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:paddingStart="0dp"
-        android:paddingTop="2dp"
-        android:paddingEnd="127dp"
-        android:paddingBottom="2dp"
-        android:text="@string/datePicker"
-        android:textColorHint="#808080"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:backgroundTint="#ffffff"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            <!-- Optional while active (a planned end); required when discontinuing -->
+            <LinearLayout
+                android:id="@+id/endDateGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        app:layout_constraintTop_toBottomOf="@+id/frequencyField" />
+                <TextView
+                    android:id="@+id/endDateLabel"
+                    style="@style/Widget.EGIDTracker.PageLabel"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/end_date_optional" />
 
-    <Button
-        android:id="@+id/endDatePickerButton"
-        android:layout_width="225dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="00dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:paddingStart="0dp"
-        android:paddingTop="2dp"
-        android:paddingEnd="127dp"
-        android:paddingBottom="2dp"
-        android:text="@string/datePicker"
-        android:textColorHint="#808080"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:backgroundTint="#ffffff"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/endDateLayout"
+                    style="@style/Widget.EGIDTracker.PageField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:endIconContentDescription="@string/choose_date"
+                    app:endIconDrawable="@drawable/ic_calendar"
+                    app:endIconMode="custom">
 
-        app:layout_constraintTop_toBottomOf="@+id/datePickerButton" />
-
-    <EditText
-        android:id="@+id/frequencyField"
-        android:layout_width="225dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="0dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:hint="@string/frequencyField"
-        android:textColorHint="#808080"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/medAmountField" />
-
-    <EditText
-        android:id="@+id/medAmountField"
-        android:layout_width="225dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:hint="@string/medAmountField"
-        android:textColorHint="#808080"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/medNameField" />
-
-    <Switch
-        android:id="@+id/discontinueSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginTop="24dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        app:layout_constraintHorizontal_bias="0.588"
-        app:layout_constraintTop_toBottomOf="@+id/endMedDate" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        style="@style/Widget.EGIDTracker.PageField.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/date_hint"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/medSaveButton"
-        android:layout_width="250dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:layout_marginBottom="30dp"
-        android:text="@string/saveButton"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/medNotesField" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/enterFieldsGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.35" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+        style="@style/Widget.EGIDTracker.PrimaryButton"
+        android:layout_width="match_parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/save_medication" />
+</LinearLayout>

@@ -1,133 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/HomeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackground"
-    tools:context="AddAllergiesActivity"
-    tools:ignore="ExtraText">
+    android:background="@color/lightBackground"
+    android:orientation="vertical"
+    tools:context=".FoodTrackerActivity">
 
-    <!-- Navigation Bar -->
-
-    <RelativeLayout
-        android:id="@+id/navBar"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:background="@color/primaryBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.elizabethwhitebaker.egidtracker.BackButton
-            style="@style/Widget.EGIDTracker.BackButton"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="4dp" />
-
-        <!-- Back Button -->
-
-        <!-- Page Title -->
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/lato_medium"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="5dp"
-            android:text="@string/foodTracker"
-            android:textColor="@color/primary"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
-
-
-    <Button
-        android:id="@+id/date"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="00dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:fontFamily="@font/lato_medium"
-        android:gravity="start|center_vertical"
-        android:paddingStart="16dp"
-        android:paddingTop="0dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="0dp"
-        android:text="@string/date"
-        android:textColorHint="#808080"
-        android:textColor="@color/secondary"
-        android:textSize="14sp"
-        app:backgroundTint="#ffffff"
-        app:layout_constraintTop_toBottomOf="@+id/navBar"
-        app:layout_constraintStart_toStartOf="@id/leftGuideline"/>
-
-    <Button
-        android:id="@+id/addButton"
-        style="?attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="11dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:fontFamily="@font/lato_medium"
-        android:text="@string/add"
-        android:textColor="@color/primary"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/navBar"
-        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-        tools:ignore="SpeakableTextPresentCheck" />
-
+    <include layout="@layout/view_page_header" />
 
     <ScrollView
-        android:id="@+id/foodsScrollView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date"
-        app:layout_constraintVertical_bias="0.0">
+        android:layout_weight="1">
 
-        <TableLayout
-            android:id="@+id/pastAllergenTableLayout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!-- Rows will be added programmatically -->
-        </TableLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="22dp">
+
+            <TextView
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:text="@string/showing" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dateLayout"
+                style="@style/Widget.EGIDTracker.PageField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:endIconContentDescription="@string/choose_date"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/Widget.EGIDTracker.PageField.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/foodListLabel"
+                style="@style/Widget.EGIDTracker.PageLabel"
+                android:layout_marginTop="32dp"
+                android:text="@string/todays_food" />
+
+            <!-- The day's foods, or an empty message; Add food is always at the bottom -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/dashed_box"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="18dp">
+
+                <LinearLayout
+                    android:id="@+id/foodRows"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/foodEmpty"
+                    style="@style/Widget.EGIDTracker.EmptyText"
+                    android:layout_marginTop="44dp"
+                    android:text="@string/no_foods_logged" />
+
+                <Button
+                    android:id="@+id/addButton"
+                    style="@style/Widget.EGIDTracker.SmallAccentButton"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/add_food_short" />
+            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/enterFieldsGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.35" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/leftGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rightGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

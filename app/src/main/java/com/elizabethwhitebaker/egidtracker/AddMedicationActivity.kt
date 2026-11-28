@@ -1,269 +1,155 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
-import java.text.SimpleDateFormat
+import androidx.core.widget.doAfterTextChanged
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
+/**
+ * Adds a medication, or edits one (extra: medicationId). A discontinued medication opens
+ * read-only except for its notes; switching Discontinue off resumes it (unlocks it for editing).
+ */
 class AddMedicationActivity : AppCompatActivity() {
 
-    private lateinit var datePickerButton: Button
-    private lateinit var endDatePickerButton: Button
-    private lateinit var saveButton: Button
-
-    private lateinit var title: TextView
+    private lateinit var medNameLayout: TextInputLayout
     private lateinit var medName: EditText
     private lateinit var dosage: EditText
-    private lateinit var frequency: EditText
     private lateinit var notes: EditText
-    private lateinit var discontinue: Switch
+    private lateinit var discontinue: SwitchMaterial
+    private lateinit var startDate: DateField
+    private lateinit var endDate: DateField
+    private lateinit var saveButton: Button
 
-    private var startDate: String = ""
-    private var endDate: String = ""
-    private var childId: String? = null
-    private var medicationId: String? = null
+    private val childId by lazy { CurrentChild.getId(this) }
+    private var wasDiscontinued = false // opened from Past medications
 
-    private lateinit var calendar: Calendar
-    private val firestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+    private fun today() = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
+    }.time
+    private val medicationId by lazy { intent.getStringExtra("medicationId") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_addmedication)
+        setupPageHeader(if (medicationId == null) R.string.add_medications else R.string.edit_medication)
+        if (requireSelectedChild() == null) return // needs a child; offers to add one
 
-        datePickerButton = findViewById(R.id.datePickerButton)
-        endDatePickerButton = findViewById(R.id.endDatePickerButton)
-        saveButton = findViewById(R.id.medSaveButton)
-        title = findViewById(R.id.title)
+        medNameLayout = findViewById(R.id.medNameLayout)
         medName = findViewById(R.id.medNameField)
         dosage = findViewById(R.id.medAmountField)
-        frequency = findViewById(R.id.frequencyField)
         notes = findViewById(R.id.medNotesField)
         discontinue = findViewById(R.id.discontinueSwitch)
-        childId = getCurrentChildId()
+        saveButton = findViewById(R.id.medSaveButton)
+        startDate = DateField(this, findViewById(R.id.startDateLayout), MedicationsActivity.MED_DATE_PATTERN)
+        // The end date may be planned ahead; MedicationsActivity discontinues it once it passes
+        endDate = DateField(this, findViewById(R.id.endDateLayout), MedicationsActivity.MED_DATE_PATTERN, allowFuture = true)
 
-        calendar = Calendar.getInstance()
-
-        datePickerButton.setOnClickListener {
-            showDatePickerDialog(datePickerButton)
+        medName.doAfterTextChanged { medNameLayout.error = null }
+        discontinue.setOnCheckedChangeListener { _, checked ->
+            // Discontinuing needs an end date; today is the usual answer
+            findViewById<TextView>(R.id.endDateLabel).setText(if (checked) R.string.end_date else R.string.end_date_optional)
+            if (checked && endDate.date == null) endDate.date = today()
+            if (!checked && wasDiscontinued) resume()
         }
 
-        endDatePickerButton.setOnClickListener {
-            showDatePickerDialog(endDatePickerButton)
-        }
-
-        // Check if in edit mode
-        medicationId = intent.getStringExtra("medicationId")
-        if (medicationId != null) {
-            fetchAndPopulateMedicationData(medicationId!!)
-        }
-
-        saveButton.setOnClickListener {
-            // Validate that the end date is after the start date.
-            if (!validateMedicationDates()) {
-                return@setOnClickListener
-            }
-
-            if (medicationId == null) {
-                saveMedication()
-            } else {
-                updateMedication()
-            }
-        }
+        medicationId?.let { loadMedication(it) }
+        saveButton.setOnClickListener { saveMedication() }
     }
 
-    private fun getCurrentChildId(): String? = CurrentChild.getId(this)
+    private fun loadMedication(id: String) {
+        Firebase.firestore.collection("Medications").document(id).get()
+            .addOnSuccessListener { doc ->
+                if (!doc.exists()) {
+                    Toast.makeText(this, "Medication not found.", Toast.LENGTH_SHORT).show()
+                    return@addOnSuccessListener
+                }
+                medName.setText(doc.getString("medName"))
+                dosage.setText(doc.getString("dosage"))
+                notes.setText(doc.getString("notes"))
+                startDate.stored = doc.getString("startDate").orEmpty()
+                endDate.stored = doc.getString("endDate").orEmpty()
+                discontinue.isChecked = doc.getBoolean("discontinue") ?: false
+
+                // A discontinued medication is history: only its notes can still change, unless
+                // Discontinue is switched off to resume it
+                if (discontinue.isChecked) {
+                    wasDiscontinued = true
+                    setupPageHeader(R.string.view_medication)
+                    setDetailsEnabled(false)
+                    saveButton.setText(R.string.save_notes)
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to load medication: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun setDetailsEnabled(enabled: Boolean) {
+        medNameLayout.isEnabled = enabled
+        findViewById<TextInputLayout>(R.id.dosageLayout).isEnabled = enabled
+        startDate.isEnabled = enabled
+        endDate.isEnabled = enabled
+    }
+
+    /** Taking it again: back to Current on save. Its old end date is over, so it's cleared. */
+    private fun resume() {
+        wasDiscontinued = false
+        setupPageHeader(R.string.edit_medication)
+        setDetailsEnabled(true)
+        endDate.date = null
+        saveButton.setText(R.string.save)
+        Toast.makeText(this, R.string.medication_resumed_hint, Toast.LENGTH_SHORT).show()
+    }
 
     private fun saveMedication() {
-        val discontinueChecked = discontinue.isChecked
-        val startDateText = datePickerButton.text.toString().trim()
-        val endDateTextRaw = endDatePickerButton.text.toString().trim()
+        val name = medName.text.toString().trim()
+        val discontinued = discontinue.isChecked
 
-        val endDateText = if (endDateTextRaw == "Enter Date") "" else endDateTextRaw
-
-        // Require a start date always
-        if (startDateText.isEmpty() || startDateText == "Enter Date") {
-            Toast.makeText(this, "Start date is required", Toast.LENGTH_SHORT).show()
-            return
+        var valid = true
+        if (name.isEmpty()) { medNameLayout.error = getString(R.string.error_required); valid = false }
+        if (!startDate.requireDate()) valid = false
+        if (discontinued && !endDate.requireDate()) valid = false
+        // Same-day start and end is fine; ending before starting isn't
+        val start = startDate.date
+        val end = endDate.date
+        if (start != null && end != null && end.before(start)) {
+            findViewById<TextInputLayout>(R.id.endDateLayout).error = getString(R.string.error_end_before_start)
+            valid = false
         }
+        if (!valid) return
+        // An end date that's already over means the medication is no longer taken
+        val nowDiscontinued = discontinued || MedicationsActivity.hasEnded(end)
 
-        // If discontinuing, require an end date
-        if (discontinueChecked && endDateText.isEmpty()) {
-            Toast.makeText(this, "End date is required when discontinuing medication", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val medicationMap = hashMapOf(
-            "medName" to medName.text.toString().trim(),
+        val medicationMap = hashMapOf<String, Any?>(
+            "medName" to name,
             "dosage" to dosage.text.toString().trim(),
-            "startDate" to startDateText,
-            "endDate" to endDateText,   // now "" when not provided
-            "frequency" to frequency.text.toString().trim(),
-            "discontinue" to discontinueChecked,
+            "startDate" to startDate.stored,
+            "discontinue" to nowDiscontinued,
+            "endDate" to endDate.stored, // "" when there's no end date
             "notes" to notes.text.toString().trim(),
             "childId" to childId
         )
-
-        firestore.collection("Medications").add(medicationMap)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Medication added successfully", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to add medication: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-
-        val intent = Intent(this, MedicationsActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        startActivity(intent)
-        finish()
-    }
-
-    private fun updateMedication() {
-        val discontinueChecked = discontinue.isChecked
-        val startDateText = datePickerButton.text.toString().trim()
-        val endDateTextRaw = endDatePickerButton.text.toString().trim()
-        val endDateText = if (endDateTextRaw == "Enter Date") "" else endDateTextRaw
-
-        val medicationMap = hashMapOf(
-            "medName" to medName.text.toString().trim(),
-            "dosage" to dosage.text.toString().trim(),
-            "startDate" to startDateText,
-            "endDate" to endDateText,
-            "frequency" to frequency.text.toString().trim(),
-            "discontinue" to discontinueChecked,
-            "notes" to notes.text.toString().trim(),
-            "childId" to childId
-        )
-
-        medicationId?.let {
-            firestore.collection("Medications").document(it)
-                .set(medicationMap)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Medication updated successfully", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to update medication: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        }
-
-        val intent = Intent(this, MedicationsActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        startActivity(intent)
-        finish()
-    }
-
-    private fun fetchAndPopulateMedicationData(medicationId: String) {
-        title.text = "Edit Medication"
-        firestore.collection("Medications").document(medicationId).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    medName.setText(document.getString("medName"))
-                    dosage.setText(document.getString("dosage"))
-                    startDate = document.getString("startDate") ?: ""
-                    endDate = document.getString("endDate") ?: ""
-                    frequency.setText(document.getString("frequency"))
-                    discontinue.isChecked = document.getBoolean("discontinue") ?: false
-                    notes.setText(document.getString("notes"))
-
-                    datePickerButton.text = startDate
-                    endDatePickerButton.text = endDate
-
-                    // If medication is discontinued, disable all fields except the notes field.
-                    if (discontinue.isChecked) {
-                        medName.isEnabled = false
-                        dosage.isEnabled = false
-                        datePickerButton.isEnabled = false
-                        endDatePickerButton.isEnabled = false
-                        frequency.isEnabled = false
-                        discontinue.isEnabled = false
-                    }
-                } else {
-                    Toast.makeText(this, "Medication not found.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to load medication data: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun showDatePickerDialog(button: Button) {
-        val datePicker = DatePickerDialog(
-            this,
-            { _, year, monthOfYear, dayOfMonth ->
-                val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, monthOfYear, dayOfMonth)
-                val formattedDate = formatDate(selectedDate.time)
-                button.text = formattedDate
-                if (button == datePickerButton) {
-                    startDate = formattedDate // Save startDate
-                } else {
-                    endDate = formattedDate // Save endDate
-                }
+        // Merge keeps fields this screen doesn't show (e.g. frequency from older versions)
+        val medications = Firebase.firestore.collection("Medications")
+        val ref = medicationId?.let { medications.document(it) } ?: medications.document()
+        saveButton.isEnabled = false
+        awaitSave(ref.set(medicationMap, SetOptions.merge()),
+            onSaved = { queued ->
+                toastSaved(if (medicationId == null) "Medication added" else "Medication updated", queued)
+                finish()
             },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.show()
-    }
-
-    private fun formatDate(date: Date): String {
-        val sdf = SimpleDateFormat("MM-dd-yyyy", Locale.getDefault())
-        return sdf.format(date)
-    }
-
-    private fun validateMedicationDates(): Boolean {
-        val sdf = SimpleDateFormat("MM-dd-yyyy", Locale.getDefault())
-        val startDateStr = datePickerButton.text.toString().trim()
-        val endDateStrRaw = endDatePickerButton.text.toString().trim()
-        val isDiscontinue = discontinue.isChecked
-
-        val startMissing = startDateStr.isEmpty() || startDateStr == "Enter Date"
-        val endMissing = endDateStrRaw.isEmpty() || endDateStrRaw == "Enter Date"
-        val endDateStr = if (endMissing) "" else endDateStrRaw
-
-        // Start date is always required
-        if (startMissing) {
-            Toast.makeText(this, "Start date is required", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        // If not discontinuing, end date can be blank → no further validation
-        if (!isDiscontinue && endMissing) {
-            return true
-        }
-
-        // If discontinuing, end date must be provided
-        if (isDiscontinue && endMissing) {
-            Toast.makeText(this, "End date is required when discontinuing medication", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        // At this point both startDateStr and endDateStr should be real dates
-        return try {
-            val startDate: Date = sdf.parse(startDateStr) ?: throw IllegalArgumentException()
-            val endDate: Date = sdf.parse(endDateStr) ?: throw IllegalArgumentException()
-
-            if (!endDate.after(startDate)) {
-                Toast.makeText(this, "Medication end date must be after the start date", Toast.LENGTH_SHORT).show()
-                false
-            } else {
-                true
-            }
-        } catch (e: Exception) {
-            Toast.makeText(this, "Invalid date format", Toast.LENGTH_SHORT).show()
-            false
-        }
+            onFailed = { e ->
+                saveButton.isEnabled = true
+                Toast.makeText(this, "Failed to save medication: ${e.message}", Toast.LENGTH_SHORT).show()
+            })
     }
 }

@@ -17,12 +17,21 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
+import com.google.firebase.auth.FirebaseAuth
 import kotlin.math.hypot
 
 
 class MainActivity : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
+
+            // Firebase keeps the user signed in between launches, so skip the landing page
+            if (FirebaseAuth.getInstance().currentUser != null) {
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
+                return
+            }
+
             setContentView(R.layout.activity_landing)
 
             // The first frame matches the splash exactly (see playIntro), so drop the splash

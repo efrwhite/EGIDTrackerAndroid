@@ -1,99 +1,120 @@
 package com.elizabethwhitebaker.egidtracker
 
-import android.app.AlertDialog
-import android.content.ContentValues
-import android.content.Context
+import android.Manifest
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.OpenableColumns
-import android.view.LayoutInflater
+import android.text.format.Formatter
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
+import android.webkit.MimeTypeMap
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
+/**
+ * The selected child's documents: files and photos copied into the app's storage, listed in
+ * DBHelper. They stay on this device. Tap one to open it; Edit renames or deletes it.
+ */
 class DocumentsActivity : AppCompatActivity() {
 
-    private lateinit var addButton: Button
-    private lateinit var docsRecyclerView: RecyclerView
     private lateinit var documentUploadLauncher: ActivityResultLauncher<Intent>
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
-    private var documentsList = mutableListOf<Document>()
+    private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var dbHelper: DBHelper
     private lateinit var childId: String
     private var tempPhotoUri: Uri? = null
 
+    private val dateFormat = SimpleDateFormat(DateField.DISPLAY_PATTERN, Locale.US)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_documents)
+        setupPageHeader(R.string.documents)
+        childId = requireSelectedChild() ?: return // needs a child; offers to add one
 
-        addButton = findViewById(R.id.addButton)
-        docsRecyclerView = findViewById(R.id.docsRecyclerView)
         dbHelper = DBHelper(this)
+        // One-time move of documents saved by older versions, which weren't kept per child
+        dbHelper.migrateLegacyDocuments(this, childId)
 
-        childId = getChildId()
+        CurrentChild.getName(this)?.takeIf { it.isNotBlank() }?.let {
+            findViewById<TextView>(R.id.documentsLabel).text = getString(R.string.childs_documents, it)
+        } ?: findViewById<TextView>(R.id.documentsLabel).setText(R.string.documents)
 
-        documentsList = dbHelper.getAllDocuments(childId).toMutableList()
-        docsRecyclerView.layoutManager = LinearLayoutManager(this)
-        docsRecyclerView.adapter = DocumentAdapter(documentsList)
-
-        // Initialize the ActivityResultLauncher for loading a document
         documentUploadLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK && result.data != null && result.data!!.data != null) {
-                processDocumentUri(result.data!!.data!!)
-            } else {
-                Toast.makeText(this, "No file selected or an error occurred.", Toast.LENGTH_SHORT).show()
-            }
+            // Backing out of the picker isn't an error, so nothing to say then
+            result.data?.data?.takeIf { result.resultCode == RESULT_OK }?.let { addDocument(it) }
         }
-
-        // Initialize the ActivityResultLauncher for taking a photo
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            val uri = tempPhotoUri  // Create a local copy to safely cast it
-            if (success && uri != null) {
-                processDocumentUri(uri)
-            } else {
-                Toast.makeText(this, "Failed to capture photo.", Toast.LENGTH_SHORT).show()
-            }
+            val uri = tempPhotoUri ?: return@registerForActivityResult
+            if (success) addDocument(uri, getString(R.string.photo_on, dateFormat.format(Date())))
+            // addDocument keeps its own copy; drop the camera's temporary file either way
+            Photos.deleteIfOwned(this, uri.toString())
+            tempPhotoUri = null
+        }
+        // The app declares the camera permission, so the camera can't open until it's granted
+        requestCameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) takePhoto()
+            else Toast.makeText(this, "Camera permission is needed to take a photo", Toast.LENGTH_SHORT).show()
         }
 
-
-        // Show the dialog to choose between "Take Photo" and "Load Document"
-        addButton.setOnClickListener {
-            showAddDocumentOptions()
-        }
+        findViewById<View>(R.id.addButton).setOnClickListener { showAddDocumentOptions() }
+        showDocuments()
     }
 
-    // Function to show the dialog
+    private fun showDocuments() {
+        val rows = dbHelper.getAllDocuments(childId)
+            .sortedByDescending { it.date }
+            .map { doc ->
+                ListRow(doc.name, describe(doc), getString(R.string.edit),
+                    onClick = { openDocument(doc) },
+                    onAction = { showEditOptions(doc) })
+            }
+        fillList(findViewById<LinearLayout>(R.id.documentRows), findViewById(R.id.documentsEmpty), rows)
+    }
+
+    /** e.g. "PDF · 120 kB · Added 11/24/2026" */
+    private fun describe(doc: Document): String {
+        val kind = when {
+            doc.type == "application/pdf" -> "PDF"
+            doc.type.startsWith("image/") -> "Image"
+            else -> MimeTypeMap.getSingleton().getExtensionFromMimeType(doc.type)?.uppercase() ?: "File"
+        }
+        return listOf(kind, Formatter.formatShortFileSize(this, doc.size),
+            getString(R.string.document_added_on, dateFormat.format(doc.date))).joinToString(" · ")
+    }
+
+    /** --- Adding --- */
+
     private fun showAddDocumentOptions() {
-        val options = arrayOf("Take Photo", "Load Document")
-        AlertDialog.Builder(this)
-            .setTitle("Add Document")
-            .setItems(options) { _, which ->
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.add_document)
+            .setItems(arrayOf(getString(R.string.take_photo), getString(R.string.choose_file))) { _, which ->
                 when (which) {
-                    0 -> takePhoto()
+                    0 -> if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
+                        PackageManager.PERMISSION_GRANTED) takePhoto()
+                    else requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                     1 -> loadDocument()
                 }
             }
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 
-    // Load document from the phone
     private fun loadDocument() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "*/*"
@@ -102,161 +123,126 @@ class DocumentsActivity : AppCompatActivity() {
         documentUploadLauncher.launch(intent)
     }
 
-    // Take a photo using the camera
     private fun takePhoto() {
-        val photoFile = createImageFile()
-        val uri = FileProvider.getUriForFile(
-            this,
-            "com.elizabethwhitebaker.egidtracker.fileprovider",
-            photoFile
-        )
-        tempPhotoUri = uri  // Set tempPhotoUri after creating the URI
-        takePictureLauncher.launch(uri)  // Use the local uri variable for launching
+        val uri = Photos.newPhotoUri(this)
+        tempPhotoUri = uri
+        takePictureLauncher.launch(uri)
     }
 
-
-    // Create a file to store the photo
-    private fun createImageFile(): File {
-        val fileName = "photo_${System.currentTimeMillis()}.jpg"
-        // Use app-specific external storage to avoid Scoped Storage issues
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File(storageDir, fileName)
-    }
-
-
-    private fun getChildId(): String {
-        return CurrentChild.getId(this) ?: ""
-    }
-
-    private fun processDocumentUri(uri: Uri) {
-        val cursor = contentResolver.query(uri, null, null, null, null)
-        cursor?.use {
+    /** Copies [uri] into the app's storage and lists it, named [displayName] or the file's name. */
+    private fun addDocument(uri: Uri, displayName: String? = null) {
+        var name = displayName
+        var size = 0L
+        contentResolver.query(uri, null, null, null, null)?.use {
             if (it.moveToFirst()) {
-                val name = it.getString(it.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
-                val size = it.getLong(it.getColumnIndexOrThrow(OpenableColumns.SIZE))
-                val date = Date()
-                val type = contentResolver.getType(uri) ?: "Unknown"
-
-                // Copy the file from the original location to the app's internal storage
-                val savedFilePath = copyDocumentToAppStorage(uri, name)
-
-                if (savedFilePath != null) {
-                    // Save the document info to the database
-                    val document = Document(0, name, savedFilePath, type, size, date, null)
-                    dbHelper.insertDocument(childId, name, savedFilePath, type, size, date.time, null)
-                    documentsList.add(document)
-                    docsRecyclerView.adapter?.notifyDataSetChanged()
-                } else {
-                    Toast.makeText(this, "Failed to save the document.", Toast.LENGTH_SHORT).show()
-                }
+                if (name == null) name = it.getString(it.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
+                size = it.getLong(it.getColumnIndexOrThrow(OpenableColumns.SIZE))
             }
         }
+        val docName = name ?: "Document"
+        val type = contentResolver.getType(uri) ?: "application/octet-stream"
+        // Keep an extension on the stored file (camera photos are named without one)
+        val ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+        val fileName = if (ext != null && !docName.endsWith(".$ext", ignoreCase = true)) "$docName.$ext" else docName
+        val savedFilePath = copyDocumentToAppStorage(uri, fileName)
+        if (savedFilePath == null) {
+            Toast.makeText(this, "Failed to save the document.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (size <= 0) size = File(savedFilePath).length()
+        dbHelper.insertDocument(childId, docName, savedFilePath, type, size, Date().time, null)
+        showDocuments()
     }
 
-    // Helper function to copy the document to internal storage
-    private fun copyDocumentToAppStorage(uri: Uri, fileName: String): String? {
+    private fun copyDocumentToAppStorage(uri: Uri, fileName: String): String? = runCatching {
+        // Unique name, so two documents called e.g. "report.pdf" don't overwrite each other
+        val safeName = fileName.replace(Regex("[^A-Za-z0-9._-]"), "_")
+        val file = File(filesDir, "doc_${System.currentTimeMillis()}_$safeName")
+        contentResolver.openInputStream(uri)!!.use { input ->
+            FileOutputStream(file).use { output -> input.copyTo(output) }
+        }
+        file.absolutePath
+    }.getOrNull()
+
+    /** --- Open, rename, delete --- */
+
+    private fun openDocument(document: Document) {
+        val file = File(document.url)
+        if (!file.exists()) {
+            Toast.makeText(this, "This file is no longer on this phone.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val fileUri = FileProvider.getUriForFile(this, "com.elizabethwhitebaker.egidtracker.fileprovider", file)
+        val intent = Intent(Intent.ACTION_VIEW)
+            .setDataAndType(fileUri, document.type)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         try {
-            val inputStream: InputStream? = contentResolver.openInputStream(uri)
-            val file = File(filesDir, fileName)  // Save to internal storage
-            val outputStream = FileOutputStream(file)
-
-            inputStream?.use { input ->
-                outputStream.use { output ->
-                    input.copyTo(output)
-                }
-            }
-            return file.absolutePath // Return the file path
+            startActivity(intent)
         } catch (e: Exception) {
-            e.printStackTrace()
-            return null
+            Toast.makeText(this, "No app on this phone can open this kind of file.", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // DBHelper and DocumentAdapter remain the same
-    class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-
-        companion object {
-            private const val DATABASE_NAME = "documents.db"
-            private const val DATABASE_VERSION = 1
-
-            private const val TABLE_DOCUMENTS = "documents"
-            private const val COLUMN_ID = "id"
-            private const val COLUMN_NAME = "name"
-            private const val COLUMN_URL = "url"
-            private const val COLUMN_TYPE = "type"
-            private const val COLUMN_SIZE = "size"
-            private const val COLUMN_DATE = "date"
-            private const val COLUMN_THUMBNAIL = "thumbnail"
-        }
-
-        override fun onCreate(db: SQLiteDatabase?) {
-            val createTable = ("CREATE TABLE $TABLE_DOCUMENTS ("
-                    + "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + "$COLUMN_NAME TEXT, "
-                    + "$COLUMN_URL TEXT, "
-                    + "$COLUMN_TYPE TEXT, "
-                    + "$COLUMN_SIZE INTEGER, "
-                    + "$COLUMN_DATE INTEGER, "
-                    + "$COLUMN_THUMBNAIL TEXT)")
-            db?.execSQL(createTable)
-        }
-
-        override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-            db?.execSQL("DROP TABLE IF EXISTS $TABLE_DOCUMENTS")
-            onCreate(db)
-        }
-
-        // In your DBHelper, ensure you're storing the file path
-        fun insertDocument(childId: String, name: String, filePath: String, type: String, size: Long, date: Long, thumbnail: String?) {
-            val db = this.writableDatabase
-            val contentValues = ContentValues().apply {
-                put(COLUMN_NAME, name)
-                put(COLUMN_URL, filePath)  // Save the file path instead of the URI
-                put(COLUMN_TYPE, type)
-                put(COLUMN_SIZE, size)
-                put(COLUMN_DATE, date)
-                put(COLUMN_THUMBNAIL, thumbnail)
-            }
-            db.insert(TABLE_DOCUMENTS, null, contentValues)
-            db.close()
-        }
-
-        fun getAllDocuments(childId: String): List<Document> {
-            val documents = mutableListOf<Document>()
-            val db = this.readableDatabase
-            val cursor = db.rawQuery("SELECT * FROM $TABLE_DOCUMENTS", null)
-            cursor?.use {
-                if (it.moveToFirst()) {
-                    do {
-                        val id = it.getLong(it.getColumnIndexOrThrow(COLUMN_ID))
-                        val name = it.getString(it.getColumnIndexOrThrow(COLUMN_NAME))
-                        val url = it.getString(it.getColumnIndexOrThrow(COLUMN_URL))
-                        val type = it.getString(it.getColumnIndexOrThrow(COLUMN_TYPE))
-                        val size = it.getLong(it.getColumnIndexOrThrow(COLUMN_SIZE))
-                        val date = Date(it.getLong(it.getColumnIndexOrThrow(COLUMN_DATE)))
-                        val thumbnail = it.getString(it.getColumnIndexOrThrow(COLUMN_THUMBNAIL))
-                        documents.add(Document(id, name, url, type, size, date, thumbnail))
-                    } while (it.moveToNext())
+    private fun showEditOptions(document: Document) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(document.name)
+            .setItems(arrayOf(getString(R.string.rename), getString(R.string.delete))) { _, which ->
+                when (which) {
+                    0 -> showRenameDialog(document)
+                    1 -> confirmDelete(document)
                 }
             }
-            db.close()
-            return documents
-        }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
 
-        fun updateDocumentName(documentId: Long, newName: String) {
-            val db = this.writableDatabase
-            val contentValues = ContentValues().apply {
-                put(COLUMN_NAME, newName)
+    private fun showRenameDialog(document: Document) {
+        val layout = TextInputLayout(this, null, com.google.android.material.R.attr.textInputOutlinedStyle).apply {
+            hint = getString(R.string.document_name)
+        }
+        val input = TextInputEditText(layout.context).apply {
+            setText(document.name)
+            setSelection(document.name.length)
+        }
+        layout.addView(input)
+        val padding = (20 * resources.displayMetrics.density).toInt()
+        val container = android.widget.FrameLayout(this).apply {
+            setPadding(padding, padding / 2, padding, 0)
+            addView(layout)
+        }
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.rename_document)
+            .setView(container)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.rename, null) // set below, so an empty name keeps it open
+            .show()
+        dialog.getButton(android.content.DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+            val newName = input.text.toString().trim()
+            if (newName.isEmpty()) {
+                layout.error = getString(R.string.error_required)
+                return@setOnClickListener
             }
-            db.update(TABLE_DOCUMENTS, contentValues, "$COLUMN_ID = ?", arrayOf(documentId.toString()))
-            db.close()
+            dbHelper.updateDocumentName(document.id, newName)
+            dialog.dismiss()
+            showDocuments()
         }
+    }
 
-        fun deleteDocument(documentId: Long) {
-            val db = this.writableDatabase
-            db.delete(TABLE_DOCUMENTS, "$COLUMN_ID = ?", arrayOf(documentId.toString()))
-            db.close()
-        }
+    private fun confirmDelete(document: Document) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.delete_document_title, document.name))
+            .setMessage(R.string.delete_document_message)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.delete) { _, _ ->
+                dbHelper.deleteDocument(this, document.id)
+                showDocuments()
+            }
+            .show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::dbHelper.isInitialized) dbHelper.close()
     }
 
     data class Document(
@@ -268,104 +254,4 @@ class DocumentsActivity : AppCompatActivity() {
         val date: Date,
         val thumbnail: String?
     )
-
-    inner class DocumentAdapter(private val documents: List<Document>) : RecyclerView.Adapter<DocumentAdapter.DocumentViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DocumentViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.table_row_item, parent, false)
-            return DocumentViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: DocumentViewHolder, position: Int) {
-            holder.bind(documents[position])
-        }
-
-        override fun getItemCount() = documents.size
-
-        inner class DocumentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
-            private val editButton: Button = itemView.findViewById(R.id.editButton)
-
-            init {
-                // Set click listener for the entire row
-                itemView.setOnClickListener {
-                    val document = documents[adapterPosition]
-                    openDocument(document)
-                }
-
-                // Set click listener for the nameTextView (optional, if you want individual clicks)
-                nameTextView.setOnClickListener {
-                    val document = documents[adapterPosition]
-                    openDocument(document)
-                }
-
-                // Set click listener for the edit button
-                editButton.setOnClickListener {
-                    val document = documents[adapterPosition]
-                    showEditOptionsDialog(document)
-                }
-            }
-
-            fun bind(document: Document) {
-                nameTextView.text = document.name
-                editButton.visibility = View.VISIBLE
-            }
-
-            private fun openDocument(document: Document) {
-                val file = File(document.url)
-                val fileUri: Uri = FileProvider.getUriForFile(
-                    this@DocumentsActivity,
-                    "com.elizabethwhitebaker.egidtracker.fileprovider",
-                    file
-                )
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(fileUri, document.type)
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                try {
-                    itemView.context.startActivity(intent)
-                } catch (e: Exception) {
-                    Toast.makeText(itemView.context, "No application found to open this file type.", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            private fun showEditOptionsDialog(document: Document) {
-                val options = arrayOf("Rename", "Delete")
-                AlertDialog.Builder(itemView.context)
-                    .setTitle("Edit Document")
-                    .setItems(options) { dialog, which ->
-                        when (which) {
-                            0 -> showRenameDialog(document)
-                            1 -> deleteDocument(document)
-                        }
-                    }
-                    .show()
-            }
-
-            private fun showRenameDialog(document: Document) {
-                val editText = EditText(itemView.context)
-                editText.setText(document.name)
-                AlertDialog.Builder(itemView.context)
-                    .setTitle("Rename Document")
-                    .setView(editText)
-                    .setPositiveButton("Rename") { dialog, which ->
-                        val newName = editText.text.toString()
-                        if (newName.isNotEmpty()) {
-                            document.name = newName
-                            dbHelper.updateDocumentName(document.id, newName)
-                            notifyDataSetChanged()
-                        } else {
-                            Toast.makeText(itemView.context, "Name cannot be empty", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    .setNegativeButton("Cancel", null)
-                    .show()
-            }
-
-            private fun deleteDocument(document: Document) {
-                dbHelper.deleteDocument(document.id)
-                documentsList.remove(document)
-                notifyDataSetChanged()
-            }
-        }
-    }
 }

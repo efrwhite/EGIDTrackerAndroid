@@ -5,160 +5,161 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
+import android.text.InputType
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
+import androidx.core.widget.doAfterTextChanged
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
+/**
+ * Adds a caregiver, or edits one (extra: caregiverId). The account holder's own profile, made at
+ * sign-up, also shows the login username and offers Delete Account; other caregivers can be
+ * removed. Same design as the child profile (AddChildActivity).
+ */
 class AddCaregiverActivity : AppCompatActivity() {
 
-    private lateinit var usernameEditText: EditText
     private lateinit var firstNameEditText: EditText
     private lateinit var lastNameEditText: EditText
+    private lateinit var firstNameLayout: TextInputLayout
+    private lateinit var lastNameLayout: TextInputLayout
     private lateinit var saveButton: Button
-    private lateinit var imageView: ImageView
-    private lateinit var pictureButton: Button
-    private lateinit var deleteAccountButton: Button
-    private var imageUri: Uri? = null
-    private var currentPhotoPath: String = ""
+    private lateinit var photoView: ImageView
+    private lateinit var photoLink: TextView
+    private lateinit var deleteAccountButton: TextView
+    private var imageUri: Uri? = null // a newly picked photo, saved with the rest of the form
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private lateinit var pickImageFromGalleryLauncher: ActivityResultLauncher<String>
+    private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
 
     private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private var caregiverId: String? = null
-    private var mode: String = "add" // 'add' or 'edit'
+    private var caregiverId: String? = null // Set in edit mode
+
+    /**
+     * True when editing the account holder's own caregiver profile (created at sign-up). Their
+     * name is also stored on Users/{uid}, so it's kept in sync, and only this profile shows
+     * Delete Account.
+     */
+    private var isAccountHolder = false
+    private var photoUrl: String? = null // the saved photo, deleted from this device on removal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_caregiver_profile)
 
-        usernameEditText = findViewById(R.id.editText2)
-        firstNameEditText = findViewById(R.id.editText)
-        lastNameEditText = findViewById(R.id.editText3)
+        firstNameEditText = findViewById(R.id.caregiverFirstName)
+        lastNameEditText = findViewById(R.id.caregiverLastName)
+        firstNameLayout = findViewById(R.id.firstNameLayout)
+        lastNameLayout = findViewById(R.id.lastNameLayout)
         saveButton = findViewById(R.id.saveButton)
-        imageView = findViewById(R.id.imageView)
-        pictureButton = findViewById(R.id.button)
+        photoView = findViewById(R.id.caregiverPhoto)
+        photoLink = findViewById(R.id.caregiverPhotoLink)
         deleteAccountButton = findViewById(R.id.deleteAccount)
 
-        imageView.setImageResource(R.drawable.default_profile_picture)
-
-        deleteAccountButton.setOnClickListener { deleteAccount() }
         initLaunchers()
 
+        // The account holder's profile deletes the whole account; other caregivers are just removed
+        deleteAccountButton.setOnClickListener { if (isAccountHolder) deleteAccount() else confirmRemoveCaregiver() }
+
         caregiverId = intent.getStringExtra("caregiverId")
-        val usernameFromIntent = intent.getStringExtra("username")
-
-        if (usernameFromIntent != null) {
-            usernameEditText.setText(usernameFromIntent)
-            usernameEditText.isEnabled = false
-        } else {
-            // First time open without username extra? Fetch from Users using current uid
-            fetchUsernameFromUsers(firebaseAuth.currentUser?.uid)
+        caregiverId?.let {
+            findViewById<TextView>(R.id.caregiverTitle).setText(R.string.edit_caregiver_title)
+            populateCaregiverData(it)
         }
 
-        if (caregiverId != null) {
-            mode = "edit"
-            populateCaregiverData(caregiverId!!)
+        photoView.setOnClickListener { showImagePickDialog() }
+        photoLink.setOnClickListener { showImagePickDialog() }
+        listOf(firstNameLayout, lastNameLayout).forEach { layout ->
+            layout.editText?.doAfterTextChanged { layout.error = null }
         }
-
-        pictureButton.setOnClickListener { showImagePickDialog() }
-
-        saveButton.setOnClickListener {
-            if (mode == "add") saveCaregiverInfo() else updateCaregiverInfo()
-        }
+        saveButton.setOnClickListener { if (caregiverId == null) saveCaregiverInfo() else updateCaregiverInfo() }
     }
 
     private fun initLaunchers() {
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
-            if (isSuccess) {
-                imageView.setImageURI(imageUri)
-                saveImageInfoToDatabase()
+            if (isSuccess) showPhoto(imageUri) else imageUri = null
+        }
+        // The system picker needs no storage permission
+        pickImageFromGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri ?: return@registerForActivityResult
+            val saved = Photos.copyToAppStorage(this, uri)
+            if (saved == null) {
+                Toast.makeText(this, "Couldn't use that photo", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT).show()
+                imageUri = saved
+                showPhoto(saved)
             }
         }
+        requestCameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) takePhoto()
+            else Toast.makeText(this, "Camera permission is needed to take a photo", Toast.LENGTH_SHORT).show()
+        }
+    }
 
-        pickImageFromGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                imageUri = it
-                imageView.setImageURI(it)
-                saveImageInfoToDatabase()
-            }
+    /** --- Photo --- */
+
+    private fun showPhoto(uri: Any?) {
+        if (uri == null) {
+            Glide.with(this).clear(photoView)
+            photoView.setImageDrawable(null) // plain salmon square
+            photoLink.setText(R.string.add_photo)
+        } else {
+            Glide.with(this).load(uri).centerCrop().into(photoView)
+            photoLink.setText(R.string.change_photo)
         }
     }
 
     private fun showImagePickDialog() {
-        val options = arrayOf("Take Photo", "Choose from Gallery", "Delete Picture", "Cancel")
-        val builder = android.app.AlertDialog.Builder(this)
-        builder.setItems(options) { dialog, which ->
-            when (which) {
-                0 -> checkAndRequestCameraPermission()
-                1 -> pickImageFromGallery()
-                2 -> deleteProfilePicture()
-                3 -> dialog.dismiss()
+        val options = arrayOf("Take Photo", "Choose from Gallery", "Remove Photo")
+        MaterialAlertDialogBuilder(this)
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
+                        PackageManager.PERMISSION_GRANTED) takePhoto()
+                    else requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    1 -> pickImageFromGalleryLauncher.launch("image/*")
+                    2 -> removePhoto()
+                }
             }
-        }
-        builder.show()
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
-    private fun deleteProfilePicture() {
-        imageView.setImageResource(R.drawable.default_profile_picture)
-        imageUri = null
-
-        caregiverId?.let { id ->
-            Firebase.firestore.collection("Caregivers").document(id)
-                .update("imageUrl", "")
-        }
-    }
-
-    private fun checkAndRequestCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
-        } else {
-            dispatchTakePictureIntent()
-        }
-    }
-
-    private fun dispatchTakePictureIntent() {
-        val photoFile = createImageFile()
-        val uri = FileProvider.getUriForFile(this, "com.elizabethwhitebaker.egidtracker.fileprovider", photoFile)
+    private fun takePhoto() {
+        val uri = Photos.newPhotoUri(this)
         imageUri = uri
         takePictureLauncher.launch(uri)
     }
 
-    private fun pickImageFromGallery() {
-        pickImageFromGalleryLauncher.launch("image/*")
-    }
-
-    private fun createImageFile(): File {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
-            currentPhotoPath = absolutePath
-        }
-    }
-
-    private fun saveImageInfoToDatabase() {
-        val imageUrl = imageUri?.toString() ?: ""
+    private fun removePhoto() {
+        imageUri = null
+        showPhoto(null)
+        // In edit mode the stored photo is cleared right away
         caregiverId?.let { id ->
-            Firebase.firestore.collection("Caregivers").document(id)
-                .update("imageUrl", imageUrl)
+            Firebase.firestore.collection("Caregivers").document(id).update("imageUrl", "")
         }
     }
+
+    /** --- Load and save --- */
 
     private fun populateCaregiverData(caregiverId: String) {
         Firebase.firestore.collection("Caregivers").document(caregiverId).get()
@@ -171,186 +172,200 @@ class AddCaregiverActivity : AppCompatActivity() {
                 firstNameEditText.setText(caregiverSnapshot.getString("firstName") ?: "")
                 lastNameEditText.setText(caregiverSnapshot.getString("lastName") ?: "")
 
-                val parentUserId = caregiverSnapshot.getString("parentUserId") ?: ""
-                fetchUsernameFromUsers(parentUserId)
+                isAccountHolder = caregiverSnapshot.getBoolean("isAccountHolder") == true
+                deleteAccountButton.setText(if (isAccountHolder) R.string.delete_account else R.string.remove_caregiver)
+                deleteAccountButton.visibility = View.VISIBLE
+                if (isAccountHolder) showUsername()
 
-                val imageUrl = caregiverSnapshot.getString("imageUrl") ?: ""
-                if (imageUrl.isNotEmpty()) {
-                    Glide.with(this).load(imageUrl).into(imageView)
-                } else {
-                    imageView.setImageResource(R.drawable.default_profile_picture)
-                }
+                photoUrl = caregiverSnapshot.getString("imageUrl")
+                showPhoto(photoUrl?.takeIf { it.isNotEmpty() })
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error fetching caregiver details: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun saveCaregiverInfo() {
+    /** The login username, from the signed-in user's profile. */
+    private fun showUsername() {
+        val uid = firebaseAuth.currentUser?.uid ?: return
+        Firebase.firestore.collection("Users").document(uid).get()
+            .addOnSuccessListener { doc ->
+                val username = doc.getString("username").orEmpty()
+                if (username.isNotBlank()) {
+                    findViewById<EditText>(R.id.caregiverUsername).setText(username)
+                    findViewById<View>(R.id.usernameGroup).visibility = View.VISIBLE
+                }
+            }
+    }
+
+    /** Marks empty name fields; returns the trimmed names when both are filled. */
+    private fun validNames(): Pair<String, String>? {
         val firstName = firstNameEditText.text.toString().trim()
         val lastName = lastNameEditText.text.toString().trim()
-        val imageUrl = imageUri?.toString() ?: ""
+        if (firstName.isEmpty()) firstNameLayout.error = getString(R.string.error_required)
+        if (lastName.isEmpty()) lastNameLayout.error = getString(R.string.error_required)
+        return if (firstName.isEmpty() || lastName.isEmpty()) null else firstName to lastName
+    }
 
-        if (firstName.isEmpty() || lastName.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show()
-            return
-        }
+    private fun saveCaregiverInfo() {
+        val (firstName, lastName) = validNames() ?: return
 
         val userMap = hashMapOf(
             "firstName" to firstName,
             "lastName" to lastName,
             "parentUserId" to firebaseAuth.currentUser?.uid,
-            "imageUrl" to imageUrl
+            "imageUrl" to (imageUri?.toString() ?: "")
         )
 
-        Firebase.firestore.collection("Caregivers").add(userMap)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Caregiver added successfully", Toast.LENGTH_SHORT).show()
+        saveButton.isEnabled = false
+        // A new document reference (rather than add()) so the write is applied locally right away
+        awaitSave(Firebase.firestore.collection("Caregivers").document().set(userMap),
+            onSaved = { queued ->
+                toastSaved("Caregiver added", queued)
                 goToNextActivity()
-            }
-            .addOnFailureListener { e ->
+            },
+            onFailed = { e ->
+                saveButton.isEnabled = true
                 Toast.makeText(this, "Failed to add caregiver: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            })
     }
 
     private fun updateCaregiverInfo() {
-        val firstName = firstNameEditText.text.toString().trim()
-        val lastName = lastNameEditText.text.toString().trim()
-        val imageUrl = imageUri?.toString() ?: ""
+        val (firstName, lastName) = validNames() ?: return
+        val uid = firebaseAuth.currentUser?.uid ?: return
+        val id = caregiverId ?: return
 
-        if (firstName.isEmpty() || lastName.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show()
-            return
+        val userMap = hashMapOf<String, Any>(
+            "firstName" to firstName,
+            "lastName" to lastName,
+            "parentUserId" to uid
+        )
+        // Only write the photo when one was picked, so editing the name keeps the old photo
+        imageUri?.let { userMap["imageUrl"] = it.toString() }
+
+        val db = Firebase.firestore
+        val batch = db.batch()
+            .set(db.collection("Caregivers").document(id), userMap, SetOptions.merge())
+        if (isAccountHolder) {
+            // Same person as the account: keep the profile's name in step
+            batch.update(db.collection("Users").document(uid),
+                mapOf("firstName" to firstName, "lastName" to lastName))
+        }
+        saveButton.isEnabled = false
+        awaitSave(batch.commit(),
+            onSaved = { queued ->
+                // A replaced photo's old file is no longer used
+                if (imageUri != null) Photos.deleteIfOwned(this, photoUrl)
+                toastSaved("Caregiver updated", queued)
+                goToNextActivity()
+            },
+            onFailed = { e ->
+                saveButton.isEnabled = true
+                Toast.makeText(this, "Failed to update caregiver: ${e.message}", Toast.LENGTH_SHORT).show()
+            })
+    }
+
+    /**
+     * Deletes the account after the user re-enters their password. Firebase only deletes a login
+     * that signed in recently, so re-authenticating first means the final step can't fail after
+     * the data is already gone (which used to leave a login with no profile or username).
+     */
+    private fun deleteAccount() {
+        val user = firebaseAuth.currentUser ?: return
+        val email = user.email ?: return
+
+        val passwordLayout = TextInputLayout(this, null,
+            com.google.android.material.R.attr.textInputOutlinedStyle).apply {
+            endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
+            hint = getString(R.string.password)
+        }
+        val passwordInput = TextInputEditText(passwordLayout.context).apply {
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        passwordLayout.addView(passwordInput)
+        val padding = (20 * resources.displayMetrics.density).toInt()
+        val container = FrameLayout(this).apply {
+            setPadding(padding, padding / 2, padding, 0)
+            addView(passwordLayout)
         }
 
-        caregiverId?.let { id ->
-            val userMap = hashMapOf(
-                "firstName" to firstName,
-                "lastName" to lastName,
-                "parentUserId" to firebaseAuth.currentUser?.uid,
-                "imageUrl" to imageUrl
-            )
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.delete_account_title)
+            .setMessage(R.string.delete_account_message)
+            .setView(container)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.delete, null) // set below, so a wrong password keeps it open
+            .show()
 
-            Firebase.firestore.collection("Caregivers").document(id).set(userMap)
+        val deleteButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        deleteButton.setOnClickListener {
+            val password = passwordInput.text.toString()
+            if (password.isEmpty()) {
+                passwordLayout.error = getString(R.string.error_required)
+                return@setOnClickListener
+            }
+            deleteButton.isEnabled = false
+            user.reauthenticate(EmailAuthProvider.getCredential(email, password))
                 .addOnSuccessListener {
-                    Toast.makeText(this, "Caregiver updated successfully", Toast.LENGTH_SHORT).show()
-                    goToNextActivity()
+                    dialog.dismiss()
+                    deleteAccountData(user)
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to update caregiver: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        } ?: Toast.makeText(this, "Error: Caregiver ID is missing.", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun fetchUsernameFromUsers(parentUserId: String?) {
-        val uid = parentUserId ?: return
-        Firebase.firestore.collection("Users")
-            .document(uid)
-            .get()
-            .addOnSuccessListener { doc ->
-                if (doc.exists()) {
-                    val username = doc.getString("username") ?: ""
-                    if (username.isNotBlank()) {
-                        usernameEditText.setText(username)
-                        usernameEditText.isEnabled = false
-                    }
-                } else {
-                    Toast.makeText(this, "User not found.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Error fetching username: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun deleteAccount() {
-        val builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle("Delete Account")
-        builder.setMessage("Are you sure you want to delete your account? If you are the only caregiver, this will delete all your child profiles as well.")
-        builder.setPositiveButton("Delete") { dialog, _ ->
-            dialog.dismiss()
-
-            val currentUser = firebaseAuth.currentUser
-            val uid = currentUser?.uid ?: return@setPositiveButton
-            val db = Firebase.firestore
-            val batch = db.batch()
-
-            // Step 1: Delete Children
-            db.collection("Children")
-                .whereEqualTo("parentUserId", uid)
-                .get()
-                .addOnSuccessListener { childrenSnapshot ->
-                    for (child in childrenSnapshot.documents) {
-                        batch.delete(child.reference)
-                    }
-
-                    // Step 2: Delete Caregivers
-                    db.collection("Caregivers")
-                        .whereEqualTo("parentUserId", uid)
-                        .get()
-                        .addOnSuccessListener { caregiverSnapshot ->
-                            for (caregiver in caregiverSnapshot.documents) {
-                                batch.delete(caregiver.reference)
-                            }
-
-                            // Step 3: Delete from Users collection (doc ID == UID), and free
-                            // the username for someone else
-                            db.collection("Users").document(uid).get()
-                                .addOnSuccessListener { userDoc ->
-                                    if (userDoc.exists()) {
-                                        batch.delete(userDoc.reference)
-                                        userDoc.getString("username")
-                                            ?.takeIf { Usernames.isValid(it) }
-                                            ?.let { batch.delete(Usernames.ref(it)) }
-                                    }
-
-                                    // Step 4: Commit batch
-                                    batch.commit()
-                                        .addOnSuccessListener {
-                                            // Step 5: Delete Authentication user
-                                            currentUser.delete()
-                                                .addOnSuccessListener {
-                                                    Toast.makeText(this, "Account deleted successfully.", Toast.LENGTH_LONG).show()
-                                                    startActivity(Intent(this, MainActivity::class.java).apply {
-                                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                                    })
-                                                }
-                                                .addOnFailureListener {
-                                                    Toast.makeText(this, "Failed to delete auth: ${it.message}", Toast.LENGTH_LONG).show()
-                                                }
-                                        }
-                                        .addOnFailureListener {
-                                            Toast.makeText(this, "Batch delete failed: ${it.message}", Toast.LENGTH_LONG).show()
-                                        }
-                                }
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, "Failed to delete caregiver: ${it.message}", Toast.LENGTH_LONG).show()
-                        }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Failed to delete children: ${it.message}", Toast.LENGTH_LONG).show()
+                    deleteButton.isEnabled = true
+                    passwordLayout.error = getString(
+                        if (e is FirebaseAuthInvalidCredentialsException) R.string.error_wrong_password
+                        else R.string.error_network
+                    )
                 }
         }
+    }
 
-        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-        builder.create().show()
+    /** Deletes all the user's data (see AccountDeletion), then the login itself. */
+    private fun deleteAccountData(user: FirebaseUser) {
+        AccountDeletion.deleteAllData(this, user.uid)
+            .onSuccessTask {
+                CurrentChild.clear(this) // needs the uid, so before delete()
+                user.delete()
+            }
+            .addOnSuccessListener {
+                Toast.makeText(this, "Account deleted.", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                })
+            }
+            .addOnFailureListener { e ->
+                // The login still exists, so trying again picks up where this stopped
+                Toast.makeText(this, "Couldn't delete the account: ${e.message}. Please try again.", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun confirmRemoveCaregiver() {
+        val id = caregiverId ?: return
+        val name = firstNameEditText.text.toString().trim()
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.remove_caregiver_title, name))
+            .setMessage(getString(R.string.remove_caregiver_message, name))
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.remove_caregiver) { _, _ ->
+                deleteAccountButton.isEnabled = false
+                awaitSave(Firebase.firestore.collection("Caregivers").document(id).delete(),
+                    onSaved = { queued ->
+                        Photos.deleteIfOwned(this, photoUrl)
+                        toastSaved(getString(R.string.caregiver_removed, name), queued)
+                        goToNextActivity()
+                    },
+                    onFailed = { e ->
+                        deleteAccountButton.isEnabled = true
+                        Toast.makeText(this, "Failed to remove caregiver: ${e.message}", Toast.LENGTH_SHORT).show()
+                    })
+            }
+            .show()
     }
 
     private fun goToNextActivity() {
-        val nextActivityIntent = when {
-            intent.getBooleanExtra("isFirstTimeUser", false) && mode == "add" -> {
-                Intent(this, AddChildActivity::class.java).apply {
-                    putExtra("isFirstTimeUser", true)
-                }
-            }
-            else -> {
-                Intent(this, ProfilesActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                }
-            }
-        }
-        startActivity(nextActivityIntent)
+        startActivity(Intent(this, ProfilesActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        })
         finish()
     }
 }
